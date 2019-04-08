@@ -1,0 +1,32 @@
+//
+//  ExhibitTableViewCell.swift
+//  Exhibit Finder
+//
+//  Created by Kate Duncan-Welke on 4/8/19.
+//  Copyright © 2019 Kate Duncan-Welke. All rights reserved.
+//
+
+import UIKit
+
+class ExhibitTableViewCell: UITableViewCell {
+	
+	@IBOutlet weak var title: UILabel!
+	@IBOutlet weak var musuem: UILabel!
+	@IBOutlet weak var openDate: UILabel!
+	@IBOutlet weak var closeDate: UILabel!
+	
+	
+	static let reuseIdentifier = "exhibitCell"
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}

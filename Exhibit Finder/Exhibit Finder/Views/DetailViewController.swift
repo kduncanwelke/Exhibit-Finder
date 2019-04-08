@@ -10,17 +10,20 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
-	@IBOutlet weak var detailDescriptionLabel: UILabel!
-
-
-	func configureView() {
-		// Update the user interface for the detail item.
-		if let detail = detailItem {
-		    if let label = detailDescriptionLabel {
-		        label.text = detail.description
-		    }
-		}
-	}
+	// MARK: IBOutlets
+	
+	@IBOutlet weak var titleLabel: UILabel!
+	@IBOutlet weak var museumLabel: UILabel!
+	@IBOutlet weak var openDateLabel: UILabel!
+	@IBOutlet weak var closeDateLabel: UILabel!
+	@IBOutlet weak var permanentLabel: UILabel!
+	@IBOutlet weak var tourLabel: UILabel!
+	@IBOutlet weak var travelingLabel: UILabel!
+	@IBOutlet weak var descriptionLabel: UILabel!
+	
+	// MARK: Variables
+	
+	var detailItem: Exhibition?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -28,13 +31,41 @@ class DetailViewController: UIViewController {
 		configureView()
 	}
 
-	var detailItem: NSDate? {
-		didSet {
-		    // Update the view.
-		    configureView()
-		}
+	func configureView() {
+		// Update the user interface for the detail item.
+		guard let detail = detailItem else { return }
+		titleLabel.text = detail.attributes.title
+		museumLabel.text = detail.attributes.museum ?? "No museum listed"
+		let open = detail.attributes.openDate.dropLast(14)
+		openDateLabel.text = "\(open)"
+		let close = detail.attributes.closeDate.dropLast(14)
+		closeDateLabel.text = "\(close)"
+	
+		permanentLabel.text = {
+			if detail.attributes.permanentExhibition {
+				return "Yes"
+			} else {
+				return "No"
+			}
+		}()
+	
+		tourLabel.text = {
+			if detail.attributes.offeredForTour {
+				return "Yes"
+			} else {
+				return "No"
+			}
+		}()
+	
+		travelingLabel.text = {
+			if detail.attributes.traveling {
+				return "Yes"
+			} else {
+				return "No"
+			}
+		}()
+	
+		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
 	}
-
-
 }
 

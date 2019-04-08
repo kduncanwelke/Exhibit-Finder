@@ -15,7 +15,7 @@ enum Errors: Error {
 	var localizedDescription: String {
 		switch self {
 		case .networkError:
-			return "The network could not be reached successfully - check your data connection or api key"
+			return "The network could not be reached successfully - check your data connection or wifi connection and try again."
 		}
 	}
 }

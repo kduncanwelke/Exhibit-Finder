@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2DB9D3E1225BE5970025535D /* ExhibitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */; };
+		2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E2225BF6B00025535D /* Extensions.swift */; };
 		2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D2D22592FA200B924F0 /* AppDelegate.swift */; };
 		2DE50D3022592FA200B924F0 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D2F22592FA200B924F0 /* MasterViewController.swift */; };
 		2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D3122592FA200B924F0 /* DetailViewController.swift */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitTableViewCell.swift; sourceTree = "<group>"; };
+		2DB9D3E2225BF6B00025535D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2DE50D2A22592FA200B924F0 /* Exhibit Finder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Exhibit Finder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DE50D2D22592FA200B924F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2DE50D2F22592FA200B924F0 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 				2DE50D5D2259564400B924F0 /* Views */,
 				2DE50D4F2259407F00B924F0 /* Networking */,
 				2DE50D3322592FA200B924F0 /* Main.storyboard */,
+				2DB9D3E2225BF6B00025535D /* Extensions.swift */,
 				2DE50D3622592FA300B924F0 /* Assets.xcassets */,
 				2DE50D3822592FA300B924F0 /* LaunchScreen.storyboard */,
 				2DE50D3B22592FA300B924F0 /* Info.plist */,
@@ -142,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				2DE50D2F22592FA200B924F0 /* MasterViewController.swift */,
+				2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */,
 				2DE50D3122592FA200B924F0 /* DetailViewController.swift */,
 			);
 			path = Views;
@@ -253,8 +259,10 @@
 				2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */,
 				2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */,
 				2DE50D592259412300B924F0 /* Endpoint.swift in Sources */,
+				2DB9D3E1225BE5970025535D /* ExhibitTableViewCell.swift in Sources */,
 				2DE50D53225940B400B924F0 /* Result.swift in Sources */,
 				2DE50D3022592FA200B924F0 /* MasterViewController.swift in Sources */,
+				2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */,
 				2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */,
 				2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */,
 				2DE50D512259409200B924F0 /* Networker.swift in Sources */,
