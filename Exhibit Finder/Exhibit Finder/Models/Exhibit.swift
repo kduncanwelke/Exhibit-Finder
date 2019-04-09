@@ -26,8 +26,13 @@ struct Attribute: Codable {
 	let permanentExhibition: Bool
 	let offeredForTour: Bool
 	var traveling: Bool
+	var path: Path
 }
 
 struct Description: Codable {
 	let processed: String
+}
+
+struct Path: Codable {
+	let alias: String
 }

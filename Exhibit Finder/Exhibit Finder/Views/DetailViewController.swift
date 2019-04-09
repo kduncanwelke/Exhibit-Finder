@@ -65,7 +65,7 @@ class DetailViewController: UIViewController {
 			}
 		}()
 	
-		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil)
+		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")
 	}
 }
 

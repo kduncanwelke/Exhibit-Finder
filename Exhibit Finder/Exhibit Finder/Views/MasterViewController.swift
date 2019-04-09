@@ -19,15 +19,24 @@ class MasterViewController: UITableViewController {
 	var currentDate = Date()
 	let dateFormatter = ISO8601DateFormatter()
 	var hasBeenLoaded = false
+	var segmentedController: UISegmentedControl!
 	
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
-		navigationItem.leftBarButtonItem = editButtonItem
+		
+		let items = ["Current Exhibits", "Upcoming Exhibits"]
+		segmentedController = UISegmentedControl(items: items)
+		segmentedController.tintColor = UIColor(red:1.00, green:0.58, blue:0.00, alpha:1.0)
+		segmentedController.selectedSegmentIndex = 0
+		navigationItem.titleView = segmentedController
+		segmentedController.addTarget(self, action: #selector(segmentSelected), for: .valueChanged)
+		
+		//navigationItem.leftBarButtonItem = editButtonItem
 
-		let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-		navigationItem.rightBarButtonItem = addButton
+		//let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
+		//navigationItem.rightBarButtonItem = addButton
 		if let split = splitViewController {
 		    let controllers = split.viewControllers
 		    detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -61,6 +70,10 @@ class MasterViewController: UITableViewController {
 	}
 	
 	// MARK: Custom functions
+	
+	@objc func segmentSelected() {
+		tableView.reloadData()
+	}
 	
 	func loadExhibitions() {
 		DataManager<Exhibit>.fetch(with: nil) { [unowned self] result in
@@ -129,19 +142,34 @@ class MasterViewController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return exhibitsList.count
+		if segmentedController.selectedSegmentIndex == 0 {
+			return exhibitsList.count
+		} else {
+			return upcomingExhibits.count
+		}
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "exhibitCell", for: indexPath) as! ExhibitTableViewCell
 
-		let object = exhibitsList[indexPath.row]
-		cell.title.text = object.attributes.title
-		cell.musuem.text = object.attributes.museum ?? "No museum listed"
-		let open = object.attributes.openDate.dropLast(14)
-		cell.openDate.text = "\(open)"
-		let close = object.attributes.closeDate.dropLast(14)
-		cell.closeDate.text = "\(close)"
+		if segmentedController.selectedSegmentIndex == 0 {
+			let object = exhibitsList[indexPath.row]
+			cell.title.text = object.attributes.title
+			cell.musuem.text = object.attributes.museum ?? "No museum listed"
+			let open = object.attributes.openDate.dropLast(14)
+			cell.openDate.text = "\(open)"
+			let close = object.attributes.closeDate.dropLast(14)
+			cell.closeDate.text = "\(close)"
+		} else {
+			let object = upcomingExhibits[indexPath.row]
+			cell.title.text = object.attributes.title
+			cell.musuem.text = object.attributes.museum ?? "No museum listed"
+			let open = object.attributes.openDate.dropLast(14)
+			cell.openDate.text = "\(open)"
+			let close = object.attributes.closeDate.dropLast(14)
+			cell.closeDate.text = "\(close)"
+		}
+
 		return cell
 	}
 
