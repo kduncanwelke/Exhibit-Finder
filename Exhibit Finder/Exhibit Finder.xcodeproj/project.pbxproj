@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D68D679225D35200018C59E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D678225D35200018C59E /* WebKit.framework */; };
+		2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D67A225D42060018C59E /* MapKit.framework */; };
+		2D68D67D225D48D60018C59E /* SeeOnlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D68D67C225D48D60018C59E /* SeeOnlineViewController.swift */; };
 		2DB9D3E1225BE5970025535D /* ExhibitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */; };
 		2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E2225BF6B00025535D /* Extensions.swift */; };
 		2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D2D22592FA200B924F0 /* AppDelegate.swift */; };
@@ -37,6 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D68D678225D35200018C59E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		2D68D67A225D42060018C59E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2D68D67C225D48D60018C59E /* SeeOnlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeOnlineViewController.swift; sourceTree = "<group>"; };
 		2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitTableViewCell.swift; sourceTree = "<group>"; };
 		2DB9D3E2225BF6B00025535D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2DE50D2A22592FA200B924F0 /* Exhibit Finder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Exhibit Finder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +71,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */,
+				2D68D679225D35200018C59E /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,12 +86,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D68D677225D35200018C59E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2D68D67A225D42060018C59E /* MapKit.framework */,
+				2D68D678225D35200018C59E /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		2DE50D2122592FA100B924F0 = {
 			isa = PBXGroup;
 			children = (
 				2DE50D2C22592FA200B924F0 /* Exhibit Finder */,
 				2DE50D4322592FA300B924F0 /* Exhibit FinderTests */,
 				2DE50D2B22592FA200B924F0 /* Products */,
+				2D68D677225D35200018C59E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,6 +167,7 @@
 				2DE50D2F22592FA200B924F0 /* MasterViewController.swift */,
 				2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */,
 				2DE50D3122592FA200B924F0 /* DetailViewController.swift */,
+				2D68D67C225D48D60018C59E /* SeeOnlineViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -203,6 +222,11 @@
 				TargetAttributes = {
 					2DE50D2922592FA200B924F0 = {
 						CreatedOnToolsVersion = 10.2;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					2DE50D3F22592FA300B924F0 = {
 						CreatedOnToolsVersion = 10.2;
@@ -255,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DE50D612259574800B924F0 /* Exhibit.swift in Sources */,
+				2D68D67D225D48D60018C59E /* SeeOnlineViewController.swift in Sources */,
 				2DE50D55225940CA00B924F0 /* JSONDecoder.swift in Sources */,
 				2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */,
 				2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */,

@@ -26,16 +26,22 @@
             </objects>
             <point key="canvasLocation" x="-38" y="-630"/>
         </scene>
-        <!--Detail-->
+        <!--Exhibit Details-->
         <scene sceneID="yUG-lL-AsK">
             <objects>
-                <viewController title="Detail" id="JEX-9P-axG" customClass="DetailViewController" customModule="Exhibit_Finder" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Exhibit Details" id="JEX-9P-axG" customClass="DetailViewController" customModule="Exhibit_Finder" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="svH-Pt-448">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NnY-wB-mLQ">
+                                <rect key="frame" x="0.0" y="88" width="414" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="Gak-d2-v2g"/>
+                                </constraints>
+                            </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="cl0-Mv-Rer">
-                                <rect key="frame" x="20" y="108" width="374" height="137"/>
+                                <rect key="frame" x="20" y="308" width="374" height="137"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6g-ry-jya">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="21.5"/>
@@ -147,39 +153,106 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Due-TM-JDK">
-                                <rect key="frame" x="20" y="265" width="374" height="19.5"/>
+                                <rect key="frame" x="20" y="465" width="374" height="19.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LHd-8i-FVt">
+                                <rect key="frame" x="50" y="521" width="314" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="View On the Smithsonian Website">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="viewOnlineButtonTapped:" destination="JEX-9P-axG" eventType="touchUpInside" id="xyN-tW-F2d"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="cl0-Mv-Rer" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="20" id="1kS-gB-YSX"/>
+                            <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="LHd-8i-FVt" secondAttribute="trailing" constant="50" id="2wW-hp-aDN"/>
+                            <constraint firstItem="NnY-wB-mLQ" firstAttribute="top" secondItem="VUw-jc-0yf" secondAttribute="top" id="2xp-bn-ing"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="Due-TM-JDK" secondAttribute="trailing" constant="20" id="4vU-dC-rv3"/>
+                            <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="NnY-wB-mLQ" secondAttribute="trailing" id="9c1-Ib-JEl"/>
+                            <constraint firstItem="LHd-8i-FVt" firstAttribute="top" secondItem="Due-TM-JDK" secondAttribute="bottom" constant="36.5" id="W4N-V5-6DB"/>
+                            <constraint firstItem="cl0-Mv-Rer" firstAttribute="top" secondItem="NnY-wB-mLQ" secondAttribute="bottom" constant="20" id="Ylo-uh-nGF"/>
                             <constraint firstItem="VUw-jc-0yf" firstAttribute="trailing" secondItem="cl0-Mv-Rer" secondAttribute="trailing" constant="20" id="ZxO-Tg-l1V"/>
-                            <constraint firstItem="cl0-Mv-Rer" firstAttribute="top" secondItem="VUw-jc-0yf" secondAttribute="top" constant="20" id="eID-ek-rXd"/>
                             <constraint firstItem="Due-TM-JDK" firstAttribute="top" secondItem="cl0-Mv-Rer" secondAttribute="bottom" constant="20" id="krd-NR-MkB"/>
                             <constraint firstItem="Due-TM-JDK" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="20" id="rBZ-dO-4cH"/>
+                            <constraint firstItem="LHd-8i-FVt" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" constant="50" id="tiB-eM-636"/>
+                            <constraint firstItem="NnY-wB-mLQ" firstAttribute="leading" secondItem="VUw-jc-0yf" secondAttribute="leading" id="xJL-3A-4Zh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="VUw-jc-0yf"/>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM"/>
+                    <navigationItem key="navigationItem" title="Exhibit Details" id="mOI-FS-AaM"/>
                     <connections>
                         <outlet property="closeDateLabel" destination="vLL-Pn-j2R" id="cWd-38-Nfh"/>
                         <outlet property="descriptionLabel" destination="Due-TM-JDK" id="fIm-6c-J7o"/>
+                        <outlet property="mapView" destination="NnY-wB-mLQ" id="IU8-9S-Z1p"/>
                         <outlet property="museumLabel" destination="0eJ-iB-I2h" id="URh-wx-GnQ"/>
                         <outlet property="openDateLabel" destination="4vd-sW-PNS" id="fxy-BK-rVn"/>
                         <outlet property="permanentLabel" destination="bof-wp-Cz5" id="VyG-bH-CBB"/>
                         <outlet property="titleLabel" destination="b6g-ry-jya" id="jNG-5r-fU1"/>
                         <outlet property="tourLabel" destination="vLA-ex-IMB" id="C8X-am-m8K"/>
                         <outlet property="travelingLabel" destination="LHB-jU-Gfu" id="Lfq-ot-x5m"/>
+                        <outlet property="viewOnlineButton" destination="LHd-8i-FVt" id="Loc-bG-Epo"/>
+                        <segue destination="txU-0H-ddG" kind="presentation" identifier="viewOnline" id="qNi-sd-S1k"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="709" y="129"/>
+            <point key="canvasLocation" x="708.69565217391312" y="128.57142857142856"/>
+        </scene>
+        <!--See Online View Controller-->
+        <scene sceneID="iar-20-fTF">
+            <objects>
+                <viewController id="txU-0H-ddG" customClass="SeeOnlineViewController" customModule="Exhibit_Finder" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="y2j-h7-Cbc">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wf1-vz-HBo">
+                                <rect key="frame" x="90" y="812" width="234" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Dismiss">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="dismissButtonTapped:" destination="txU-0H-ddG" eventType="touchUpInside" id="F0Y-Yl-SZo"/>
+                                </connections>
+                            </button>
+                            <wkWebView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gFa-ky-LNI">
+                                <rect key="frame" x="0.0" y="44" width="414" height="748"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="gFa-ky-LNI" firstAttribute="leading" secondItem="c40-hb-ipN" secondAttribute="leading" id="EHL-Y2-O40"/>
+                            <constraint firstItem="gFa-ky-LNI" firstAttribute="top" secondItem="c40-hb-ipN" secondAttribute="top" id="FhV-Kd-FwD"/>
+                            <constraint firstItem="c40-hb-ipN" firstAttribute="trailing" secondItem="gFa-ky-LNI" secondAttribute="trailing" id="Hil-Tv-BmF"/>
+                            <constraint firstItem="c40-hb-ipN" firstAttribute="trailing" secondItem="Wf1-vz-HBo" secondAttribute="trailing" constant="90" id="acA-bb-Sq7"/>
+                            <constraint firstItem="Wf1-vz-HBo" firstAttribute="bottom" secondItem="c40-hb-ipN" secondAttribute="bottom" constant="-20" id="fLI-lo-LxL"/>
+                            <constraint firstItem="Wf1-vz-HBo" firstAttribute="leading" secondItem="c40-hb-ipN" secondAttribute="leading" constant="90" id="x2e-oS-8wS"/>
+                            <constraint firstItem="Wf1-vz-HBo" firstAttribute="top" secondItem="gFa-ky-LNI" secondAttribute="bottom" constant="20" id="znC-f9-4Rg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="c40-hb-ipN"/>
+                    </view>
+                    <connections>
+                        <outlet property="dismissButton" destination="Wf1-vz-HBo" id="8v0-rz-IGy"/>
+                        <outlet property="webView" destination="gFa-ky-LNI" id="XHX-L9-dRK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Ca-wA-28u" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1503" y="125"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">

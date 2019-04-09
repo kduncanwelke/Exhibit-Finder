@@ -126,9 +126,16 @@ class MasterViewController: UITableViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "showDetail" {
 		    if let indexPath = tableView.indexPathForSelectedRow {
-		        let object = exhibitsList[indexPath.row]
-		        let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-		        controller.detailItem = object
+				
+				var object: Exhibition
+				if segmentedController.selectedSegmentIndex == 0 {
+					object = exhibitsList[indexPath.row]
+				} else {
+					object = upcomingExhibits[indexPath.row]
+				}
+				
+				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+				controller.detailItem = object
 		        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
 		        controller.navigationItem.leftItemsSupplementBackButton = true
 		    }
@@ -152,23 +159,20 @@ class MasterViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "exhibitCell", for: indexPath) as! ExhibitTableViewCell
 
+		var object: Exhibition
+		
 		if segmentedController.selectedSegmentIndex == 0 {
-			let object = exhibitsList[indexPath.row]
-			cell.title.text = object.attributes.title
-			cell.musuem.text = object.attributes.museum ?? "No museum listed"
-			let open = object.attributes.openDate.dropLast(14)
-			cell.openDate.text = "\(open)"
-			let close = object.attributes.closeDate.dropLast(14)
-			cell.closeDate.text = "\(close)"
+			object = exhibitsList[indexPath.row]
 		} else {
-			let object = upcomingExhibits[indexPath.row]
-			cell.title.text = object.attributes.title
-			cell.musuem.text = object.attributes.museum ?? "No museum listed"
-			let open = object.attributes.openDate.dropLast(14)
-			cell.openDate.text = "\(open)"
-			let close = object.attributes.closeDate.dropLast(14)
-			cell.closeDate.text = "\(close)"
+			object = upcomingExhibits[indexPath.row]
 		}
+		
+		cell.title.text = object.attributes.title
+		cell.musuem.text = object.attributes.museum ?? "No museum listed"
+		let open = object.attributes.openDate.dropLast(14)
+		cell.openDate.text = "\(open)"
+		let close = object.attributes.closeDate.dropLast(14)
+		cell.closeDate.text = "\(close)"
 
 		return cell
 	}
