@@ -10,11 +10,12 @@ import UIKit
 
 class ExhibitTableViewCell: UITableViewCell {
 	
+	// MARK: IBOutlets
+	
 	@IBOutlet weak var title: UILabel!
 	@IBOutlet weak var musuem: UILabel!
 	@IBOutlet weak var openDate: UILabel!
 	@IBOutlet weak var closeDate: UILabel!
-	
 	
 	static let reuseIdentifier = "exhibitCell"
 

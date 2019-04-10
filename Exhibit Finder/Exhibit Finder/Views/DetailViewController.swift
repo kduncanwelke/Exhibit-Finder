@@ -25,6 +25,8 @@ class DetailViewController: UIViewController {
 	@IBOutlet weak var descriptionLabel: UILabel!
 	
 	@IBOutlet weak var mapView: MKMapView!
+	
+	@IBOutlet weak var reminderButton: UIButton!
 	@IBOutlet weak var viewOnlineButton: UIButton!
 	
 	
@@ -36,6 +38,7 @@ class DetailViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		viewOnlineButton.layer.cornerRadius = 10
+		reminderButton.layer.cornerRadius = 10
 		
 		configureView()
 	}
@@ -77,9 +80,6 @@ class DetailViewController: UIViewController {
 		}()
 	
 		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")
-		
-		//guard let url = URL(string: "https://americanart.si.edu\(detail.attributes.path.alias)") else { return }
-		//let urlRequest = URLRequest(url: url)
 		
 		loadMapView()
 	}
@@ -129,6 +129,20 @@ class DetailViewController: UIViewController {
 			let destinationViewController = segue.destination as? SeeOnlineViewController
 			guard let detail = detailItem, let url = URL(string: "https://americanart.si.edu\(detail.attributes.path.alias)") else { return }
 			destinationViewController?.urlToDisplay = url
+		} else if segue.identifier == "addReminder" {
+			let barViewControllers = segue.destination as! UITabBarController
+			let destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
+			guard let detail = detailItem else { return }
+			destinationViewControllerOne?.exhibit = detail
+			destinationViewControllerOne?.openDate = openDateLabel.text
+			destinationViewControllerOne?.closeDate = closeDateLabel.text
+			
+			let destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
+			destinationViewControllerTwo?.exhibit = detail
+			destinationViewControllerTwo?.openDate = openDateLabel.text
+			destinationViewControllerTwo?.closeDate = closeDateLabel.text
+			destinationViewControllerTwo?.museumLocation = mapView.annotations.first as? MKPointAnnotation
+			destinationViewControllerTwo?.region = mapView.region
 		}
 	}
 	
@@ -137,5 +151,10 @@ class DetailViewController: UIViewController {
 	@IBAction func viewOnlineButtonTapped(_ sender: UIButton) {
 		performSegue(withIdentifier: "viewOnline", sender: Any?.self)
 	}
+	
+	@IBAction func addReminderButtonTapped(_ sender: UIButton) {
+		performSegue(withIdentifier: "addReminder", sender: Any?.self)
+	}
+	
 }
 

@@ -10,6 +10,8 @@
 		2D68D679225D35200018C59E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D678225D35200018C59E /* WebKit.framework */; };
 		2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D67A225D42060018C59E /* MapKit.framework */; };
 		2D68D67D225D48D60018C59E /* SeeOnlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D68D67C225D48D60018C59E /* SeeOnlineViewController.swift */; };
+		2DB45142225E7A1E008E2E2C /* TimeReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB45141225E7A1E008E2E2C /* TimeReminderViewController.swift */; };
+		2DB45144225E7A28008E2E2C /* LocationReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB45143225E7A28008E2E2C /* LocationReminderViewController.swift */; };
 		2DB9D3E1225BE5970025535D /* ExhibitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */; };
 		2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E2225BF6B00025535D /* Extensions.swift */; };
 		2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D2D22592FA200B924F0 /* AppDelegate.swift */; };
@@ -43,6 +45,8 @@
 		2D68D678225D35200018C59E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2D68D67A225D42060018C59E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2D68D67C225D48D60018C59E /* SeeOnlineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeOnlineViewController.swift; sourceTree = "<group>"; };
+		2DB45141225E7A1E008E2E2C /* TimeReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeReminderViewController.swift; sourceTree = "<group>"; };
+		2DB45143225E7A28008E2E2C /* LocationReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationReminderViewController.swift; sourceTree = "<group>"; };
 		2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitTableViewCell.swift; sourceTree = "<group>"; };
 		2DB9D3E2225BF6B00025535D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		2DE50D2A22592FA200B924F0 /* Exhibit Finder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Exhibit Finder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +172,8 @@
 				2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */,
 				2DE50D3122592FA200B924F0 /* DetailViewController.swift */,
 				2D68D67C225D48D60018C59E /* SeeOnlineViewController.swift */,
+				2DB45141225E7A1E008E2E2C /* TimeReminderViewController.swift */,
+				2DB45143225E7A28008E2E2C /* LocationReminderViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -290,6 +296,8 @@
 				2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */,
 				2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */,
 				2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */,
+				2DB45142225E7A1E008E2E2C /* TimeReminderViewController.swift in Sources */,
+				2DB45144225E7A28008E2E2C /* LocationReminderViewController.swift in Sources */,
 				2DE50D512259409200B924F0 /* Networker.swift in Sources */,
 				2DE50D57225940EE00B924F0 /* Errors.swift in Sources */,
 			);
