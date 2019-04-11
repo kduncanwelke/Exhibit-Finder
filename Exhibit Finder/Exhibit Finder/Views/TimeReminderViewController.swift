@@ -39,9 +39,16 @@ class TimeReminderViewController: UIViewController {
 		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
 		exhibitName.text = selectedExhibit.attributes.title
 		museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
-		time.text = "\(open) to \(close)"
 		
 		let minDate = Date()
+		
+		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
+		if convertedOpenDate > minDate {
+			time.text = "\(open) to \(close)"
+		} else {
+			time.text = "Today to \(close)"
+		}
+		
 		let maxDate = getDate(from: close)
 		
 		datePicker.minimumDate = minDate

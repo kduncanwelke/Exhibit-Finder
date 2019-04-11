@@ -17,6 +17,14 @@ class LocationReminderViewController: UIViewController {
 	@IBOutlet weak var confirmButton: UIButton!
 	@IBOutlet weak var slider: UISlider!
 	@IBOutlet weak var selectedRange: UILabel!
+	@IBOutlet weak var leftStepper: UIStepper!
+	@IBOutlet weak var rightStepper: UIStepper!
+	@IBOutlet weak var startTime: UILabel!
+	@IBOutlet weak var endTime: UILabel!
+	@IBOutlet weak var exhibitName: UILabel!
+	@IBOutlet weak var museumName: UILabel!
+	@IBOutlet weak var time: UILabel!
+	
 	
 	// MARK: Variables
 	
@@ -25,14 +33,30 @@ class LocationReminderViewController: UIViewController {
 	var closeDate: String?
 	var museumLocation: MKPointAnnotation?
 	var region: MKCoordinateRegion?
+	let dateFormatter = DateFormatter()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 		mapView.delegate = self
+		dateFormatter.dateFormat = "yyyy-MM-dd"
 		
         // Do any additional setup after loading the view.
 		confirmButton.layer.cornerRadius = 10
 		slider.addTarget(self, action: #selector(sliderChanged(slider:)), for: .valueChanged)
+		leftStepper.addTarget(self, action: #selector(leftStepperChanged(stepper:)), for: .valueChanged)
+		rightStepper.addTarget(self, action: #selector(rightStepperChanged(stepper:)), for: .valueChanged)
+		
+		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
+		exhibitName.text = selectedExhibit.attributes.title
+		museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
+	
+		let date = Date()
+		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
+		if convertedOpenDate > date {
+			time.text = "\(open) to \(close)"
+		} else {
+			time.text = "Today to \(close)"
+		}
 		
 		guard let location = museumLocation, let mapRegion = region else {
 			// if there is no location associated with the selected exhibit, show national mall
@@ -62,6 +86,38 @@ class LocationReminderViewController: UIViewController {
 		mapView.addOverlay(circle)
 	}
 	
+	@objc func leftStepperChanged(stepper: UIStepper) {
+		rightStepper.minimumValue = stepper.value + 1
+		leftStepper.maximumValue = rightStepper.value - 1
+		let valueToDisplay = returnTime(inputValue: stepper.value)
+		
+		startTime.text = valueToDisplay
+	}
+	
+	@objc func rightStepperChanged(stepper: UIStepper) {
+		rightStepper.minimumValue = leftStepper.value + 1
+		leftStepper.maximumValue = stepper.value - 1
+		let valueToDisplay = returnTime(inputValue: stepper.value)
+		
+		endTime.text = valueToDisplay
+	}
+	
+	// return time to display on labels, converting 24-hour time used in stepper to 12-hour time
+	func returnTime(inputValue: Double) -> String {
+		if inputValue <= 12 {
+			let value = Int(inputValue)
+			return "\(value)am"
+		} else if inputValue == 12 {
+			let value = Int(inputValue)
+			return "\(value)pm"
+		} else if inputValue == 24 {
+			let value = Int(inputValue) - 12
+			return "\(value)am"
+		} else {
+			let value = Int(inputValue) - 12
+			return "\(value)pm"
+		}
+	}
 	
     /*
     // MARK: - Navigation
