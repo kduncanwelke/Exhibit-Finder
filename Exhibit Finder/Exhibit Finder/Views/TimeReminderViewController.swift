@@ -26,6 +26,7 @@ class TimeReminderViewController: UIViewController {
 	var closeDate: String?
 	let dateFormatter = DateFormatter()
 	let timeDateFormatter = DateFormatter()
+	var timeReminder: Reminder?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,8 +56,14 @@ class TimeReminderViewController: UIViewController {
 		datePicker.maximumDate = maxDate
 		
 		reminderSelected.text = getStringDate(from: datePicker.date)
+		
+		guard let reminder = timeReminder, let date = reminder.time?.date else { return }
+		reminderSelected.text = getStringDate(from: date)
+		datePicker.date = date
+		
+		confirmButton.setTitle("Save Changes", for: .normal)
     }
-    
+	
 
 	// MARK: Custom functions
 	@objc func datePickerChanged(picker: UIDatePicker) {
@@ -78,6 +85,54 @@ class TimeReminderViewController: UIViewController {
 		return createdDate
 	}
 	
+	func saveEntry() {
+		let managedContext = CoreDataManager.shared.managedObjectContext
+		
+		// save new entry if no reminder is being edited
+		guard let currentReminder = timeReminder else {
+			let newReminder = Reminder(context: managedContext)
+			
+			var time: Time?
+			time = Time(context: managedContext)
+			
+			getTimeForReminder(time: time)
+			newReminder.time = time
+			getExhibitData(reminder: newReminder)
+			
+			do {
+				try managedContext.save()
+				print("saved")
+			} catch {
+				// this should never be displayed but is here to cover the possibility
+				showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
+			}
+			return
+		}
+	
+		// otherwise overwrite existing item with new time selection
+		guard let time = currentReminder.time else { return }
+		getTimeForReminder(time: time)
+		currentReminder.time = time
+	
+		do {
+			try managedContext.save()
+			print("resave successful")
+		} catch {
+			// this should never be displayed but is here to cover the possibility
+			showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
+		}
+	}
+	
+	func getExhibitData(reminder: Reminder) {
+		guard let currentExhibit = exhibit else { return }
+		reminder.name = currentExhibit.attributes.title
+		reminder.id = Int64(currentExhibit.attributes.path.pid)
+	}
+	
+	func getTimeForReminder(time: Time?) {
+		let date = datePicker.date
+		time?.date = date
+	}
 	
 	
     /*
@@ -94,6 +149,8 @@ class TimeReminderViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func confirmButtonTapped(_ sender: UIButton) {
+		saveEntry()
+		dismiss(animated: true, completion: nil)
 	}
 	
 	@IBAction func cancelButtonTapped(_ sender: UIButton) {

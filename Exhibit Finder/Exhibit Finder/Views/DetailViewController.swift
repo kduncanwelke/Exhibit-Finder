@@ -33,6 +33,7 @@ class DetailViewController: UIViewController {
 	// MARK: Variables
 	
 	var detailItem: Exhibition?
+	var reminder: Reminder?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -78,7 +79,11 @@ class DetailViewController: UIViewController {
 				return "No"
 			}
 		}()
-	
+		
+		if reminder != nil {
+			reminderButton.setTitle(" Edit Reminder ", for: .normal)
+		}
+		
 		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")
 		
 		loadMapView()
@@ -136,6 +141,9 @@ class DetailViewController: UIViewController {
 			destinationViewControllerOne?.exhibit = detail
 			destinationViewControllerOne?.openDate = openDateLabel.text
 			destinationViewControllerOne?.closeDate = closeDateLabel.text
+			
+			guard let currentReminder = reminder, let _ = currentReminder.time else { return }
+			destinationViewControllerOne?.timeReminder = currentReminder
 			
 			let destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
 			destinationViewControllerTwo?.exhibit = detail

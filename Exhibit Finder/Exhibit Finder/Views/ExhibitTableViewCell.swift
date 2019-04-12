@@ -16,6 +16,8 @@ class ExhibitTableViewCell: UITableViewCell {
 	@IBOutlet weak var musuem: UILabel!
 	@IBOutlet weak var openDate: UILabel!
 	@IBOutlet weak var closeDate: UILabel!
+	@IBOutlet weak var hasReminder: UILabel!
+	
 	
 	static let reuseIdentifier = "exhibitCell"
 

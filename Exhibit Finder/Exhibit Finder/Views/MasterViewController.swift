@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MasterViewController: UITableViewController {
 
@@ -20,7 +21,7 @@ class MasterViewController: UITableViewController {
 	let dateFormatter = ISO8601DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
-	
+	var reminders: [Reminder] = []
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -60,6 +61,8 @@ class MasterViewController: UITableViewController {
 		} else {
 			loadExhibitions()
 		}
+		
+		loadReminders()
 	}
 	
 	@objc
@@ -112,6 +115,22 @@ class MasterViewController: UITableViewController {
 		}
 	}
 	
+	// load reminders from core data
+	func loadReminders() {
+		let managedContext = CoreDataManager.shared.managedObjectContext
+		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
+		
+		do {
+			reminders = try managedContext.fetch(fetchRequest)
+			print("reminders loaded")
+		} catch let error as NSError {
+			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
+		}
+		
+		//tableView.reloadData()
+	}
+
+	
 	// turn date into string to pass into search
 	func getDate(from stringDate: String) -> Date? {
 		guard let createdDate = dateFormatter.date(from: stringDate) else {
@@ -135,6 +154,13 @@ class MasterViewController: UITableViewController {
 				}
 				
 				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+				
+				for reminder in reminders {
+					if reminder.id == object.attributes.path.pid {
+						controller.reminder = reminder
+					}
+				}
+				
 				controller.detailItem = object
 		        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
 		        controller.navigationItem.leftItemsSupplementBackButton = true
@@ -173,6 +199,14 @@ class MasterViewController: UITableViewController {
 		cell.openDate.text = "\(open)"
 		let close = object.attributes.closeDate.dropLast(14)
 		cell.closeDate.text = "\(close)"
+		
+		for reminder in reminders {
+			if reminder.id == object.attributes.path.pid {
+				cell.hasReminder.text = "Reminder Set"
+			} else {
+				cell.hasReminder.text = "No Reminder"
+			}
+		}
 
 		return cell
 	}

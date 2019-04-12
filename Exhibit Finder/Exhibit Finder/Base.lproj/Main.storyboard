@@ -439,7 +439,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ycr-k2-sI2"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Proximity Reminder" id="TdX-aB-DBN"/>
+                    <tabBarItem key="tabBarItem" title="Proximity Reminder" image="location25" id="TdX-aB-DBN"/>
                     <connections>
                         <outlet property="confirmButton" destination="M9v-uI-itW" id="xhC-33-41T"/>
                         <outlet property="endTime" destination="2jS-ne-e4h" id="oPv-Qs-hC6"/>
@@ -595,7 +595,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="r9i-la-Yrk"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Date Reminder" id="pDV-aO-8Tb"/>
+                    <tabBarItem key="tabBarItem" title="Date Reminder" image="clock25" id="pDV-aO-8Tb"/>
                     <connections>
                         <outlet property="confirmButton" destination="B1s-nd-t1X" id="0bc-lp-INd"/>
                         <outlet property="datePicker" destination="Lzw-AF-Pgm" id="HVM-lE-FTV"/>
@@ -721,12 +721,23 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Museum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1S-B0-AfC">
+                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jQf-ZS-H8N">
                                             <rect key="frame" x="20" y="36.5" width="374" height="19.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Museum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1S-B0-AfC">
+                                                    <rect key="frame" x="0.0" y="0.0" width="62.5" height="19.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Has Reminder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhW-a0-jVi">
+                                                    <rect key="frame" x="272.5" y="0.0" width="101.5" height="19.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </stackView>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="CKV-ww-RwH">
                                             <rect key="frame" x="20" y="61" width="374" height="18"/>
                                             <subviews>
@@ -769,20 +780,21 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="CKV-ww-RwH" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="BOB-By-ibv"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="jQf-ZS-H8N" secondAttribute="trailing" id="EqZ-E2-brf"/>
                                         <constraint firstItem="DeD-Jz-3WI" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="FOv-7s-12C"/>
+                                        <constraint firstItem="jQf-ZS-H8N" firstAttribute="top" secondItem="DeD-Jz-3WI" secondAttribute="bottom" constant="5" id="FUp-V2-h4a"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="DeD-Jz-3WI" secondAttribute="trailing" id="KCk-8T-QOf"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="j1S-B0-AfC" secondAttribute="trailing" id="VDF-J1-LTH"/>
-                                        <constraint firstItem="CKV-ww-RwH" firstAttribute="top" secondItem="j1S-B0-AfC" secondAttribute="bottom" constant="5" id="f7j-M1-Y7x"/>
+                                        <constraint firstItem="CKV-ww-RwH" firstAttribute="top" secondItem="jQf-ZS-H8N" secondAttribute="bottom" constant="5" id="PqI-X3-qgj"/>
+                                        <constraint firstItem="jQf-ZS-H8N" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="QSc-tp-m7o"/>
                                         <constraint firstItem="DeD-Jz-3WI" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" id="iR1-8C-LP2"/>
-                                        <constraint firstItem="j1S-B0-AfC" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="qFP-4f-EcZ"/>
                                         <constraint firstItem="CKV-ww-RwH" firstAttribute="bottom" secondItem="37f-cq-3Eg" secondAttribute="bottomMargin" id="tWP-yi-fNV"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="CKV-ww-RwH" secondAttribute="trailing" id="vwj-D9-3fa"/>
-                                        <constraint firstItem="j1S-B0-AfC" firstAttribute="top" secondItem="DeD-Jz-3WI" secondAttribute="bottom" constant="5" id="xSe-2V-gAh"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <outlet property="closeDate" destination="eUF-rP-Rae" id="ckv-kD-QRd"/>
+                                    <outlet property="hasReminder" destination="uhW-a0-jVi" id="S88-4Q-tuJ"/>
                                     <outlet property="musuem" destination="j1S-B0-AfC" id="MBP-mS-kWo"/>
                                     <outlet property="openDate" destination="T3Z-ZP-HoA" id="HIJ-kz-yDc"/>
                                     <outlet property="title" destination="DeD-Jz-3WI" id="muG-x4-fx5"/>
@@ -819,6 +831,10 @@
             <point key="canvasLocation" x="-45" y="129"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="clock25" width="25" height="25"/>
+        <image name="location25" width="25" height="25"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="6S0-TO-JiA"/>
     </inferredMetricsTieBreakers>

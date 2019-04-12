@@ -35,4 +35,5 @@ struct Description: Codable {
 
 struct Path: Codable {
 	let alias: String
+	let pid: Int
 }
