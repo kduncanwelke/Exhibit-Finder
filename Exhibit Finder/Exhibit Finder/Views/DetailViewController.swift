@@ -29,17 +29,18 @@ class DetailViewController: UIViewController {
 	@IBOutlet weak var reminderButton: UIButton!
 	@IBOutlet weak var viewOnlineButton: UIButton!
 	
-	
 	// MARK: Variables
 	
 	var detailItem: Exhibition?
-	var reminder: Reminder?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		viewOnlineButton.layer.cornerRadius = 10
 		reminderButton.layer.cornerRadius = 10
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(updateButton), name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+		
 		
 		configureView()
 	}
@@ -48,7 +49,14 @@ class DetailViewController: UIViewController {
 	
 	func configureView() {
 		// Update the user interface for the detail item.
-		guard let detail = detailItem else { return }
+		guard let detail = detailItem else {
+			// if there is no selection, set button titles appropriately
+			viewOnlineButton.setTitle("No Selection", for: .normal)
+			viewOnlineButton.isEnabled = false
+			reminderButton.setTitle(" No Selection ", for: .normal)
+			
+			return
+		}
 		titleLabel.text = detail.attributes.title
 		museumLabel.text = detail.attributes.museum ?? "No museum listed"
 		let open = detail.attributes.openDate.dropLast(14)
@@ -80,13 +88,17 @@ class DetailViewController: UIViewController {
 			}
 		}()
 		
-		if reminder != nil {
+		if ReminderManager.currentReminder != nil {
 			reminderButton.setTitle(" Edit Reminder ", for: .normal)
 		}
 		
 		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")
 		
 		loadMapView()
+	}
+	
+	@objc func updateButton() {
+		reminderButton.setTitle(" Edit Reminder ", for: .normal)
 	}
 	
 	func loadMapView() {
@@ -141,9 +153,6 @@ class DetailViewController: UIViewController {
 			destinationViewControllerOne?.exhibit = detail
 			destinationViewControllerOne?.openDate = openDateLabel.text
 			destinationViewControllerOne?.closeDate = closeDateLabel.text
-			
-			guard let currentReminder = reminder, let _ = currentReminder.time else { return }
-			destinationViewControllerOne?.timeReminder = currentReminder
 			
 			let destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
 			destinationViewControllerTwo?.exhibit = detail

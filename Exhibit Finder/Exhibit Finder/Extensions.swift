@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+extension UISplitViewController {
+	var primaryViewController: MasterViewController? {
+		let navController = self.viewControllers.first as? UINavigationController
+		return navController?.topViewController as? MasterViewController
+	}
+}
+
 // add reusable alert functionality
 extension UIViewController {
 	func showAlert(title: String, message: String) {

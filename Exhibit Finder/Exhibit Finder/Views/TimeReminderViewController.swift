@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class TimeReminderViewController: UIViewController {
 
@@ -26,7 +27,7 @@ class TimeReminderViewController: UIViewController {
 	var closeDate: String?
 	let dateFormatter = DateFormatter()
 	let timeDateFormatter = DateFormatter()
-	var timeReminder: Reminder?
+
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,33 +36,33 @@ class TimeReminderViewController: UIViewController {
 		datePicker.addTarget(self, action: #selector(datePickerChanged(picker:)), for: .valueChanged)
 		confirmButton.layer.cornerRadius = 10
 		dateFormatter.dateFormat = "yyyy-MM-dd"
-		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' HH:mm"
+		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
 		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
-		exhibitName.text = selectedExhibit.attributes.title
-		museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
+			exhibitName.text = selectedExhibit.attributes.title
+			museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
 		
-		let minDate = Date()
+			let minDate = Date()
 		
-		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
-		if convertedOpenDate > minDate {
-			time.text = "\(open) to \(close)"
-		} else {
-			time.text = "Today to \(close)"
-		}
+			guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
+				if convertedOpenDate > minDate {
+					time.text = "\(open) to \(close)"
+				} else {
+					time.text = "Today to \(close)"
+				}
 		
-		let maxDate = getDate(from: close)
+				let maxDate = getDate(from: close)
 		
-		datePicker.minimumDate = minDate
-		datePicker.maximumDate = maxDate
+				datePicker.minimumDate = minDate
+				datePicker.maximumDate = maxDate
 		
-		reminderSelected.text = getStringDate(from: datePicker.date)
+				reminderSelected.text = getStringDate(from: datePicker.date)
 		
-		guard let reminder = timeReminder, let date = reminder.time?.date else { return }
-		reminderSelected.text = getStringDate(from: date)
-		datePicker.date = date
+				guard let reminder = ReminderManager.currentReminder, let date = reminder.time?.date else { return }
+				reminderSelected.text = getStringDate(from: date)
+				datePicker.date = date
 		
-		confirmButton.setTitle("Save Changes", for: .normal)
+				confirmButton.setTitle("Save Changes", for: .normal)
     }
 	
 
@@ -89,7 +90,7 @@ class TimeReminderViewController: UIViewController {
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		
 		// save new entry if no reminder is being edited
-		guard let currentReminder = timeReminder else {
+		guard let currentReminder = ReminderManager.currentReminder else {
 			let newReminder = Reminder(context: managedContext)
 			
 			var time: Time?
@@ -150,6 +151,8 @@ class TimeReminderViewController: UIViewController {
 	
 	@IBAction func confirmButtonTapped(_ sender: UIButton) {
 		saveEntry()
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 		dismiss(animated: true, completion: nil)
 	}
 	

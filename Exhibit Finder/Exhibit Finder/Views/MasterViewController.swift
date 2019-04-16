@@ -21,7 +21,7 @@ class MasterViewController: UITableViewController {
 	let dateFormatter = ISO8601DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
-	var reminders: [Reminder] = []
+	//var reminders: [Reminder] = []
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -34,10 +34,8 @@ class MasterViewController: UITableViewController {
 		navigationItem.titleView = segmentedController
 		segmentedController.addTarget(self, action: #selector(segmentSelected), for: .valueChanged)
 		
-		//navigationItem.leftBarButtonItem = editButtonItem
-
-		//let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-		//navigationItem.rightBarButtonItem = addButton
+		NotificationCenter.default.addObserver(self, selector: #selector(reload), name: NSNotification.Name(rawValue: "reload"), object: nil)
+		
 		if let split = splitViewController {
 		    let controllers = split.viewControllers
 		    detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -115,19 +113,24 @@ class MasterViewController: UITableViewController {
 		}
 	}
 	
+	@objc func reload() {
+		loadReminders()
+	}
+	
 	// load reminders from core data
 	func loadReminders() {
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
+		//ReminderManager.reminders.removeAll()
 		
 		do {
-			reminders = try managedContext.fetch(fetchRequest)
+			ReminderManager.reminders = try managedContext.fetch(fetchRequest)
 			print("reminders loaded")
 		} catch let error as NSError {
 			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
 		}
 		
-		//tableView.reloadData()
+		tableView.reloadData()
 	}
 
 	
@@ -153,13 +156,17 @@ class MasterViewController: UITableViewController {
 					object = upcomingExhibits[indexPath.row]
 				}
 				
-				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-				
-				for reminder in reminders {
+				ReminderManager.currentReminder = nil
+				for reminder in ReminderManager.reminders {
 					if reminder.id == object.attributes.path.pid {
-						controller.reminder = reminder
+						ReminderManager.currentReminder = reminder
+						break
+					} else {
+						continue
 					}
 				}
+				
+				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
 				
 				controller.detailItem = object
 		        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -200,11 +207,17 @@ class MasterViewController: UITableViewController {
 		let close = object.attributes.closeDate.dropLast(14)
 		cell.closeDate.text = "\(close)"
 		
-		for reminder in reminders {
-			if reminder.id == object.attributes.path.pid {
-				cell.hasReminder.text = "Reminder Set"
-			} else {
-				cell.hasReminder.text = "No Reminder"
+		if ReminderManager.reminders.isEmpty {
+			cell.hasReminder.text = "No Reminder"
+		} else {
+			// set text to no reminder by default
+			cell.hasReminder.text = "No Reminder"
+			for reminder in ReminderManager.reminders {
+				if object.attributes.path.pid == reminder.id {
+					cell.hasReminder.text = "Reminder Set"
+				} else {
+					continue
+				}
 			}
 		}
 
