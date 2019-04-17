@@ -21,7 +21,6 @@ class MasterViewController: UITableViewController {
 	let dateFormatter = ISO8601DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
-	//var reminders: [Reminder] = []
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -121,7 +120,6 @@ class MasterViewController: UITableViewController {
 	func loadReminders() {
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
-		//ReminderManager.reminders.removeAll()
 		
 		do {
 			ReminderManager.reminders = try managedContext.fetch(fetchRequest)

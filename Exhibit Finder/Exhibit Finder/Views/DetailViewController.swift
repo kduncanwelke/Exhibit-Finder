@@ -148,18 +148,29 @@ class DetailViewController: UIViewController {
 			destinationViewController?.urlToDisplay = url
 		} else if segue.identifier == "addReminder" {
 			let barViewControllers = segue.destination as! UITabBarController
-			let destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
-			guard let detail = detailItem else { return }
-			destinationViewControllerOne?.exhibit = detail
-			destinationViewControllerOne?.openDate = openDateLabel.text
-			destinationViewControllerOne?.closeDate = closeDateLabel.text
 			
-			let destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
-			destinationViewControllerTwo?.exhibit = detail
-			destinationViewControllerTwo?.openDate = openDateLabel.text
-			destinationViewControllerTwo?.closeDate = closeDateLabel.text
-			destinationViewControllerTwo?.museumLocation = mapView.annotations.first as? MKPointAnnotation
-			destinationViewControllerTwo?.region = mapView.region
+				let destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
+				guard let detail = detailItem else { return }
+				destinationViewControllerOne?.exhibit = detail
+				destinationViewControllerOne?.openDate = openDateLabel.text
+				destinationViewControllerOne?.closeDate = closeDateLabel.text
+				
+				let destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
+				destinationViewControllerTwo?.exhibit = detail
+				destinationViewControllerTwo?.openDate = openDateLabel.text
+				destinationViewControllerTwo?.closeDate = closeDateLabel.text
+				destinationViewControllerTwo?.museumLocation = mapView.annotations.first as? MKPointAnnotation
+				destinationViewControllerTwo?.region = mapView.region
+	
+			guard let currentReminder = ReminderManager.currentReminder else { return }
+			
+			if currentReminder.time != nil {
+				barViewControllers.selectedIndex = 0
+			} else if currentReminder.location != nil {
+				barViewControllers.selectedIndex = 1
+			} else {
+				return
+			}
 		}
 	}
 	

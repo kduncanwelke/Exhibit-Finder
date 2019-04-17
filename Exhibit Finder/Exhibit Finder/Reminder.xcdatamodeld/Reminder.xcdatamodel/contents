@@ -17,12 +17,16 @@
         <relationship name="time" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Time" inverseName="reminder" inverseEntity="Time" syncable="YES"/>
     </entity>
     <entity name="Time" representedClassName="Time" syncable="YES" codeGenerationType="class">
-        <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="day" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="minute" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="month" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="year" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="reminder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Reminder" inverseName="time" inverseEntity="Reminder" syncable="YES"/>
     </entity>
     <elements>
         <element name="Location" positionX="-54" positionY="9" width="128" height="165"/>
         <element name="Reminder" positionX="-63" positionY="-18" width="128" height="105"/>
-        <element name="Time" positionX="-45" positionY="72" width="128" height="75"/>
+        <element name="Time" positionX="-45" positionY="72" width="128" height="135"/>
     </elements>
 </model>

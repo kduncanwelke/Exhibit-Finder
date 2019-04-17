@@ -35,8 +35,6 @@ class LocationReminderViewController: UIViewController {
 	var museumLocation: MKPointAnnotation?
 	var region: MKCoordinateRegion?
 	let dateFormatter = DateFormatter()
-	//var locationReminder: Reminder?
-	//var reminderPin: MKPointAnnotation?
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +50,6 @@ class LocationReminderViewController: UIViewController {
 		configureView()
     }
 	
-
 	// MARK: Custom functions
 	
 	func configureView() {
@@ -83,6 +80,7 @@ class LocationReminderViewController: UIViewController {
 			
 			slider.value = Float(reminderInfo.radius)
 			
+			confirmButton.setTitle("Save Changes", for: .normal)
 			
 			// create pin from a reminder reminder
 			let annotation = MKPointAnnotation()
@@ -243,13 +241,17 @@ class LocationReminderViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func confirmButtonPressed(_ sender: UIButton) {
-		saveEntry()
-		reloadReminders()
-		
-		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
-		
-		dismiss(animated: true, completion: nil)
+		if mapView.annotations.isEmpty {
+			showAlert(title: "No location selected", message: "Please select a place on the map for this notification")
+		} else {
+			saveEntry()
+			reloadReminders()
+			
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			
+			dismiss(animated: true, completion: nil)
+		}
 	}
 	
 	@IBAction func cancelButtonPressed(_ sender: UIButton) {

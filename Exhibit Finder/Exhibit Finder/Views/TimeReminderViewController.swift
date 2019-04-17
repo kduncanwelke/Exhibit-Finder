@@ -58,9 +58,14 @@ class TimeReminderViewController: UIViewController {
 		
 				reminderSelected.text = getStringDate(from: datePicker.date)
 		
-				guard let reminder = ReminderManager.currentReminder, let date = reminder.time?.date else { return }
-				reminderSelected.text = getStringDate(from: date)
-				datePicker.date = date
+				guard let reminder = ReminderManager.currentReminder, let date = reminder.time else { return }
+		
+				let calendar = Calendar.current
+				let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
+		
+				guard let dateToUse = calendar.date(from: components) else { return }
+				reminderSelected.text = getStringDate(from: dateToUse)
+				datePicker.date = dateToUse
 		
 				confirmButton.setTitle("Save Changes", for: .normal)
     }
@@ -132,7 +137,15 @@ class TimeReminderViewController: UIViewController {
 	
 	func getTimeForReminder(time: Time?) {
 		let date = datePicker.date
-		time?.date = date
+		let calendar = Calendar.current
+		let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+		
+		guard let year = components.year, let month = components.month, let day = components.day, let hour = components.hour, let minute = components.minute else { return }
+		time?.year = Int32(year)
+		time?.month = Int32(month)
+		time?.day = Int32(day)
+		time?.hour = Int32(hour)
+		time?.minute = Int32(minute)
 	}
 	
 	
@@ -150,10 +163,16 @@ class TimeReminderViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func confirmButtonTapped(_ sender: UIButton) {
-		saveEntry()
-		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
-		dismiss(animated: true, completion: nil)
+		let currentDate = Date()
+		if datePicker.date <= currentDate.addingTimeInterval(500) {
+			showAlert(title: "Cannot save reminder", message: "Please select a date that is in the future - the current date and time cannot be used")
+			return
+		} else {
+			saveEntry()
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			dismiss(animated: true, completion: nil)
+		}
 	}
 	
 	@IBAction func cancelButtonTapped(_ sender: UIButton) {
