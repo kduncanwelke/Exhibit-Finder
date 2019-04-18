@@ -36,6 +36,8 @@ class LocationReminderViewController: UIViewController {
 	var region: MKCoordinateRegion?
 	let dateFormatter = DateFormatter()
 	
+	//weak var delegate: AddReminderDelegate?
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		mapView.delegate = self
@@ -157,7 +159,6 @@ class LocationReminderViewController: UIViewController {
 	func reloadReminders() {
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
-		//ReminderManager.reminders.removeAll()
 		
 		do {
 			ReminderManager.reminders = try managedContext.fetch(fetchRequest)
@@ -249,6 +250,9 @@ class LocationReminderViewController: UIViewController {
 			
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			guard let exhibitWithReminder = exhibit else { return }
+			ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
+			
 			
 			dismiss(animated: true, completion: nil)
 		}

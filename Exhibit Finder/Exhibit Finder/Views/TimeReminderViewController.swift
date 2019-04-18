@@ -27,7 +27,6 @@ class TimeReminderViewController: UIViewController {
 	var closeDate: String?
 	let dateFormatter = DateFormatter()
 	let timeDateFormatter = DateFormatter()
-
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,6 +170,9 @@ class TimeReminderViewController: UIViewController {
 			saveEntry()
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			guard let exhibitWithReminder = exhibit else { return }
+			ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
+			
 			dismiss(animated: true, completion: nil)
 		}
 	}
