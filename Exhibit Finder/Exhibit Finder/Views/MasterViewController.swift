@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class MasterViewController: UITableViewController {
 
@@ -259,6 +260,17 @@ class MasterViewController: UITableViewController {
 			
 			if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.row].attributes.path.pid }) {
 				ReminderManager.currentReminder = result
+				
+				// remove existing time-based notification
+				let notificationCenter = UNUserNotificationCenter.current()
+				let identifier = "\(result.id)"
+				notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+				
+				notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
+					for request in requests {
+						print(request)
+					}
+				})
 				
 				managedContext.delete(result)
 				

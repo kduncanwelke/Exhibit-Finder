@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D031C2D226932C100F47E75 /* NotificationManager.swift */; };
 		2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D677BEE2260FD3100A1CC2E /* Reminder.xcdatamodeld */; };
 		2D677BF2226104C900A1CC2E /* CoreDateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D677BF1226104C900A1CC2E /* CoreDateManager.swift */; };
 		2D677BF422613AFC00A1CC2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D677BF322613AFC00A1CC2E /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2D031C2D226932C100F47E75 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2D677BEF2260FD3100A1CC2E /* Reminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Reminder.xcdatamodel; sourceTree = "<group>"; };
 		2D677BF1226104C900A1CC2E /* CoreDateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDateManager.swift; sourceTree = "<group>"; };
 		2D677BF322613AFC00A1CC2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				2DE50D5B2259563700B924F0 /* SearchType.swift */,
 				2DE50D602259574800B924F0 /* Exhibit.swift */,
 				2D677BF1226104C900A1CC2E /* CoreDateManager.swift */,
+				2D031C2D226932C100F47E75 /* NotificationManager.swift */,
 				2D956B4E226529B10079BA2A /* ReminderManager.swift */,
 			);
 			path = Models;
@@ -295,6 +298,7 @@
 			files = (
 				2DE50D612259574800B924F0 /* Exhibit.swift in Sources */,
 				2D68D67D225D48D60018C59E /* SeeOnlineViewController.swift in Sources */,
+				2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */,
 				2DE50D55225940CA00B924F0 /* JSONDecoder.swift in Sources */,
 				2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */,
 				2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */,

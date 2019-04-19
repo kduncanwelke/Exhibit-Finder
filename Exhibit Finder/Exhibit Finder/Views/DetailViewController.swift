@@ -41,7 +41,6 @@ class DetailViewController: UIViewController {
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(updateButton), name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 		
-		
 		configureView()
 	}
 
@@ -88,8 +87,10 @@ class DetailViewController: UIViewController {
 			}
 		}()
 		
-		if ReminderManager.currentReminder != nil {
+		if ReminderManager.reminders.contains(where: { $0.id == detail.attributes.path.pid }) {
 			reminderButton.setTitle(" Edit Reminder ", for: .normal)
+		} else {
+			reminderButton.setTitle(" Add Reminder ", for: .normal)
 		}
 		
 		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")

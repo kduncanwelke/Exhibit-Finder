@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class TimeReminderViewController: UIViewController {
 
@@ -57,16 +58,20 @@ class TimeReminderViewController: UIViewController {
 		
 				reminderSelected.text = getStringDate(from: datePicker.date)
 		
-				guard let reminder = ReminderManager.currentReminder, let date = reminder.time else { return }
-		
+			if let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) {
+				guard let date = result.time else { return }
+				ReminderManager.currentReminder = result
+				
 				let calendar = Calendar.current
 				let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
 		
 				guard let dateToUse = calendar.date(from: components) else { return }
 				reminderSelected.text = getStringDate(from: dateToUse)
 				datePicker.date = dateToUse
-		
 				confirmButton.setTitle("Save Changes", for: .normal)
+			} else {
+				ReminderManager.currentReminder = nil
+			}
     }
 	
 
@@ -111,6 +116,10 @@ class TimeReminderViewController: UIViewController {
 				// this should never be displayed but is here to cover the possibility
 				showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
 			}
+			
+			// add notification
+			NotificationManager.addTimeBasedNotification(for: newReminder)
+			
 			return
 		}
 	
@@ -126,12 +135,26 @@ class TimeReminderViewController: UIViewController {
 			// this should never be displayed but is here to cover the possibility
 			showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
 		}
+		
+		// remove existing notification, so notifs aren't doubled
+		let notificationCenter = UNUserNotificationCenter.current()
+		//notificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(currentReminder.id)"])
+		
+		// add notification anew
+		NotificationManager.addTimeBasedNotification(for: currentReminder)
+		
+		notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
+			for request in requests {
+				print(request)
+			}
+		})
 	}
 	
 	func getExhibitData(reminder: Reminder) {
 		guard let currentExhibit = exhibit else { return }
 		reminder.name = currentExhibit.attributes.title
 		reminder.id = Int64(currentExhibit.attributes.path.pid)
+		print(reminder.id)
 	}
 	
 	func getTimeForReminder(time: Time?) {
@@ -172,7 +195,6 @@ class TimeReminderViewController: UIViewController {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			guard let exhibitWithReminder = exhibit else { return }
 			ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
-			
 			dismiss(animated: true, completion: nil)
 		}
 	}
