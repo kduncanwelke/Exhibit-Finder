@@ -151,10 +151,11 @@ class TimeReminderViewController: UIViewController {
 	}
 	
 	func getExhibitData(reminder: Reminder) {
-		guard let currentExhibit = exhibit else { return }
+		guard let currentExhibit = exhibit, let open = openDate, let close = closeDate else { return }
 		reminder.name = currentExhibit.attributes.title
 		reminder.id = Int64(currentExhibit.attributes.path.pid)
-		print(reminder.id)
+		reminder.startDate = dateFormatter.date(from: open)
+		reminder.invalidDate = dateFormatter.date(from: close)
 	}
 	
 	func getTimeForReminder(time: Time?) {

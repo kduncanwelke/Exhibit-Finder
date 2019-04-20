@@ -19,7 +19,7 @@ struct NotificationManager {
 		
 		guard let title = reminder.name, let time = reminder.time else { return }
 		notificationContent.title = "Exhibit Finder Reminder"
-		notificationContent.body = "The \(title) exhibit is now on!"
+		notificationContent.body = "The \(title) exhibit is now on display."
 		notificationContent.sound = UNNotificationSound.default
 		
 		var components = DateComponents()

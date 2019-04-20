@@ -32,6 +32,7 @@ class DetailViewController: UIViewController {
 	// MARK: Variables
 	
 	var detailItem: Exhibition?
+	var museumPinLocation: MKPointAnnotation?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -122,7 +123,7 @@ class DetailViewController: UIViewController {
 		request.region = mapView.region
 		let search = MKLocalSearch(request: request)
 		
-		search.start { [unowned self] response, _ in
+		search.start { [weak self] response, _ in
 			guard let response = response else {
 				return
 			}
@@ -132,11 +133,12 @@ class DetailViewController: UIViewController {
 			guard let result = response.mapItems.first?.placemark else { return }
 			annotation.coordinate = result.coordinate
 			annotation.title = "\(museum) \n \(result.title ?? "")"
-			self.mapView.addAnnotation(annotation)
+			self?.mapView.addAnnotation(annotation)
+			self?.museumPinLocation = annotation
 			
 			// recenter map on added annotation
 			let region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-			self.mapView.setRegion(region, animated: true)
+			self?.mapView.setRegion(region, animated: true)
 		}
 	}
 	
@@ -160,7 +162,7 @@ class DetailViewController: UIViewController {
 				destinationViewControllerTwo?.exhibit = detail
 				destinationViewControllerTwo?.openDate = openDateLabel.text
 				destinationViewControllerTwo?.closeDate = closeDateLabel.text
-				destinationViewControllerTwo?.museumLocation = mapView.annotations.first as? MKPointAnnotation
+				destinationViewControllerTwo?.museumLocation = museumPinLocation
 				destinationViewControllerTwo?.region = mapView.region
 	
 			guard let currentReminder = ReminderManager.currentReminder else { return }

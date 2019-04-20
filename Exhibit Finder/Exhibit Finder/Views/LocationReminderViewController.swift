@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreData
+import CoreLocation
 
 class LocationReminderViewController: UIViewController {
 
@@ -35,6 +36,7 @@ class LocationReminderViewController: UIViewController {
 	var museumLocation: MKPointAnnotation?
 	var region: MKCoordinateRegion?
 	let dateFormatter = DateFormatter()
+	let locationManager = CLLocationManager()
 	
 	//weak var delegate: AddReminderDelegate?
 	
@@ -43,6 +45,10 @@ class LocationReminderViewController: UIViewController {
 		mapView.delegate = self
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		
+		locationManager.delegate = self
+		//locationManager.desiredAccuracy = kCLLocationAccuracyBest
+		//locationManager.startUpdatingLocation()
+		
         // Do any additional setup after loading the view.
 		confirmButton.layer.cornerRadius = 10
 		slider.addTarget(self, action: #selector(sliderChanged(slider:)), for: .valueChanged)
@@ -50,6 +56,20 @@ class LocationReminderViewController: UIViewController {
 		rightStepper.addTarget(self, action: #selector(rightStepperChanged(stepper:)), for: .valueChanged)
 		
 		configureView()
+		
+		// perform check for location services access, as this is the main area that depends on location
+		if CLLocationManager.locationServicesEnabled() {
+			switch CLLocationManager.authorizationStatus() {
+			case .notDetermined, .restricted, .denied:
+				showAlert(title: "Notice", message: "Access to location services has not been granted. This may result in undesired behavior.")
+			case .authorizedAlways, .authorizedWhenInUse:
+				print("Access")
+			@unknown default:
+				return
+			}
+		} else {
+			showAlert(title: "Notice", message: "Location service is not available - all features of this app may not be available.")
+		}
     }
 	
 	// MARK: Custom functions
@@ -72,7 +92,29 @@ class LocationReminderViewController: UIViewController {
 		let regionRadius: CLLocationDistance = 1000
 		
 		// if there is a reminder do this
-		if let reminderInfo = ReminderManager.currentReminder?.location {
+		guard let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) else {
+			// if there is no reminder set do this instead
+			ReminderManager.currentReminder = nil
+			
+			// if a museum location is in use, display it
+			if let location = museumLocation, let mapRegion = region {
+				mapView.addAnnotation(location)
+				mapView.setRegion(mapRegion, animated: true)
+				
+				let circle = MKCircle(center: location.coordinate, radius: 125)
+				mapView.addOverlay(circle)
+			} else {
+				// if there is no location associated with the selected exhibit, show national mall
+				let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
+				let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+				mapView.setRegion(defaultRegion, animated: true)
+			}
+			
+			return
+		}
+			ReminderManager.currentReminder = result
+			guard let reminderInfo = ReminderManager.currentReminder?.location else { return }
+		
 			// show time range selections and region
 			leftStepper.value = reminderInfo.minTime
 			startTime.text = returnTime(inputValue: reminderInfo.minTime)
@@ -84,7 +126,7 @@ class LocationReminderViewController: UIViewController {
 			
 			confirmButton.setTitle("Save Changes", for: .normal)
 			
-			// create pin from a reminder reminder
+			// create pin from a reminder
 			let annotation = MKPointAnnotation()
 			let coordinate = CLLocationCoordinate2D(latitude: reminderInfo.latitude, longitude: reminderInfo.longitude)
 			annotation.coordinate = coordinate
@@ -98,23 +140,6 @@ class LocationReminderViewController: UIViewController {
 			mapView.setRegion(region, animated: true)
 			let circle = MKCircle(center: coordinate, radius: reminderInfo.radius)
 			mapView.addOverlay(circle)
-		} else { // if there is no reminder set do this instead
-			guard let location = museumLocation, let mapRegion = region else {
-				// if there is no location associated with the selected exhibit, show national mall
-				let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
-				let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-				
-				mapView.setRegion(defaultRegion, animated: true)
-				return
-			}
-			
-			mapView.addAnnotation(location)
-			mapView.setRegion(mapRegion, animated: true)
-			
-			let circle = MKCircle(center: location.coordinate, radius: 125)
-			mapView.addOverlay(circle)
-			
-		}
 	}
 	
 	func saveEntry() {
@@ -172,6 +197,7 @@ class LocationReminderViewController: UIViewController {
 	func getLocationForReminder(location: Location?) {
 		guard let locationReminder = mapView.annotations.first, let address = locationReminder.title, let currentExhibit = exhibit else { return }
 		location?.address = address
+		location?.museum = museumName.text
 		location?.latitude = locationReminder.coordinate.latitude
 		location?.longitude = locationReminder.coordinate.longitude
 		location?.name = currentExhibit.attributes.title
@@ -183,9 +209,11 @@ class LocationReminderViewController: UIViewController {
 	
 	// get exhibit data for reminder
 	func getExhibitData(reminder: Reminder) {
-		guard let currentExhibit = exhibit else { return }
+		guard let currentExhibit = exhibit, let open = openDate, let close = closeDate else { return }
 		reminder.name = currentExhibit.attributes.title
 		reminder.id = Int64(currentExhibit.attributes.path.pid)
+		reminder.startDate = dateFormatter.date(from: open)
+		reminder.invalidDate = dateFormatter.date(from: close)
 	}
 	
 	@objc func sliderChanged(slider: UISlider) {
@@ -242,18 +270,32 @@ class LocationReminderViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func confirmButtonPressed(_ sender: UIButton) {
-		if mapView.annotations.isEmpty {
+		if locationManager.monitoredRegions.count == 20 {
+			showAlert(title: "Unable to save", message: "The maximum of 20 monitored locations has been met - please delete or modify an existing reminder.")
+		} else if mapView.annotations.isEmpty {
 			showAlert(title: "No location selected", message: "Please select a place on the map for this notification")
 		} else {
 			saveEntry()
 			reloadReminders()
 			
+			if let pin = mapView.annotations.first, let exhibitWithReminder = exhibit, let circle = mapView.overlays.first as? MKCircle {
+				
+				let annotation = MKPointAnnotation()
+				let coordinate = CLLocationCoordinate2D(latitude: pin.coordinate.latitude, longitude: pin.coordinate.longitude)
+				annotation.coordinate = coordinate
+				
+				let geofenceArea = LocationManager.getMonitoringRegion(for: annotation, exhibitName: exhibitWithReminder.attributes.title, radius: circle.radius)
+		
+				locationManager.startMonitoring(for: geofenceArea)
+				print("\(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
+				print("started monitoring")
+			
+			}
+			
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			guard let exhibitWithReminder = exhibit else { return }
 			ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
-			
-			
 			dismiss(animated: true, completion: nil)
 		}
 	}
@@ -262,6 +304,15 @@ class LocationReminderViewController: UIViewController {
 		dismiss(animated: true, completion: nil)
 	}
 	
+}
+
+extension LocationReminderViewController: CLLocationManagerDelegate {
+	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+	}
+	
+	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+		showAlert(title: "Geolocation failed", message: "\(error)")
+	}
 }
 
 extension LocationReminderViewController: MKMapViewDelegate {

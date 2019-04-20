@@ -8,12 +8,13 @@
 
 import UIKit
 import UserNotifications
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate, UNUserNotificationCenterDelegate {
 
 	var window: UIWindow?
-
+	let locationManager = CLLocationManager()
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
@@ -21,6 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 		let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
 		navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
 		splitViewController.delegate = self
+		
+		locationManager.delegate = self
+		locationManager.requestAlwaysAuthorization()
+		locationManager.requestLocation()
 		
 		let notificationCenter = UNUserNotificationCenter.current()
 		notificationCenter.delegate = self
@@ -94,3 +99,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 	}
 }
 
+extension AppDelegate: CLLocationManagerDelegate {
+	func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+		if region is CLCircularRegion {
+			print("entered region")
+			LocationManager.showLocationBasedNotification(for: region)
+		}
+	}
+	
+	func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
+		print("Monitoring failed for region \(String(describing: region))")
+	}
+	
+	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+		print("Location monitoring failed with error \(error)")
+	}
+	
+	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+		print("Location updated")
+	}
+}

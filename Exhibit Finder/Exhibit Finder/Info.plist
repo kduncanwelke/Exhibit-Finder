@@ -51,5 +51,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Access is required in order to receive location based reminders.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Access is required in order to receive location based reminders.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Access is required in order to receive location based reminders.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Access is required in order to receive location based reminders.</string>
 </dict>
 </plist>

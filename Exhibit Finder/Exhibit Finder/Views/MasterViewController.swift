@@ -147,7 +147,7 @@ class MasterViewController: UITableViewController {
 			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
 		}
 	
-		//tableView.reloadData()
+		tableView.reloadData()
 	}
 
 	
@@ -178,7 +178,7 @@ class MasterViewController: UITableViewController {
 				if let result = ReminderManager.reminders.first(where: { $0.id == object.attributes.path.pid }) {
 					ReminderManager.currentReminder = result
 				} else {
-					// nothing
+					ReminderManager.currentReminder = nil
 				}
 				
 				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
@@ -234,11 +234,11 @@ class MasterViewController: UITableViewController {
 		if ReminderManager.reminders.isEmpty {
 			cell.hasReminder.text = "No Reminder"
 		} else {
-			cell.hasReminder.text = "No Reminder"
 			// set text to show reminder if one matches
 			if ReminderManager.reminders.contains(where: { $0.id == object.attributes.path.pid }) {
 				cell.hasReminder.text = "Reminder Set"
 			} else {
+				cell.hasReminder.text = "No Reminder"
 			}
 		}
 
@@ -262,6 +262,7 @@ class MasterViewController: UITableViewController {
 				ReminderManager.currentReminder = result
 				
 				// remove existing time-based notification
+				// location notifications are only created and displayed when triggered so they don't require deletion
 				let notificationCenter = UNUserNotificationCenter.current()
 				let identifier = "\(result.id)"
 				notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
