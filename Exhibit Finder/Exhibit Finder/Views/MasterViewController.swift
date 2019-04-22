@@ -68,6 +68,7 @@ class MasterViewController: UITableViewController {
 		if hasBeenLoaded {
 			return
 		} else {
+			deleteExpiredReminders()
 			loadExhibitions()
 		}
 		
@@ -134,6 +135,65 @@ class MasterViewController: UITableViewController {
 		loadReminders()
 	}
 
+	func deleteExpiredReminders() {
+		let managedContext = CoreDataManager.shared.managedObjectContext
+		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
+		let now = Date()
+		//let calendar = Calendar.current
+		//var dateComponents = DateComponents()
+		//dateComponents.month = 8
+		//dateComponents.day = 18
+		//guard let now = calendar.date(from: dateComponents) else { return }
+		fetchRequest.predicate = NSPredicate(format: "invalidDate > %@", now as CVarArg)
+		
+		var remindersToDelete: [Reminder] = []
+		do {
+			remindersToDelete = try managedContext.fetch(fetchRequest)
+		} catch let error as NSError {
+			print("could not fetch, \(error), \(error.userInfo)")
+		}
+		
+		if remindersToDelete.count > 0 {
+			for reminder in remindersToDelete {
+				managedContext.delete(reminder)
+				print("deleted")
+				
+				// clear notifications and geofenced areas associated with reminder
+				clearNotification(result: reminder)
+				endLocationMonitoring(result: reminder)
+			}
+			
+			do {
+				try managedContext.save()
+			} catch {
+				print("Failed to save")
+			}
+		} else {
+			return
+		}
+		
+	}
+	
+	func endLocationMonitoring(result: Reminder) {
+		if let location = result.location, let name = result.name {
+			LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
+			print("stopped monitoring")
+		}
+	}
+	
+	func clearNotification(result: Reminder) {
+		// remove existing time-based notification
+		let notificationCenter = UNUserNotificationCenter.current()
+		let identifier = "\(result.id)"
+		notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+		
+		notificationCenter.getPendingNotificationRequests(completionHandler: { notifs in
+			for notif in notifs {
+				print(notif)
+			}
+		})
+		
+	}
 	
 	// load reminders from core data
 	func loadReminders() {
@@ -263,22 +323,8 @@ class MasterViewController: UITableViewController {
 			
 			if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.row].attributes.path.pid }) {
 				
-				// remove existing time-based notification
-				// location notifications are only created and displayed when triggered so they don't require deletion
-				let notificationCenter = UNUserNotificationCenter.current()
-				let identifier = "\(result.id)"
-				notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
-				
-				/*notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
-					for request in requests {
-						print(request)
-					}
-				})*/
-				
-				if let location = result.location, let name = result.name {
-					LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
-					print("stopped monitoring")
-				}
+				clearNotification(result: result)
+				endLocationMonitoring(result: result)
 				
 				managedContext.delete(result)
 				
