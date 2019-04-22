@@ -42,10 +42,10 @@ class MasterViewController: UITableViewController {
 		searchController.delegate = self
 		searchController.searchResultsUpdater = self
 		searchController.obscuresBackgroundDuringPresentation = false
+		self.definesPresentationContext = true
 		searchController.searchBar.placeholder = "Type to search . . ."
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
-		searchController.definesPresentationContext = true
 		
 		if let split = splitViewController {
 		    let controllers = split.viewControllers
@@ -144,7 +144,7 @@ class MasterViewController: UITableViewController {
 		//dateComponents.month = 8
 		//dateComponents.day = 18
 		//guard let now = calendar.date(from: dateComponents) else { return }
-		fetchRequest.predicate = NSPredicate(format: "invalidDate > %@", now as CVarArg)
+		fetchRequest.predicate = NSPredicate(format: "invalidDate < %@", now as CVarArg)
 		
 		var remindersToDelete: [Reminder] = []
 		do {

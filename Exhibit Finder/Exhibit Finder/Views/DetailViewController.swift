@@ -164,8 +164,17 @@ class DetailViewController: UIViewController {
 				destinationViewControllerTwo?.closeDate = closeDateLabel.text
 				destinationViewControllerTwo?.museumLocation = museumPinLocation
 				destinationViewControllerTwo?.region = mapView.region
-	
-			guard let currentReminder = ReminderManager.currentReminder else { return }
+			
+			guard let currentReminder = ReminderManager.currentReminder else {
+				// if showing a location, segue to location based reminder view
+				if museumPinLocation != nil {
+					barViewControllers.selectedIndex = 1
+				} else {
+					barViewControllers.selectedIndex = 0
+				}
+				
+				return
+			}
 			
 			if currentReminder.time != nil {
 				barViewControllers.selectedIndex = 0

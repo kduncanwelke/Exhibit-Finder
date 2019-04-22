@@ -61,7 +61,7 @@ class LocationReminderViewController: UIViewController {
 		if CLLocationManager.locationServicesEnabled() {
 			switch CLLocationManager.authorizationStatus() {
 			case .notDetermined, .restricted, .denied:
-				showAlert(title: "Notice", message: "Access to location services has not been granted. This may result in undesired behavior.")
+				showAlert(title: "Location service disabled", message: "Access to location services has not been granted. Location based notifications will not be displayed.")
 			case .authorizedAlways, .authorizedWhenInUse:
 				print("Access")
 			@unknown default:
@@ -113,7 +113,7 @@ class LocationReminderViewController: UIViewController {
 			return
 		}
 			ReminderManager.currentReminder = result
-			guard let reminderInfo = ReminderManager.currentReminder?.location else { return }
+			guard let reminderInfo = ReminderManager.currentReminder?.location, let address = reminderInfo.address else { return }
 		
 			// show time range selections and region
 			leftStepper.value = reminderInfo.minTime
@@ -130,7 +130,7 @@ class LocationReminderViewController: UIViewController {
 			let annotation = MKPointAnnotation()
 			let coordinate = CLLocationCoordinate2D(latitude: reminderInfo.latitude, longitude: reminderInfo.longitude)
 			annotation.coordinate = coordinate
-			annotation.title = reminderInfo.address
+			annotation.title = "\(address)"
 			
 			// add pin to map
 			mapView.addAnnotation(annotation)

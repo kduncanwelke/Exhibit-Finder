@@ -38,44 +38,63 @@ class TimeReminderViewController: UIViewController {
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
-		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
-			exhibitName.text = selectedExhibit.attributes.title
-			museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
+		configureView()
 		
-			let minDate = Date()
-		
-			guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
-				if convertedOpenDate > minDate {
-					time.text = "\(open) to \(close)"
-				} else {
-					time.text = "Today to \(close)"
-				}
-		
-				let maxDate = getDate(from: close)
-		
-				datePicker.minimumDate = minDate
-				datePicker.maximumDate = maxDate
-		
-				reminderSelected.text = getStringDate(from: datePicker.date)
-		
-			if let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) {
-				guard let date = result.time else { return }
-				ReminderManager.currentReminder = result
-				
-				let calendar = Calendar.current
-				let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
-		
-				guard let dateToUse = calendar.date(from: components) else { return }
-				reminderSelected.text = getStringDate(from: dateToUse)
-				datePicker.date = dateToUse
-				confirmButton.setTitle("Save Changes", for: .normal)
-			} else {
-				ReminderManager.currentReminder = nil
+		// check if notifications are enabled, as this is the first point of use
+		UNUserNotificationCenter.current().getNotificationSettings(){ (settings) in
+			switch settings.alertSetting {
+			case .enabled:
+				break
+			case .disabled:
+				self.showAlert(title: "Notifications disabled", message: "Access to provide notifications has not been granted. Time based notifications will not be displayed.")
+			case .notSupported:
+				self.showAlert(title: "Notifications not supported", message: "Notifications will not be displayed, as the service is not available on this device.")
+			@unknown default:
+				return
 			}
+		}
     }
 	
 
 	// MARK: Custom functions
+	func configureView() {
+		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
+		exhibitName.text = selectedExhibit.attributes.title
+		museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
+		
+		let minDate = Date()
+		
+		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
+		if convertedOpenDate > minDate {
+			time.text = "\(open) to \(close)"
+		} else {
+			time.text = "Today to \(close)"
+		}
+		
+		let maxDate = getDate(from: close)
+		
+		datePicker.minimumDate = minDate
+		datePicker.maximumDate = maxDate
+		
+		reminderSelected.text = getStringDate(from: datePicker.date)
+		
+		if let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) {
+			guard let date = result.time else { return }
+			ReminderManager.currentReminder = result
+			
+			let calendar = Calendar.current
+			let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
+			
+			guard let dateToUse = calendar.date(from: components) else { return }
+			reminderSelected.text = getStringDate(from: dateToUse)
+			datePicker.date = dateToUse
+			confirmButton.setTitle("Save Changes", for: .normal)
+		} else {
+			ReminderManager.currentReminder = nil
+		}
+	}
+	
+	
 	@objc func datePickerChanged(picker: UIDatePicker) {
 		reminderSelected.text = getStringDate(from: datePicker.date)
 	}
