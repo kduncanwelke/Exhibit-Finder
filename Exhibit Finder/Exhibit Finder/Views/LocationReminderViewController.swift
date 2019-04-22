@@ -289,7 +289,11 @@ class LocationReminderViewController: UIViewController {
 				locationManager.startMonitoring(for: geofenceArea)
 				print("\(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
 				print("started monitoring")
-			
+				
+				let regions = locationManager.monitoredRegions
+				for region in regions {
+					print(region)
+				}
 			}
 			
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)

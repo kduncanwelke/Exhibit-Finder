@@ -25,7 +25,7 @@ struct LocationManager {
 		let locationManager = CLLocationManager()
 		let coordinate = CLLocationCoordinate2DMake(latitude, longitude)
 		let selectedRegion = CLCircularRegion(center: coordinate, radius: radius, identifier: exhibitName)
-		
+
 		locationManager.stopMonitoring(for: selectedRegion)
 	}
 	

@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import UserNotifications
+import CoreLocation
 
 class MasterViewController: UITableViewController {
 
@@ -28,7 +29,6 @@ class MasterViewController: UITableViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
-		
 		let items = ["Current", "Upcoming", "My Reminders"]
 		segmentedController = UISegmentedControl(items: items)
 		segmentedController.tintColor = UIColor(red:1.00, green:0.58, blue:0.00, alpha:1.0)
@@ -147,7 +147,10 @@ class MasterViewController: UITableViewController {
 			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
 		}
 	
-		tableView.reloadData()
+		// if section 2 (where deletion occurs) is selected, don't reload table view as it breaks fade animation
+		if segmentedController.selectedSegmentIndex != 2 {
+			tableView.reloadData()
+		}
 	}
 
 	
@@ -259,7 +262,6 @@ class MasterViewController: UITableViewController {
 			let managedContext = CoreDataManager.shared.managedObjectContext
 			
 			if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.row].attributes.path.pid }) {
-				ReminderManager.currentReminder = result
 				
 				// remove existing time-based notification
 				// location notifications are only created and displayed when triggered so they don't require deletion
@@ -267,11 +269,16 @@ class MasterViewController: UITableViewController {
 				let identifier = "\(result.id)"
 				notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
 				
-				notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
+				/*notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
 					for request in requests {
 						print(request)
 					}
-				})
+				})*/
+				
+				if let location = result.location, let name = result.name {
+					LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
+					print("stopped monitoring")
+				}
 				
 				managedContext.delete(result)
 				
@@ -280,10 +287,10 @@ class MasterViewController: UITableViewController {
 				} catch {
 					print("Failed to save")
 				}
-				
+			
 				ReminderManager.exhibitsWithReminders.remove(at: indexPath.row)
-				tableView.deleteRows(at: [indexPath], with: .fade)
 				ReminderManager.currentReminder = nil
+				tableView.deleteRows(at: [indexPath], with: .fade)
 				
 				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			}
