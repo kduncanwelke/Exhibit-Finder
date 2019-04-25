@@ -167,8 +167,17 @@ class LocationReminderViewController: UIViewController {
 			return
 		}
 		
-		// otherwise overwrite existing item with new time selection
-		guard let location = currentReminder.location else { return }
+		// otherwise rewrite data to selected reminder
+		guard let location = currentReminder.location else {
+			// time was not set before but one is being added
+			var location: Location?
+			location = Location(context: managedContext)
+			getLocationForReminder(location: location)
+			currentReminder.location = location
+			return
+		}
+		
+		// resave current location if it already exists
 		getLocationForReminder(location: location)
 		currentReminder.location = location
 		
@@ -299,7 +308,11 @@ class LocationReminderViewController: UIViewController {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			guard let exhibitWithReminder = exhibit else { return }
-			ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
+			if ReminderManager.exhibitsWithReminders.contains(where: { $0.attributes.path.pid == exhibitWithReminder.attributes.path.pid }) {
+				// do nothing
+			} else {
+				ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
+			}
 			dismiss(animated: true, completion: nil)
 		}
 	}

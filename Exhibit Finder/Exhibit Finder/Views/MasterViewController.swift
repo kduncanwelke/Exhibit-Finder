@@ -21,6 +21,7 @@ class MasterViewController: UITableViewController {
 	var upcomingExhibits: [Exhibition] = []
 	var currentDate = Date()
 	let dateFormatter = ISO8601DateFormatter()
+	let timeDateFormatter = DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
 	let searchController = UISearchController(searchResultsController: nil)
@@ -46,6 +47,8 @@ class MasterViewController: UITableViewController {
 		searchController.searchBar.placeholder = "Type to search . . ."
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
+		
+		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
 		if let split = splitViewController {
 		    let controllers = split.viewControllers
@@ -212,7 +215,21 @@ class MasterViewController: UITableViewController {
 			tableView.reloadData()
 		}
 	}
-
+	
+	func fullDelete(result: Reminder) {
+		let managedContext = CoreDataManager.shared.managedObjectContext
+		
+		clearNotification(result: result)
+		endLocationMonitoring(result: result)
+		
+		managedContext.delete(result)
+		
+		do {
+			try managedContext.save()
+		} catch {
+			print("Failed to save")
+		}
+	}
 	
 	// turn date into string to pass into search
 	func getDate(from stringDate: String) -> Date? {
@@ -220,6 +237,11 @@ class MasterViewController: UITableViewController {
 			print("date conversion failed")
 			return nil
 		}
+		return createdDate
+	}
+	
+	func getStringDate(from date: Date) -> String {
+		let createdDate = timeDateFormatter.string(from: date)
 		return createdDate
 	}
 
@@ -256,7 +278,23 @@ class MasterViewController: UITableViewController {
 	// MARK: - Table View
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
+		if isFilteringBySearch() {
+			return 1
+		} else if segmentedController.selectedSegmentIndex == 2 {
+			return ReminderManager.exhibitsWithReminders.count
+		} else {
+			return 1
+		}
+	}
+	
+	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+		if isFilteringBySearch() {
+			return nil
+		} else if segmentedController.selectedSegmentIndex == 2 {
+			return ReminderManager.exhibitsWithReminders[section].attributes.title
+		} else {
+			return nil
+		}
 	}
 
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -267,7 +305,13 @@ class MasterViewController: UITableViewController {
 		} else if segmentedController.selectedSegmentIndex == 1{
 			return upcomingExhibits.count
 		} else {
-			return ReminderManager.exhibitsWithReminders.count
+			let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].attributes.path.pid })
+			if result?.time != nil && result?.location != nil {
+				return 2
+			} else {
+				return 1
+			}
+			//return ReminderManager.exhibitsWithReminders.count
 		}
 	}
 
@@ -284,7 +328,13 @@ class MasterViewController: UITableViewController {
 		} else if segmentedController.selectedSegmentIndex == 1 {
 			object = upcomingExhibits[indexPath.row]
 		} else {
-			object = ReminderManager.exhibitsWithReminders[indexPath.row]
+			object = ReminderManager.exhibitsWithReminders[indexPath.section]
+		}
+		
+		if segmentedController.selectedSegmentIndex == 2 {
+			cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
+		} else {
+			cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
 		}
 		
 		cell.title.text = object.attributes.title
@@ -294,17 +344,52 @@ class MasterViewController: UITableViewController {
 		let close = object.attributes.closeDate.dropLast(14)
 		cell.closeDate.text = "\(close)"
 		
-		if ReminderManager.reminders.isEmpty {
-			cell.hasReminder.text = "No Reminder"
-		} else {
-			// set text to show reminder if one matches
-			if ReminderManager.reminders.contains(where: { $0.id == object.attributes.path.pid }) {
-				cell.hasReminder.text = "Reminder Set"
+		
+		// set text to show reminder if one matches
+		if let result = ReminderManager.reminders.first(where: { $0.id == object.attributes.path.pid }) {
+			if segmentedController.selectedSegmentIndex == 2 {
+				if result.time != nil && result.location != nil {
+					if indexPath.row == 0 {
+						cell.hasReminder.text = "Time Reminder"
+						if let date = result.time {
+							let calendar = Calendar.current
+							let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
+							
+							if let dateToUse = calendar.date(from: components) {
+								let stringDate = getStringDate(from: dateToUse)
+								cell.title.text = "For \(stringDate)"
+							}
+						}
+					} else if indexPath.row == 1 {
+						cell.hasReminder.text = "Location Reminder"
+						if let radius = result.location?.radius {
+							cell.title.text = "Within \(Int(radius)) foot radius of museum"
+						}
+					}
+				} else if result.time != nil {
+					cell.hasReminder.text = "Time Reminder"
+					if let date = result.time {
+						let calendar = Calendar.current
+						let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
+						
+						if let dateToUse = calendar.date(from: components) {
+							let stringDate = getStringDate(from: dateToUse)
+							cell.title.text = "For \(stringDate)"
+						}
+					}
+					
+				} else if result.location != nil {
+					cell.hasReminder.text = "Location Reminder"
+					if let radius = result.location?.radius {
+						cell.title.text = "Within \(Int(radius)) foot radius of museum"
+					}
+				}
 			} else {
-				cell.hasReminder.text = "No Reminder"
+				cell.hasReminder.text = "Reminder Set"
 			}
+		} else {
+			cell.hasReminder.text = "No Reminder"
 		}
-
 		return cell
 	}
 
@@ -321,24 +406,76 @@ class MasterViewController: UITableViewController {
 		if editingStyle == .delete {
 			let managedContext = CoreDataManager.shared.managedObjectContext
 			
-			if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.row].attributes.path.pid }) {
-				
-				clearNotification(result: result)
-				endLocationMonitoring(result: result)
-				
-				managedContext.delete(result)
-				
-				do {
-					try managedContext.save()
-				} catch {
-					print("Failed to save")
+			if isFilteringBySearch() {
+				if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.row].attributes.path.pid }) {
+					if result.time != nil && result.location != nil {
+						let cell = tableView.cellForRow(at: indexPath) as! ExhibitTableViewCell
+						
+						if cell.hasReminder.text == "Time Reminder" {
+							result.time = nil
+							clearNotification(result: result)
+						} else if cell.hasReminder.text == "Location Reminder" {
+							result.location = nil
+							endLocationMonitoring(result: result)
+						}
+						
+						do {
+							try managedContext.save()
+							print("resave successful")
+						} catch {
+							// this should never be displayed but is here to cover the possibility
+							showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
+						}
+					} else {
+						fullDelete(result: result)
+						ReminderManager.exhibitsWithReminders.remove(at: indexPath.row)
+						ReminderManager.currentReminder = nil
+						tableView.deleteRows(at: [indexPath], with: .fade)
+						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+					}
 				}
+			}
 			
-				ReminderManager.exhibitsWithReminders.remove(at: indexPath.row)
-				ReminderManager.currentReminder = nil
-				tableView.deleteRows(at: [indexPath], with: .fade)
-				
-				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.section].attributes.path.pid }) {
+				// if there is only one reminder shown, delete it
+				if tableView.numberOfRows(inSection: indexPath.section) == 1 {
+					fullDelete(result: result)
+					
+					ReminderManager.exhibitsWithReminders.remove(at: indexPath.section)
+					ReminderManager.currentReminder = nil
+					
+					// delete entire section to prevent '0 row in section' warning
+					tableView.deleteSections([indexPath.section], with: .fade)
+					NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+				} else {
+					// if the selected row is the first, remove time based reminder and save
+					if indexPath.row == 0 {
+						result.time = nil
+						clearNotification(result: result)
+						
+						do {
+							try managedContext.save()
+							print("resave successful")
+						} catch {
+							// this should never be displayed but is here to cover the possibility
+							showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
+						}
+					} else if indexPath.row == 1 { // if second, remove location based reminder
+						result.location = nil
+						endLocationMonitoring(result: result)
+						
+						do {
+							try managedContext.save()
+							print("resave successful")
+						} catch {
+							// this should never be displayed but is here to cover the possibility
+							showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
+						}
+					}
+					
+					tableView.deleteRows(at: [indexPath], with: .fade)
+					NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+				}
 			}
 		} else if editingStyle == .insert {
 		    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.

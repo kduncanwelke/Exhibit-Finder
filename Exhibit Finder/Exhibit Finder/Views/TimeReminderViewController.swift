@@ -141,9 +141,18 @@ class TimeReminderViewController: UIViewController {
 			
 			return
 		}
-	
-		// otherwise overwrite existing item with new time selection
-		guard let time = currentReminder.time else { return }
+		
+		// otherwise rewrite data to selected reminder
+		guard let time = currentReminder.time else {
+			// time was not set before but one is being added
+			var time: Time?
+			time = Time(context: managedContext)
+			getTimeForReminder(time: time)
+			currentReminder.time = time
+			return
+		}
+		
+		// resave current time if it already exists
 		getTimeForReminder(time: time)
 		currentReminder.time = time
 	
@@ -214,7 +223,11 @@ class TimeReminderViewController: UIViewController {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			guard let exhibitWithReminder = exhibit else { return }
-			ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
+			if ReminderManager.exhibitsWithReminders.contains(where: { $0.attributes.path.pid == exhibitWithReminder.attributes.path.pid }) {
+				// do nothing
+			} else {
+				ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
+			}
 			dismiss(animated: true, completion: nil)
 		}
 	}
