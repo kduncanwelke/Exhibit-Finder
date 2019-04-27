@@ -112,34 +112,44 @@ class LocationReminderViewController: UIViewController {
 			
 			return
 		}
-			ReminderManager.currentReminder = result
-			guard let reminderInfo = ReminderManager.currentReminder?.location, let address = reminderInfo.address else { return }
 		
-			// show time range selections and region
-			leftStepper.value = reminderInfo.minTime
-			startTime.text = returnTime(inputValue: reminderInfo.minTime)
-			
-			rightStepper.value = reminderInfo.maxTime
-			endTime.text = returnTime(inputValue: reminderInfo.maxTime)
-			
-			slider.value = Float(reminderInfo.radius)
-			
-			confirmButton.setTitle("Save Changes", for: .normal)
-			
-			// create pin from a reminder
-			let annotation = MKPointAnnotation()
-			let coordinate = CLLocationCoordinate2D(latitude: reminderInfo.latitude, longitude: reminderInfo.longitude)
-			annotation.coordinate = coordinate
-			annotation.title = "\(address)"
-			
-			// add pin to map
-			mapView.addAnnotation(annotation)
-			
-			// set region and add circular overly
-			let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-			mapView.setRegion(region, animated: true)
-			let circle = MKCircle(center: coordinate, radius: reminderInfo.radius)
-			mapView.addOverlay(circle)
+		ReminderManager.currentReminder = result
+			if let reminderInfo = ReminderManager.currentReminder?.location, let address = reminderInfo.address {
+				// show time range selections and region
+				leftStepper.value = reminderInfo.minTime
+				startTime.text = returnTime(inputValue: reminderInfo.minTime)
+				
+				rightStepper.value = reminderInfo.maxTime
+				endTime.text = returnTime(inputValue: reminderInfo.maxTime)
+				
+				slider.value = Float(reminderInfo.radius)
+				
+				confirmButton.setTitle("Save Changes", for: .normal)
+				
+				// create pin from a reminder
+				let annotation = MKPointAnnotation()
+				let coordinate = CLLocationCoordinate2D(latitude: reminderInfo.latitude, longitude: reminderInfo.longitude)
+				annotation.coordinate = coordinate
+				annotation.title = "\(address)"
+				
+				// add pin to map
+				mapView.addAnnotation(annotation)
+				
+				// set region and add circular overly
+				let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+				mapView.setRegion(region, animated: true)
+				let circle = MKCircle(center: coordinate, radius: reminderInfo.radius)
+				mapView.addOverlay(circle)
+			} else {
+				// if there is no location with the reminder, display museum location instead
+				if let location = museumLocation, let mapRegion = region {
+					mapView.addAnnotation(location)
+					mapView.setRegion(mapRegion, animated: true)
+					
+					let circle = MKCircle(center: location.coordinate, radius: 125)
+					mapView.addOverlay(circle)
+				}
+			}
 	}
 	
 	func saveEntry() {
@@ -168,18 +178,17 @@ class LocationReminderViewController: UIViewController {
 		}
 		
 		// otherwise rewrite data to selected reminder
-		guard let location = currentReminder.location else {
-			// time was not set before but one is being added
+		if let location = currentReminder.location {
+			// resave current location if it already exists
+			getLocationForReminder(location: location)
+			currentReminder.location = location
+		} else {
+			// location was not set before but one is being added
 			var location: Location?
 			location = Location(context: managedContext)
 			getLocationForReminder(location: location)
 			currentReminder.location = location
-			return
 		}
-		
-		// resave current location if it already exists
-		getLocationForReminder(location: location)
-		currentReminder.location = location
 		
 		do {
 			try managedContext.save()
@@ -307,9 +316,11 @@ class LocationReminderViewController: UIViewController {
 			
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			
 			guard let exhibitWithReminder = exhibit else { return }
 			if ReminderManager.exhibitsWithReminders.contains(where: { $0.attributes.path.pid == exhibitWithReminder.attributes.path.pid }) {
-				// do nothing
+				// reminder existed but was edited
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
 			} else {
 				ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
 			}

@@ -20,7 +20,6 @@
 		2DB45144225E7A28008E2E2C /* LocationReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB45143225E7A28008E2E2C /* LocationReminderViewController.swift */; };
 		2DB9D3E1225BE5970025535D /* ExhibitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */; };
 		2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB9D3E2225BF6B00025535D /* Extensions.swift */; };
-		2DD14E7722710E9200F14430 /* ReminderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD14E7622710E9200F14430 /* ReminderList.swift */; };
 		2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D2D22592FA200B924F0 /* AppDelegate.swift */; };
 		2DE50D3022592FA200B924F0 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D2F22592FA200B924F0 /* MasterViewController.swift */; };
 		2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D3122592FA200B924F0 /* DetailViewController.swift */; };
@@ -61,7 +60,6 @@
 		2DB45143225E7A28008E2E2C /* LocationReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationReminderViewController.swift; sourceTree = "<group>"; };
 		2DB9D3E0225BE5970025535D /* ExhibitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitTableViewCell.swift; sourceTree = "<group>"; };
 		2DB9D3E2225BF6B00025535D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		2DD14E7622710E9200F14430 /* ReminderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderList.swift; sourceTree = "<group>"; };
 		2DE50D2A22592FA200B924F0 /* Exhibit Finder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Exhibit Finder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DE50D2D22592FA200B924F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2DE50D2F22592FA200B924F0 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -177,7 +175,6 @@
 				2D677BF1226104C900A1CC2E /* CoreDateManager.swift */,
 				2D031C2D226932C100F47E75 /* NotificationManager.swift */,
 				2D130614226A7C2700482D1E /* LocationManager.swift */,
-				2DD14E7622710E9200F14430 /* ReminderList.swift */,
 				2D956B4E226529B10079BA2A /* ReminderManager.swift */,
 			);
 			path = Models;
@@ -317,7 +314,6 @@
 				2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */,
 				2D677BF2226104C900A1CC2E /* CoreDateManager.swift in Sources */,
 				2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */,
-				2DD14E7722710E9200F14430 /* ReminderList.swift in Sources */,
 				2DB45142225E7A1E008E2E2C /* TimeReminderViewController.swift in Sources */,
 				2D956B4F226529B10079BA2A /* ReminderManager.swift in Sources */,
 				2D130615226A7C2700482D1E /* LocationManager.swift in Sources */,

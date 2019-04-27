@@ -252,16 +252,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wi7-W1-SvQ">
-                                <rect key="frame" x="0.0" y="104.5" width="414" height="276"/>
+                                <rect key="frame" x="0.0" y="104.5" width="414" height="248.5"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="wi7-W1-SvQ" secondAttribute="height" multiplier="3:2" id="lyh-ju-6du"/>
+                                    <constraint firstAttribute="width" secondItem="wi7-W1-SvQ" secondAttribute="height" multiplier="5:3" id="lyh-ju-6du"/>
                                 </constraints>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KCY-v1-0nv">
-                                <rect key="frame" x="0.0" y="390.5" width="414" height="402.5"/>
+                                <rect key="frame" x="0.0" y="363" width="414" height="430"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="uAi-M6-vd1">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="402.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="430"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ynr-zY-6HN">
                                                 <rect key="frame" x="10" y="0.0" width="394" height="56"/>
@@ -295,7 +295,7 @@
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="g2u-vk-qN8">
-                                                <rect key="frame" x="123" y="79" width="168.5" height="64.5"/>
+                                                <rect key="frame" x="123" y="83.5" width="168.5" height="64.5"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="12A-fC-m47">
                                                         <rect key="frame" x="0.0" y="0.0" width="145.5" height="19.5"/>
@@ -351,13 +351,13 @@
                                                 </subviews>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify me between the hours of" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3E-Ad-bzr">
-                                                <rect key="frame" x="83.5" y="166" width="247" height="20.5"/>
+                                                <rect key="frame" x="83.5" y="175" width="247" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="MBr-Xt-IJt">
-                                                <rect key="frame" x="49.5" y="209.5" width="315.5" height="29"/>
+                                                <rect key="frame" x="49.5" y="223" width="315.5" height="29"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8am" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cR-Rc-ely">
                                                         <rect key="frame" x="0.0" y="0.0" width="30.5" height="29"/>
@@ -386,13 +386,13 @@
                                                 </subviews>
                                             </stackView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You will receive a notification when you enter the marked region, if location services are enabled" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DwI-fr-IrE">
-                                                <rect key="frame" x="11" y="261" width="392.5" height="36"/>
+                                                <rect key="frame" x="11" y="279.5" width="392.5" height="36"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M9v-uI-itW">
-                                                <rect key="frame" x="132" y="320" width="150" height="30"/>
+                                                <rect key="frame" x="132" y="342.5" width="150" height="30"/>
                                                 <color key="backgroundColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="150" id="5JO-NI-X2g"/>
@@ -406,7 +406,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tnt-si-Shv">
-                                                <rect key="frame" x="183" y="372.5" width="48" height="30"/>
+                                                <rect key="frame" x="183" y="400" width="48" height="30"/>
                                                 <state key="normal" title="Cancel"/>
                                                 <connections>
                                                     <action selector="cancelButtonPressed:" destination="mzP-ih-LIQ" eventType="touchUpInside" id="hdZ-Wr-TrE"/>
@@ -497,7 +497,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="SXR-GV-CTU">
                                         <rect key="frame" x="0.0" y="352.5" width="414" height="376.5"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="OJj-W4-4OP">
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="OJj-W4-4OP">
                                                 <rect key="frame" x="123" y="0.0" width="168.5" height="64.5"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Ckx-dE-ytE">

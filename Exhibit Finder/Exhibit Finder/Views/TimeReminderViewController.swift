@@ -143,19 +143,18 @@ class TimeReminderViewController: UIViewController {
 		}
 		
 		// otherwise rewrite data to selected reminder
-		guard let time = currentReminder.time else {
+		if let time = currentReminder.time {
+			// resave current time if it already exists
+			getTimeForReminder(time: time)
+			currentReminder.time = time
+		} else {
 			// time was not set before but one is being added
 			var time: Time?
 			time = Time(context: managedContext)
 			getTimeForReminder(time: time)
 			currentReminder.time = time
-			return
 		}
 		
-		// resave current time if it already exists
-		getTimeForReminder(time: time)
-		currentReminder.time = time
-	
 		do {
 			try managedContext.save()
 			print("resave successful")
@@ -164,18 +163,15 @@ class TimeReminderViewController: UIViewController {
 			showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
 		}
 		
-		// remove existing notification, so notifs aren't doubled
-		let notificationCenter = UNUserNotificationCenter.current()
-		//notificationCenter.removePendingNotificationRequests(withIdentifiers: ["\(currentReminder.id)"])
-		
-		// add notification anew
+		// notification will be overwritten if it already exists
+		//let notificationCenter = UNUserNotificationCenter.current()
 		NotificationManager.addTimeBasedNotification(for: currentReminder)
 		
-		notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
+		/*notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
 			for request in requests {
 				print(request)
 			}
-		})
+		})*/
 	}
 	
 	func getExhibitData(reminder: Reminder) {
@@ -222,9 +218,11 @@ class TimeReminderViewController: UIViewController {
 			saveEntry()
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			
 			guard let exhibitWithReminder = exhibit else { return }
 			if ReminderManager.exhibitsWithReminders.contains(where: { $0.attributes.path.pid == exhibitWithReminder.attributes.path.pid }) {
-				// do nothing
+				// reminder existed but was edited
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
 			} else {
 				ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
 			}
