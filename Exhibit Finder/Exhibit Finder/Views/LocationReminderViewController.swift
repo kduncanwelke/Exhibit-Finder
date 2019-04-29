@@ -61,7 +61,7 @@ class LocationReminderViewController: UIViewController {
 		if CLLocationManager.locationServicesEnabled() {
 			switch CLLocationManager.authorizationStatus() {
 			case .notDetermined, .restricted, .denied:
-				showAlert(title: "Location service disabled", message: "Access to location services has not been granted. Location based notifications will not be displayed.")
+				showAlert(title: "Location service disabled", message: "Proximity reminders will not display notifications unless settings are adjusted.")
 			case .authorizedAlways, .authorizedWhenInUse:
 				print("Access")
 			@unknown default:
@@ -77,15 +77,15 @@ class LocationReminderViewController: UIViewController {
 	func configureView() {
 		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
 		exhibitName.text = selectedExhibit.attributes.title
-		museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
+		//museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
 		
-		let date = Date()
+		/*let date = Date()
 		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
 		if convertedOpenDate > date {
 			time.text = "\(open) to \(close)"
 		} else {
 			time.text = "Today to \(close)"
-		}
+		}*/
 		
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.removeOverlays(mapView.overlays)
@@ -215,7 +215,7 @@ class LocationReminderViewController: UIViewController {
 	func getLocationForReminder(location: Location?) {
 		guard let locationReminder = mapView.annotations.first, let address = locationReminder.title, let currentExhibit = exhibit else { return }
 		location?.address = address
-		location?.museum = museumName.text
+		location?.museum = currentExhibit.attributes.museum
 		location?.latitude = locationReminder.coordinate.latitude
 		location?.longitude = locationReminder.coordinate.longitude
 		location?.name = currentExhibit.attributes.title

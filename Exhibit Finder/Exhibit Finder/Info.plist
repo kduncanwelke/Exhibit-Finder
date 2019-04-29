@@ -52,12 +52,12 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Access is required in order to receive location based reminders.</string>
+	<string>Enabling location services allows you to create and receive proximity reminders for exhibits that are nearby.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Access is required in order to receive location based reminders.</string>
+	<string>Enabling location services allows you to create and receive proximity reminders for exhibits that are nearby.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Access is required in order to receive location based reminders.</string>
+	<string>Enabling location services allows you to create and receive proximity reminders for exhibits that are nearby.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Access is required in order to receive location based reminders.</string>
+	<string>Enabling location services allows you to create and receive proximity reminders for exhibits that are nearby.</string>
 </dict>
 </plist>

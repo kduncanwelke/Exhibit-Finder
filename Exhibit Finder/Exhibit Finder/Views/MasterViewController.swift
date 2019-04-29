@@ -13,6 +13,10 @@ import CoreLocation
 
 class MasterViewController: UITableViewController {
 
+	// MARK: IBOutlets
+	
+	@IBOutlet var noDataView: UIView!
+	
 	var detailViewController: DetailViewController? = nil
 	
 	// MARK: Variables
@@ -26,6 +30,7 @@ class MasterViewController: UITableViewController {
 	var segmentedController: UISegmentedControl!
 	let searchController = UISearchController(searchResultsController: nil)
 	var searchResults = [Exhibition]()
+	var activityIndicator = UIActivityIndicatorView()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -52,6 +57,9 @@ class MasterViewController: UITableViewController {
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		let currentDate = Date()
 		
+		activityIndicator.color = .gray
+		tableView.backgroundView = activityIndicator
+		
 		if let split = splitViewController {
 		    let controllers = split.viewControllers
 		    detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
@@ -76,15 +84,7 @@ class MasterViewController: UITableViewController {
 			deleteExpiredReminders()
 			loadExhibitions()
 		}
-		
 		loadReminders()
-	}
-	
-	@objc
-	func insertNewObject(_ sender: Any) {
-		//objects.insert(NSDate(), at: 0)
-		//let indexPath = IndexPath(row: 0, section: 0)
-		//tableView.insertRows(at: [indexPath], with: .automatic)
 	}
 	
 	// MARK: Custom functions
@@ -94,6 +94,7 @@ class MasterViewController: UITableViewController {
 	}
 	
 	func loadExhibitions() {
+		activityIndicator.startAnimating()
 		DataManager<Exhibit>.fetch(with: nil) { [unowned self] result in
 			switch result {
 			case .success(let response):
@@ -122,14 +123,18 @@ class MasterViewController: UITableViewController {
 					}
 					self.hasBeenLoaded = true
 					self.tableView.reloadData()
+					
+					self.activityIndicator.stopAnimating()
 				}
 			case .failure(let error):
 				DispatchQueue.main.async {
 					switch error {
 					case Errors.networkError:
 						self.showAlert(title: "Networking failed", message: "\(Errors.networkError.localizedDescription)")
+						self.activityIndicator.stopAnimating()
 					default:
 						self.showAlert(title: "Networking failed", message: "\(error.localizedDescription)")
+						self.activityIndicator.stopAnimating()
 					}
 				}
 			}
@@ -186,20 +191,6 @@ class MasterViewController: UITableViewController {
 		
 	}
 	
-	func endLocationMonitoring(result: Reminder) {
-		if let location = result.location, let name = result.name {
-			LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
-			print("stopped monitoring")
-		}
-	}
-	
-	func clearNotification(result: Reminder) {
-		// remove existing time-based notification
-		let notificationCenter = UNUserNotificationCenter.current()
-		let identifier = "\(result.id)"
-		notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
-	}
-	
 	// load reminders from core data
 	func loadReminders() {
 		let managedContext = CoreDataManager.shared.managedObjectContext
@@ -215,6 +206,18 @@ class MasterViewController: UITableViewController {
 		// if section 2 (where deletion occurs) is selected, don't reload table view as it breaks fade animation
 		if segmentedController.selectedSegmentIndex != 2 {
 			tableView.reloadData()
+		}
+	}
+	
+	func resave() {
+		let managedContext = CoreDataManager.shared.managedObjectContext
+		
+		do {
+			try managedContext.save()
+			print("resave successful")
+		} catch {
+			// this should never be displayed but is here to cover the possibility
+			showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
 		}
 	}
 	
@@ -234,6 +237,21 @@ class MasterViewController: UITableViewController {
 		}
 	}
 	
+	func endLocationMonitoring(result: Reminder) {
+		if let location = result.location, let name = result.name {
+			LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
+			print("stopped monitoring")
+		}
+	}
+	
+	func clearNotification(result: Reminder) {
+		// remove existing time-based notification
+		let notificationCenter = UNUserNotificationCenter.current()
+		let identifier = "\(result.id)"
+		notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+	}
+	
+	
 	// turn date into string to pass into search
 	func getDate(from stringDate: String) -> Date? {
 		guard let createdDate = dateFormatter.date(from: stringDate) else {
@@ -243,6 +261,7 @@ class MasterViewController: UITableViewController {
 		return createdDate
 	}
 	
+	// get string from date
 	func getStringDate(from date: Date) -> String {
 		let createdDate = timeDateFormatter.string(from: date)
 		return createdDate
@@ -282,10 +301,18 @@ class MasterViewController: UITableViewController {
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
 		if isFilteringBySearch() {
+			tableView.separatorStyle = .singleLine
 			return searchResults.count
 		} else if segmentedController.selectedSegmentIndex == 2 {
+			if ReminderManager.reminders.count == 0 {
+				tableView.backgroundView = noDataView
+				tableView.separatorStyle = .none
+			} else {
+				tableView.separatorStyle = .singleLine
+			}
 			return ReminderManager.exhibitsWithReminders.count
 		} else {
+			tableView.separatorStyle = .singleLine
 			return 1
 		}
 	}
@@ -312,7 +339,7 @@ class MasterViewController: UITableViewController {
 			return searchResults.count
 		} else if segmentedController.selectedSegmentIndex == 0 {
 			return exhibitsList.count
-		} else if segmentedController.selectedSegmentIndex == 1{
+		} else if segmentedController.selectedSegmentIndex == 1 {
 			return upcomingExhibits.count
 		} else {
 			let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].attributes.path.pid })
@@ -342,6 +369,8 @@ class MasterViewController: UITableViewController {
 			object = ReminderManager.exhibitsWithReminders[indexPath.section]
 		}
 		
+		
+		// change cell title color if reminders segment
 		if segmentedController.selectedSegmentIndex == 2 {
 			cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
 		} else {
@@ -355,39 +384,11 @@ class MasterViewController: UITableViewController {
 		let close = object.attributes.closeDate.dropLast(14)
 		cell.closeDate.text = "\(close)"
 		
-		
 		// set text to show reminder if one matches
 		if let result = ReminderManager.reminders.first(where: { $0.id == object.attributes.path.pid }) {
 			if segmentedController.selectedSegmentIndex == 2 {
-				if result.time != nil && result.location != nil {
-					if indexPath.row == 0 {
-						cell.hasReminder.text = "Time Reminder"
-						if let date = result.time {
-							let calendar = Calendar.current
-							let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
-							
-							if let dateToUse = calendar.date(from: components), let invalid = result.invalidDate {
-								if dateToUse < currentDate || invalid < currentDate {
-									cell.title.text = "This reminder has expired"
-								} else {
-									let stringDate = getStringDate(from: dateToUse)
-									cell.title.text = "For \(stringDate)"
-								}
-							}
-						}
-					} else if indexPath.row == 1 {
-						cell.hasReminder.text = "Location Reminder"
-						if let invalid = result.invalidDate {
-							if invalid < currentDate {
-								cell.title.text = "This reminder has expired"
-							} else {
-								if let radius = result.location?.radius {
-									cell.title.text = "Within \(Int(radius)) foot radius of museum"
-								}
-							}
-						}
-					}
-				} else if result.time != nil {
+				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
+					// configure time reminder cell
 					cell.hasReminder.text = "Time Reminder"
 					if let date = result.time {
 						let calendar = Calendar.current
@@ -402,8 +403,8 @@ class MasterViewController: UITableViewController {
 							}
 						}
 					}
-					
-				} else if result.location != nil {
+				} else if (result.time != nil && result.location != nil && indexPath.row == 1) || (result.time == nil && result.location != nil) {
+					// configure location reminder cell
 					cell.hasReminder.text = "Location Reminder"
 					if let invalid = result.invalidDate {
 						if invalid < currentDate {
@@ -416,9 +417,11 @@ class MasterViewController: UITableViewController {
 					}
 				}
 			} else {
+				// for non-reminder view, show if a reminder exists
 				cell.hasReminder.text = "Reminder Set"
 			}
 		} else {
+			// otherwise reminder does not exist
 			cell.hasReminder.text = "No Reminder"
 		}
 		return cell
@@ -435,82 +438,56 @@ class MasterViewController: UITableViewController {
 
 	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 		if editingStyle == .delete {
-			let managedContext = CoreDataManager.shared.managedObjectContext
+			var result: Reminder?
 			
 			if isFilteringBySearch() {
-				if let result = ReminderManager.reminders.first(where: { $0.id == searchResults[indexPath.section].attributes.path.pid }) {
-					if result.time != nil && result.location != nil {
-						
-						if indexPath.row == 0 {
-							result.time = nil
-							clearNotification(result: result)
-						} else if indexPath.row == 1 { // if second, remove location based reminder
-							endLocationMonitoring(result: result)
-							result.location = nil
-						}
-						
-						do {
-							try managedContext.save()
-							print("resave successful")
-						} catch {
-							// this should never be displayed but is here to cover the possibility
-							showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
-						}
-						
-						tableView.deleteRows(at: [indexPath], with: .fade)
-						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-					} else {
-						// remove exhibit from list of exhibits with reminders
-						let new = ReminderManager.exhibitsWithReminders.filter({ $0.attributes.path.pid != result.id })
-						ReminderManager.exhibitsWithReminders = new
-						
-						print(ReminderManager.exhibitsWithReminders)
-						ReminderManager.currentReminder = nil
-						
-						fullDelete(result: result)
-						searchResults.remove(at: indexPath.section)
-						
-						tableView.deleteSections([indexPath.section], with: .fade)
-						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-					}
+				if let reminder = ReminderManager.reminders.first(where: { $0.id == searchResults[indexPath.section].attributes.path.pid }) {
+					result = reminder
 				}
 			} else {
-				if let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.section].attributes.path.pid }) {
-					// if there is only one reminder shown, delete it
-					if tableView.numberOfRows(inSection: indexPath.section) == 1 {
-						fullDelete(result: result)
-						
-						ReminderManager.exhibitsWithReminders.remove(at: indexPath.section)
-						print(ReminderManager.exhibitsWithReminders)
-						ReminderManager.currentReminder = nil
-						
-						// delete entire section to prevent '0 row in section' warning
-						tableView.deleteSections([indexPath.section], with: .fade)
-						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-					} else {
-						// if the selected row is the first, remove time based reminder and save
-						if indexPath.row == 0 {
-							result.time = nil
-							clearNotification(result: result)
-						} else if indexPath.row == 1 { // if second, remove location based reminder
-							endLocationMonitoring(result: result)
-							result.location = nil
-						}
-						
-						do {
-							try managedContext.save()
-							print("resave successful")
-						} catch {
-							// this should never be displayed but is here to cover the possibility
-							showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
-						}
-						
-						tableView.deleteRows(at: [indexPath], with: .fade)
-						
-						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-					}
+				if let reminder = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.section].attributes.path.pid }) {
+					result = reminder
 				}
 			}
+				
+			if isFilteringBySearch() && tableView.numberOfRows(inSection: indexPath.section) == 1 {
+				// remove exhibit from list of exhibits with reminders
+				guard let result = result else { return }
+				let new = ReminderManager.exhibitsWithReminders.filter({ $0.attributes.path.pid != result.id })
+				ReminderManager.exhibitsWithReminders = new
+				ReminderManager.currentReminder = nil
+				
+				fullDelete(result: result)
+				searchResults.remove(at: indexPath.section)
+				
+				tableView.deleteSections([indexPath.section], with: .fade)
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			} else if isFilteringBySearch() == false && tableView.numberOfRows(inSection: indexPath.section) == 1 {
+				guard let result = result else { return }
+				// if there is only one reminder shown, delete it
+					fullDelete(result: result)
+					
+					ReminderManager.exhibitsWithReminders.remove(at: indexPath.section)
+					ReminderManager.currentReminder = nil
+					
+					// delete entire section to prevent '0 row in section' warning
+					tableView.deleteSections([indexPath.section], with: .fade)
+					NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			} else {
+				guard let result = result else { return }
+				if indexPath.row == 0 {
+					result.time = nil
+					clearNotification(result: result)
+				} else if indexPath.row == 1 { // if second, remove location based reminder
+					endLocationMonitoring(result: result)
+					result.location = nil
+				}
+				
+				resave()
+				tableView.deleteRows(at: [indexPath], with: .fade)
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			}
+			
 		} else if editingStyle == .insert {
 		    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
 		}

@@ -27,8 +27,8 @@ struct Networker {
 			
 			// check for status code to prevent blank loading if something is wrong (like missing api key)
 			if httpResponse.statusCode == 200 {
-				if let error = error {
-					completion(.failure(error))
+				if error != nil {
+					completion(.failure(Errors.otherError))
 				} else if let data = data {
 					completion(.success(data))
 				}
