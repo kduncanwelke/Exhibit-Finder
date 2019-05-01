@@ -21,7 +21,7 @@ struct Networker {
 		let task = session.dataTask(with: request) { data, response, error in
 			
 			guard let httpResponse = response as? HTTPURLResponse else {
-				completion(.failure(Errors.networkError))
+				completion(.failure(Errors.otherError))
 				return
 			}
 			

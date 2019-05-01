@@ -133,7 +133,7 @@ class MasterViewController: UITableViewController {
 						self.showAlert(title: "Networking failed", message: "\(Errors.networkError.localizedDescription)")
 						self.activityIndicator.stopAnimating()
 					default:
-						self.showAlert(title: "Networking failed", message: "\(error.localizedDescription)")
+						self.showAlert(title: "Networking failed", message: "\(Errors.otherError.localizedDescription)")
 						self.activityIndicator.stopAnimating()
 					}
 				}

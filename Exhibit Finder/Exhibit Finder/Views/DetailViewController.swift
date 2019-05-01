@@ -89,9 +89,9 @@ class DetailViewController: UIViewController {
 		}()
 		
 		if ReminderManager.reminders.contains(where: { $0.id == detail.attributes.path.pid }) {
-			reminderButton.setTitle(" Edit Reminder ", for: .normal)
+			reminderButton.setTitle("Edit Reminder", for: .normal)
 		} else {
-			reminderButton.setTitle(" Add Reminder ", for: .normal)
+			reminderButton.setTitle("Add Reminder", for: .normal)
 		}
 		
 		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")
@@ -100,7 +100,7 @@ class DetailViewController: UIViewController {
 	}
 	
 	@objc func updateButton() {
-		reminderButton.setTitle(" Edit Reminder ", for: .normal)
+		reminderButton.setTitle("Edit Reminder", for: .normal)
 	}
 	
 	func loadMapView() {

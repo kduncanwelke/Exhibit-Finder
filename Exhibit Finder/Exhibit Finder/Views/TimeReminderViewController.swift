@@ -39,21 +39,28 @@ class TimeReminderViewController: UIViewController {
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
 		configureView()
-		
+    }
+	
+	override func viewDidAppear(_ animated: Bool) {
 		// check if notifications are enabled, as this is the first point of use
-		UNUserNotificationCenter.current().getNotificationSettings(){ (settings) in
+		UNUserNotificationCenter.current().getNotificationSettings(){ [unowned self] (settings) in
 			switch settings.alertSetting {
 			case .enabled:
 				break
 			case .disabled:
-				self.showAlert(title: "Notifications disabled", message: "Access to provide notifications has not been granted. Time based notifications will not be displayed.")
+				DispatchQueue.main.async {
+				self.showSettingsAlert(title: "Notifications disabled", message: "Time-based reminders require access to notification sevices to provide notifications of exhibits. These notifications will not be displayed unless settings are adjusted.")
+				}
 			case .notSupported:
-				self.showAlert(title: "Notifications not supported", message: "Notifications will not be displayed, as the service is not available on this device.")
+				DispatchQueue.main.async {
+				self.showSettingsAlert(title: "Notifications not supported", message: "Notifications will not be displayed, as the service is not available on this device.")
+				}
 			@unknown default:
 				return
 			}
 		}
-    }
+	}
+	
 	
 
 	// MARK: Custom functions

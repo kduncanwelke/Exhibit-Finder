@@ -57,25 +57,30 @@ class LocationReminderViewController: UIViewController {
 		
 		configureView()
 		
+    }
+	
+	override func viewDidAppear(_ animated: Bool) {
 		// perform check for location services access, as this is the main area that depends on location
 		if CLLocationManager.locationServicesEnabled() {
 			switch CLLocationManager.authorizationStatus() {
 			case .notDetermined, .restricted, .denied:
-				showAlert(title: "Location service disabled", message: "Proximity reminders will not display notifications unless settings are adjusted.")
-			case .authorizedAlways, .authorizedWhenInUse:
-				print("Access")
+				showSettingsAlert(title: "Location service disabled", message: "Proximity reminders require use of location services in order to provide region-based notifications. These notifications will not be displayed unless settings are adjusted.")
+			case .authorizedAlways:
+				print("access")
+			case .authorizedWhenInUse:
+				showSettingsAlert(title: "Location service limited", message: "Location services are only authorized for when this app is in use. Proximity reminders will not be displayed if the app is closed, unless settings are adjusted.")
 			@unknown default:
 				return
 			}
 		} else {
-			showAlert(title: "Notice", message: "Location service is not available - all features of this app may not be available.")
+			showAlert(title: "Notice", message: "Location services are not available - all features of this app may not be available.")
 		}
-    }
+	}
 	
 	// MARK: Custom functions
 	
 	func configureView() {
-		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
+		guard let selectedExhibit = exhibit else { return }
 		exhibitName.text = selectedExhibit.attributes.title
 		//museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
 		

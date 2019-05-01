@@ -294,8 +294,8 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KCY-v1-0nv">
-                                <rect key="frame" x="15" y="294" width="290" height="215"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KCY-v1-0nv">
+                                <rect key="frame" x="15" y="294" width="290" height="206.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="g2u-vk-qN8">
                                         <rect key="frame" x="99" y="0.0" width="92.5" height="18"/>
@@ -314,13 +314,13 @@
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify me between the hours of" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P3E-Ad-bzr">
-                                        <rect key="frame" x="34.5" y="35" width="221" height="18"/>
+                                        <rect key="frame" x="34.5" y="28" width="221" height="18"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="MBr-Xt-IJt">
-                                        <rect key="frame" x="0.0" y="64.5" width="290" height="29"/>
+                                        <rect key="frame" x="0.0" y="56" width="290" height="29"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="8am" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cR-Rc-ely">
                                                 <rect key="frame" x="0.0" y="0.0" width="28.5" height="29"/>
@@ -349,13 +349,13 @@
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A notification will be displayed upon when your device enters the marked region" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DwI-fr-IrE">
-                                        <rect key="frame" x="1.5" y="103.5" width="287.5" height="31.5"/>
+                                        <rect key="frame" x="1.5" y="95" width="287.5" height="31.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M9v-uI-itW">
-                                        <rect key="frame" x="70" y="145" width="150" height="30"/>
+                                        <rect key="frame" x="70" y="136.5" width="150" height="30"/>
                                         <color key="backgroundColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="5JO-NI-X2g"/>
@@ -369,7 +369,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tnt-si-Shv">
-                                        <rect key="frame" x="121" y="185" width="48" height="30"/>
+                                        <rect key="frame" x="121" y="176.5" width="48" height="30"/>
                                         <state key="normal" title="Cancel"/>
                                         <connections>
                                             <action selector="cancelButtonPressed:" destination="mzP-ih-LIQ" eventType="touchUpInside" id="hdZ-Wr-TrE"/>
@@ -388,7 +388,7 @@
                             <constraint firstItem="wi7-W1-SvQ" firstAttribute="top" secondItem="tmP-LY-Nc5" secondAttribute="bottom" constant="10" id="V1q-UY-gnS"/>
                             <constraint firstItem="ycr-k2-sI2" firstAttribute="trailing" secondItem="ynr-zY-6HN" secondAttribute="trailing" constant="15" id="VHE-AO-fmt"/>
                             <constraint firstItem="ynr-zY-6HN" firstAttribute="leading" secondItem="ycr-k2-sI2" secondAttribute="leading" constant="15" id="cjF-gJ-o5k"/>
-                            <constraint firstItem="ycr-k2-sI2" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="KCY-v1-0nv" secondAttribute="bottom" constant="10" id="cvG-5G-Ih2"/>
+                            <constraint firstItem="ycr-k2-sI2" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="KCY-v1-0nv" secondAttribute="bottom" constant="100" id="cvG-5G-Ih2"/>
                             <constraint firstItem="KCY-v1-0nv" firstAttribute="top" secondItem="ynr-zY-6HN" secondAttribute="bottom" constant="15" id="f4z-XB-s82"/>
                             <constraint firstItem="ycr-k2-sI2" firstAttribute="trailing" secondItem="tmP-LY-Nc5" secondAttribute="trailing" constant="20" id="gS9-e7-MVA"/>
                             <constraint firstItem="wi7-W1-SvQ" firstAttribute="leading" secondItem="ycr-k2-sI2" secondAttribute="leading" id="lbe-rY-E2K"/>
@@ -443,11 +443,11 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </datePicker>
-                            <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" distribution="equalCentering" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jwu-B1-HdA">
-                                <rect key="frame" x="15" y="266" width="290" height="243"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jwu-B1-HdA">
+                                <rect key="frame" x="15" y="266" width="290" height="237"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Ckx-dE-ytE">
-                                        <rect key="frame" x="96.5" y="0.0" width="97" height="52"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Ckx-dE-ytE">
+                                        <rect key="frame" x="96.5" y="0.0" width="97" height="58"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Exhibit Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uJy-KE-chI">
                                                 <rect key="frame" x="2.5" y="0.0" width="92.5" height="18"/>
@@ -456,13 +456,13 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Museum Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a9z-uk-lRf">
-                                                <rect key="frame" x="0.0" y="18" width="97" height="17"/>
+                                                <rect key="frame" x="0.0" y="21" width="97" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z4S-Fm-zBU">
-                                                <rect key="frame" x="33" y="35" width="31.5" height="17"/>
+                                                <rect key="frame" x="33" y="41" width="31.5" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                                 <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                 <nil key="highlightedColor"/>
@@ -470,25 +470,25 @@
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Remind me on:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfl-gc-Pzg">
-                                        <rect key="frame" x="90" y="62" width="110.5" height="19.5"/>
+                                        <rect key="frame" x="90" y="68" width="110.5" height="19.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Selected Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aK1-xb-Iyw">
-                                        <rect key="frame" x="94" y="103.5" width="102.5" height="18"/>
+                                        <rect key="frame" x="94" y="97.5" width="102.5" height="18"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A notification for this exhibit will be displayed on the selected date" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XAc-GJ-yoV">
-                                        <rect key="frame" x="6.5" y="131.5" width="277" height="31.5"/>
+                                        <rect key="frame" x="6.5" y="125.5" width="277" height="31.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1s-nd-t1X">
-                                        <rect key="frame" x="70" y="173" width="150" height="30"/>
+                                        <rect key="frame" x="70" y="167" width="150" height="30"/>
                                         <color key="backgroundColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="150" id="10e-UE-JwY"/>
@@ -501,7 +501,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5O-qn-ebq">
-                                        <rect key="frame" x="121" y="213" width="48" height="30"/>
+                                        <rect key="frame" x="121" y="207" width="48" height="30"/>
                                         <state key="normal" title="Cancel"/>
                                         <connections>
                                             <action selector="cancelButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="c59-pR-eVm"/>
@@ -515,7 +515,7 @@
                             <constraint firstItem="Lzw-AF-Pgm" firstAttribute="leading" secondItem="r9i-la-Yrk" secondAttribute="leading" id="9dP-gE-dRt"/>
                             <constraint firstItem="jwu-B1-HdA" firstAttribute="leading" secondItem="r9i-la-Yrk" secondAttribute="leading" constant="15" id="D0G-fJ-rVu"/>
                             <constraint firstItem="Lzw-AF-Pgm" firstAttribute="top" secondItem="UUK-lW-r4a" secondAttribute="bottom" constant="10" id="FKI-Xw-6jJ"/>
-                            <constraint firstItem="r9i-la-Yrk" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="jwu-B1-HdA" secondAttribute="bottom" constant="10" id="UAE-cw-xBe"/>
+                            <constraint firstItem="r9i-la-Yrk" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="jwu-B1-HdA" secondAttribute="bottom" constant="100" id="UAE-cw-xBe"/>
                             <constraint firstItem="jwu-B1-HdA" firstAttribute="top" secondItem="Lzw-AF-Pgm" secondAttribute="bottom" constant="15" id="Wyf-3b-P1y"/>
                             <constraint firstItem="r9i-la-Yrk" firstAttribute="trailing" secondItem="UUK-lW-r4a" secondAttribute="trailing" constant="20" id="bjh-Mw-COX"/>
                             <constraint firstItem="r9i-la-Yrk" firstAttribute="trailing" secondItem="Lzw-AF-Pgm" secondAttribute="trailing" id="g3t-iH-4uW"/>
