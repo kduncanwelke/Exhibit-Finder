@@ -113,6 +113,17 @@ class LocationReminderViewController: UIViewController {
 				let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
 				let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
 				mapView.setRegion(defaultRegion, animated: true)
+				
+				if selectedExhibit.attributes.description.processed.contains("American Art Museum") {
+					print("recommended found")
+					performSearch(museum: "American Art Museum")
+					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
+					
+				} else if selectedExhibit.attributes.description.processed.contains("Renwick Gallery") {
+					print("recommended found")
+					performSearch(museum: "Renwick Gallery")
+					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
+				}
 			}
 			
 			return
@@ -156,7 +167,33 @@ class LocationReminderViewController: UIViewController {
 				}
 			}
 	}
-	
+
+	func performSearch(museum: String) {
+		// perform local search for museum by name, if it exists
+		let request = MKLocalSearch.Request()
+		request.naturalLanguageQuery = museum
+		request.region = mapView.region
+		let search = MKLocalSearch(request: request)
+		
+		search.start { [weak self] response, _ in
+			guard let response = response else {
+				return
+			}
+			
+			let regionRadius: CLLocationDistance = 1000
+			// create annotation and add to map
+			let annotation = MKPointAnnotation()
+			guard let result = response.mapItems.first?.placemark else { return }
+			annotation.coordinate = result.coordinate
+			annotation.title = "\(museum) \n \(result.title ?? "")"
+			self?.mapView.addAnnotation(annotation)
+			
+			// recenter map on added annotation
+			let region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+			self?.mapView.setRegion(region, animated: true)
+		}
+	}
+
 	func saveEntry() {
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		
