@@ -156,11 +156,7 @@ class MasterViewController: UITableViewController {
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
 		let now = Date()
-		//let calendar = Calendar.current
-		//var dateComponents = DateComponents()
-		//dateComponents.month = 8
-		//dateComponents.day = 18
-		//guard let now = calendar.date(from: dateComponents) else { return }
+		
 		fetchRequest.predicate = NSPredicate(format: "invalidDate < %@", now as CVarArg)
 		
 		var remindersToDelete: [Reminder] = []
@@ -369,7 +365,6 @@ class MasterViewController: UITableViewController {
 			object = ReminderManager.exhibitsWithReminders[indexPath.section]
 		}
 		
-		
 		// change cell title color if reminders segment
 		if segmentedController.selectedSegmentIndex == 2 {
 			cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
@@ -493,6 +488,8 @@ class MasterViewController: UITableViewController {
 		}
 	}
 }
+
+// MARK: Extensions
 
 extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {

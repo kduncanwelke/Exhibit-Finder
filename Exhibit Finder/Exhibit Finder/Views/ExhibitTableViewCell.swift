@@ -18,7 +18,6 @@ class ExhibitTableViewCell: UITableViewCell {
 	@IBOutlet weak var closeDate: UILabel!
 	@IBOutlet weak var hasReminder: UILabel!
 	
-	
 	static let reuseIdentifier = "exhibitCell"
 
     override func awakeFromNib() {

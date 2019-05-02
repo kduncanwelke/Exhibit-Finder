@@ -24,9 +24,6 @@ class LocationReminderViewController: UIViewController {
 	@IBOutlet weak var startTime: UILabel!
 	@IBOutlet weak var endTime: UILabel!
 	@IBOutlet weak var exhibitName: UILabel!
-	@IBOutlet weak var museumName: UILabel!
-	@IBOutlet weak var time: UILabel!
-	
 	
 	// MARK: Variables
 	
@@ -37,8 +34,8 @@ class LocationReminderViewController: UIViewController {
 	var region: MKCoordinateRegion?
 	let dateFormatter = DateFormatter()
 	let locationManager = CLLocationManager()
-	
-	//weak var delegate: AddReminderDelegate?
+	let regionRadius: CLLocationDistance = 1000
+
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,17 +43,13 @@ class LocationReminderViewController: UIViewController {
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		
 		locationManager.delegate = self
-		//locationManager.desiredAccuracy = kCLLocationAccuracyBest
-		//locationManager.startUpdatingLocation()
-		
-        // Do any additional setup after loading the view.
+	
 		confirmButton.layer.cornerRadius = 10
 		slider.addTarget(self, action: #selector(sliderChanged(slider:)), for: .valueChanged)
 		leftStepper.addTarget(self, action: #selector(leftStepperChanged(stepper:)), for: .valueChanged)
 		rightStepper.addTarget(self, action: #selector(rightStepperChanged(stepper:)), for: .valueChanged)
 		
 		configureView()
-		
     }
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -82,19 +75,8 @@ class LocationReminderViewController: UIViewController {
 	func configureView() {
 		guard let selectedExhibit = exhibit else { return }
 		exhibitName.text = selectedExhibit.attributes.title
-		//museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
-		
-		/*let date = Date()
-		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
-		if convertedOpenDate > date {
-			time.text = "\(open) to \(close)"
-		} else {
-			time.text = "Today to \(close)"
-		}*/
-		
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.removeOverlays(mapView.overlays)
-		let regionRadius: CLLocationDistance = 1000
 		
 		// if there is a reminder do this
 		guard let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) else {
@@ -115,14 +97,13 @@ class LocationReminderViewController: UIViewController {
 				mapView.setRegion(defaultRegion, animated: true)
 				
 				if selectedExhibit.attributes.description.processed.contains("American Art Museum") {
-					print("recommended found")
 					performSearch(museum: "American Art Museum")
 					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
-					
 				} else if selectedExhibit.attributes.description.processed.contains("Renwick Gallery") {
-					print("recommended found")
 					performSearch(museum: "Renwick Gallery")
 					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
+				} else {
+					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - please select a location on the map to use instead.")
 				}
 			}
 			
@@ -143,19 +124,8 @@ class LocationReminderViewController: UIViewController {
 				confirmButton.setTitle("Save Changes", for: .normal)
 				
 				// create pin from a reminder
-				let annotation = MKPointAnnotation()
 				let coordinate = CLLocationCoordinate2D(latitude: reminderInfo.latitude, longitude: reminderInfo.longitude)
-				annotation.coordinate = coordinate
-				annotation.title = "\(address)"
-				
-				// add pin to map
-				mapView.addAnnotation(annotation)
-				
-				// set region and add circular overly
-				let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-				mapView.setRegion(region, animated: true)
-				let circle = MKCircle(center: coordinate, radius: reminderInfo.radius)
-				mapView.addOverlay(circle)
+				addItemToMap(title: "\(address)", coordinate: coordinate, radius: reminderInfo.radius)
 			} else {
 				// if there is no location with the reminder, display museum location instead
 				if let location = museumLocation, let mapRegion = region {
@@ -166,6 +136,30 @@ class LocationReminderViewController: UIViewController {
 					mapView.addOverlay(circle)
 				}
 			}
+	}
+	
+	func updateLocation(location: MKPlacemark) {
+		// wipe annotations if location was updated
+		mapView.removeAnnotations(mapView.annotations)
+		mapView.removeOverlays(mapView.overlays)
+		
+		let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+		let locale = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+		let geocoder = CLGeocoder()
+		
+		// parse address to assign it to title for pin
+		geocoder.reverseGeocodeLocation(locale, completionHandler: { [unowned self] (placemarks, error) in
+			if error == nil {
+				guard let firstLocation = placemarks?[0] else { return }
+				// add to map
+				let radius = Double(self.slider.value)
+				self.addItemToMap(title: "\(firstLocation.name ?? "") \n \(LocationManager.parseAddress(selectedItem: firstLocation))", coordinate: coordinate, radius: radius)
+			}
+			else {
+				// an error occurred during geocoding
+				self.showAlert(title: "Error geocoding", message: "Location could not be parsed")
+			}
+		})
 	}
 
 	func performSearch(museum: String) {
@@ -180,18 +174,25 @@ class LocationReminderViewController: UIViewController {
 				return
 			}
 			
-			let regionRadius: CLLocationDistance = 1000
-			// create annotation and add to map
-			let annotation = MKPointAnnotation()
 			guard let result = response.mapItems.first?.placemark else { return }
-			annotation.coordinate = result.coordinate
-			annotation.title = "\(museum) \n \(result.title ?? "")"
-			self?.mapView.addAnnotation(annotation)
-			
-			// recenter map on added annotation
-			let region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-			self?.mapView.setRegion(region, animated: true)
+			// add to map
+			self?.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125)
 		}
+	}
+	
+	func addItemToMap(title: String, coordinate: CLLocationCoordinate2D, radius: Double) {
+		let annotation = MKPointAnnotation()
+		annotation.coordinate = coordinate
+		annotation.title = title
+		mapView.addAnnotation(annotation)
+		
+		// recenter map on added annotation
+		let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+		mapView.setRegion(region, animated: true)
+		
+		// add overlay for region
+		let circle = MKCircle(center: coordinate, radius: radius)
+		mapView.addOverlay(circle)
 	}
 
 	func saveEntry() {
@@ -278,7 +279,7 @@ class LocationReminderViewController: UIViewController {
 	
 	@objc func sliderChanged(slider: UISlider) {
 		selectedRange.text = "\(Int(slider.value))ft"
-		guard let location = museumLocation else { return }
+		guard let location = mapView.annotations.first else { return }
 		let circle = MKCircle(center: location.coordinate, radius: CLLocationDistance(slider.value))
 		mapView.removeOverlays(mapView.overlays)
 		mapView.addOverlay(circle)
@@ -329,6 +330,15 @@ class LocationReminderViewController: UIViewController {
 	
 	// MARK: IBActions
 	
+	@IBAction func mapTapped(_ sender: UITapGestureRecognizer) {
+		if sender.state == .ended {
+			let tappedLocation = sender.location(in: mapView)
+			let coordinate = mapView.convert(tappedLocation, toCoordinateFrom: mapView)
+			let placemark = MKPlacemark(coordinate: coordinate)
+			updateLocation(location: placemark)
+		}
+	}
+	
 	@IBAction func confirmButtonPressed(_ sender: UIButton) {
 		if locationManager.monitoredRegions.count == 20 {
 			showAlert(title: "Unable to save", message: "The maximum of 20 monitored locations has been met - please delete or modify an existing reminder.")
@@ -349,11 +359,6 @@ class LocationReminderViewController: UIViewController {
 				locationManager.startMonitoring(for: geofenceArea)
 				print("\(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
 				print("started monitoring")
-				
-				let regions = locationManager.monitoredRegions
-				for region in regions {
-					print(region)
-				}
 			}
 			
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
@@ -375,6 +380,8 @@ class LocationReminderViewController: UIViewController {
 	}
 	
 }
+
+// MARK: Extensions
 
 extension LocationReminderViewController: CLLocationManagerDelegate {
 	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

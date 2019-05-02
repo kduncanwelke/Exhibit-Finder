@@ -16,6 +16,8 @@ class SeeOnlineViewController: UIViewController {
 	@IBOutlet weak var webView: WKWebView!
 	@IBOutlet weak var dismissButton: UIButton!
 	
+	// MARK: Variables
+	
 	var urlToDisplay: URL?
 	
     override func viewDidLoad() {
@@ -39,6 +41,8 @@ class SeeOnlineViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+	
+	// MARK: IBActions
 	
 	@IBAction func dismissButtonTapped(_ sender: UIButton) {
 		self.dismiss(animated: true, completion: nil)

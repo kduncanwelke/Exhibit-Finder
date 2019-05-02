@@ -61,9 +61,9 @@ class TimeReminderViewController: UIViewController {
 		}
 	}
 	
-	
 
 	// MARK: Custom functions
+	
 	func configureView() {
 		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
 		exhibitName.text = selectedExhibit.attributes.title
@@ -171,14 +171,7 @@ class TimeReminderViewController: UIViewController {
 		}
 		
 		// notification will be overwritten if it already exists
-		//let notificationCenter = UNUserNotificationCenter.current()
 		NotificationManager.addTimeBasedNotification(for: currentReminder)
-		
-		/*notificationCenter.getPendingNotificationRequests(completionHandler: { requests in
-			for request in requests {
-				print(request)
-			}
-		})*/
 	}
 	
 	func getExhibitData(reminder: Reminder) {
