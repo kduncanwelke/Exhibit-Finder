@@ -296,7 +296,7 @@ class MasterViewController: UITableViewController {
 	// MARK: - Table View
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		if isFilteringBySearch() {
+		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 2 {
 			tableView.separatorStyle = .singleLine
 			return searchResults.count
 		} else if segmentedController.selectedSegmentIndex == 2 {
@@ -305,17 +305,21 @@ class MasterViewController: UITableViewController {
 				tableView.separatorStyle = .none
 			} else {
 				tableView.separatorStyle = .singleLine
+				tableView.backgroundView = nil
 			}
 			return ReminderManager.exhibitsWithReminders.count
 		} else {
 			tableView.separatorStyle = .singleLine
+			tableView.backgroundView = nil
 			return 1
 		}
 	}
 	
 	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		if isFilteringBySearch() {
+		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 2 {
 			return searchResults[section].attributes.title
+		} else if isFilteringBySearch() {
+			return nil
 		} else if segmentedController.selectedSegmentIndex == 2 {
 			return ReminderManager.exhibitsWithReminders[section].attributes.title
 		} else {
@@ -385,6 +389,7 @@ class MasterViewController: UITableViewController {
 				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
 					// configure time reminder cell
 					cell.hasReminder.text = "Time Reminder"
+					cell.reminderImage.image = UIImage(named: "clockicon25")
 					if let date = result.time {
 						let calendar = Calendar.current
 						let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
@@ -401,6 +406,7 @@ class MasterViewController: UITableViewController {
 				} else if (result.time != nil && result.location != nil && indexPath.row == 1) || (result.time == nil && result.location != nil) {
 					// configure location reminder cell
 					cell.hasReminder.text = "Location Reminder"
+					cell.reminderImage.image = UIImage(named: "locationicon25")
 					if let invalid = result.invalidDate {
 						if invalid < currentDate {
 							cell.title.text = "This reminder has expired"
@@ -414,10 +420,18 @@ class MasterViewController: UITableViewController {
 			} else {
 				// for non-reminder view, show if a reminder exists
 				cell.hasReminder.text = "Reminder Set"
+				if result.time != nil && result.location != nil {
+					cell.reminderImage.image = UIImage(named: "both25")
+				} else if result.time != nil && result.location == nil {
+					cell.reminderImage.image = UIImage(named: "clockicon25")
+				} else if result.time == nil && result.location != nil {
+					cell.reminderImage.image = UIImage(named: "locationicon25")
+				}
 			}
 		} else {
 			// otherwise reminder does not exist
 			cell.hasReminder.text = "No Reminder"
+			cell.reminderImage.image = nil
 		}
 		return cell
 	}

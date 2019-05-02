@@ -307,7 +307,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="12A-fC-m47">
                                                 <rect key="frame" x="0.0" y="0.0" width="92.5" height="18"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Exhibit Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="71O-mA-A13">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Exhibit Name" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="71O-mA-A13">
                                                         <rect key="frame" x="0.0" y="0.0" width="92.5" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                         <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -650,28 +650,24 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DeD-Jz-3WI">
-                                            <rect key="frame" x="16" y="11" width="288" height="20.5"/>
+                                            <rect key="frame" x="16" y="11" width="288" height="21"/>
                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jQf-ZS-H8N">
-                                            <rect key="frame" x="16" y="36.5" width="288" height="19.5"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Museum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1S-B0-AfC">
-                                                    <rect key="frame" x="0.0" y="0.0" width="62.5" height="19.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Reminder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhW-a0-jVi">
-                                                    <rect key="frame" x="193.5" y="0.0" width="94.5" height="19.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </stackView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Museum" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j1S-B0-AfC">
+                                            <rect key="frame" x="16" y="39" width="62.5" height="15"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IG8-HC-AHN">
+                                            <rect key="frame" x="174.5" y="39" width="30" height="15"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="IG8-HC-AHN" secondAttribute="height" multiplier="2:1" id="3zC-Am-f2y"/>
+                                                <constraint firstAttribute="height" constant="15" id="4Tb-G2-1LV"/>
+                                            </constraints>
+                                        </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="CKV-ww-RwH">
                                             <rect key="frame" x="16" y="61" width="288" height="18"/>
                                             <subviews>
@@ -711,18 +707,30 @@
                                                 </stackView>
                                             </subviews>
                                         </stackView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Reminder" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhW-a0-jVi">
+                                            <rect key="frame" x="209.5" y="39" width="94.5" height="15"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="j1S-B0-AfC" firstAttribute="top" secondItem="DeD-Jz-3WI" secondAttribute="bottom" constant="7" id="1eW-kv-zXT"/>
                                         <constraint firstItem="CKV-ww-RwH" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="BOB-By-ibv"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="jQf-ZS-H8N" secondAttribute="trailing" id="EqZ-E2-brf"/>
+                                        <constraint firstItem="CKV-ww-RwH" firstAttribute="top" secondItem="IG8-HC-AHN" secondAttribute="bottom" constant="7" id="BzF-aw-UF1"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="uhW-a0-jVi" secondAttribute="trailing" id="CP1-r0-pyb"/>
                                         <constraint firstItem="DeD-Jz-3WI" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="FOv-7s-12C"/>
-                                        <constraint firstItem="jQf-ZS-H8N" firstAttribute="top" secondItem="DeD-Jz-3WI" secondAttribute="bottom" constant="5" id="FUp-V2-h4a"/>
+                                        <constraint firstItem="CKV-ww-RwH" firstAttribute="top" secondItem="j1S-B0-AfC" secondAttribute="bottom" constant="7" id="GgW-61-wni"/>
+                                        <constraint firstItem="uhW-a0-jVi" firstAttribute="top" secondItem="DeD-Jz-3WI" secondAttribute="bottom" constant="7" id="IbY-J0-EIr"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="DeD-Jz-3WI" secondAttribute="trailing" id="KCk-8T-QOf"/>
-                                        <constraint firstItem="CKV-ww-RwH" firstAttribute="top" secondItem="jQf-ZS-H8N" secondAttribute="bottom" constant="5" id="PqI-X3-qgj"/>
-                                        <constraint firstItem="jQf-ZS-H8N" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="QSc-tp-m7o"/>
                                         <constraint firstItem="DeD-Jz-3WI" firstAttribute="top" secondItem="37f-cq-3Eg" secondAttribute="topMargin" id="iR1-8C-LP2"/>
+                                        <constraint firstItem="IG8-HC-AHN" firstAttribute="top" secondItem="DeD-Jz-3WI" secondAttribute="bottom" constant="7" id="ia5-jw-R2s"/>
+                                        <constraint firstItem="IG8-HC-AHN" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="j1S-B0-AfC" secondAttribute="trailing" constant="3" id="o6d-KE-z2y"/>
+                                        <constraint firstItem="j1S-B0-AfC" firstAttribute="leading" secondItem="37f-cq-3Eg" secondAttribute="leadingMargin" id="p3d-hy-DkE"/>
                                         <constraint firstItem="CKV-ww-RwH" firstAttribute="bottom" secondItem="37f-cq-3Eg" secondAttribute="bottomMargin" priority="999" id="tWP-yi-fNV"/>
+                                        <constraint firstItem="CKV-ww-RwH" firstAttribute="top" secondItem="uhW-a0-jVi" secondAttribute="bottom" constant="7" id="uUN-mF-RLK"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="CKV-ww-RwH" secondAttribute="trailing" id="vwj-D9-3fa"/>
+                                        <constraint firstItem="uhW-a0-jVi" firstAttribute="leading" secondItem="IG8-HC-AHN" secondAttribute="trailing" constant="5" id="wJg-ky-lbs"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -731,6 +739,7 @@
                                     <outlet property="hasReminder" destination="uhW-a0-jVi" id="S88-4Q-tuJ"/>
                                     <outlet property="musuem" destination="j1S-B0-AfC" id="MBP-mS-kWo"/>
                                     <outlet property="openDate" destination="T3Z-ZP-HoA" id="HIJ-kz-yDc"/>
+                                    <outlet property="reminderImage" destination="IG8-HC-AHN" id="vAf-yG-6Ok"/>
                                     <outlet property="title" destination="DeD-Jz-3WI" id="muG-x4-fx5"/>
                                     <segue destination="vC3-pB-5Vb" kind="showDetail" identifier="showDetail" id="6S0-TO-JiA"/>
                                 </connections>
@@ -767,7 +776,7 @@
                     <viewLayoutGuide key="safeArea" id="kHe-Z5-qpW"/>
                 </view>
             </objects>
-            <point key="canvasLocation" x="709" y="-630"/>
+            <point key="canvasLocation" x="708.75" y="-630.63380281690138"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">
