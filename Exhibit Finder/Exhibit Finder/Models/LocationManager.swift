@@ -46,13 +46,21 @@ struct LocationManager {
 			print("could not fetch, \(error), \(error.userInfo)")
 		}
 		
-		guard let retrievedReminder = reminders.first, let museum = retrievedReminder.location?.museum, let title = retrievedReminder.location?.name, let minHour = retrievedReminder.location?.minTime, let maxHour = retrievedReminder.location?.maxTime else { return }
+		guard let retrievedReminder = reminders.first, let title = retrievedReminder.location?.name, let minHour = retrievedReminder.location?.minTime, let maxHour = retrievedReminder.location?.maxTime else { return }
 		
 		let notificationCenter = UNUserNotificationCenter.current()
 		let notificationContent = UNMutableNotificationContent()
 		
+		let museum: String = { ()
+			if let museum = retrievedReminder.location?.museum {
+				return "the \(museum) "
+			} else {
+				return ""
+			}
+		}()
+		
 		notificationContent.title = "\(title)"
-		notificationContent.body = "You are near the \(museum) where this exhibit is currently on display."
+		notificationContent.body = "You are near \(museum)where this exhibit is currently on display."
 		notificationContent.sound = UNNotificationSound.default
 		
 		let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)

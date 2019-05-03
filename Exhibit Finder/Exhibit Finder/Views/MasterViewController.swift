@@ -63,6 +63,7 @@ class MasterViewController: UITableViewController {
 		if let split = splitViewController {
 		    let controllers = split.viewControllers
 		    detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+			detailViewController = nil
 			
 			// handle split view behavior
 			if split.displayMode == .primaryHidden {
@@ -388,7 +389,7 @@ class MasterViewController: UITableViewController {
 			if segmentedController.selectedSegmentIndex == 2 {
 				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
 					// configure time reminder cell
-					cell.hasReminder.text = "Time Reminder"
+					cell.hasReminder.text = "Time"
 					cell.reminderImage.image = UIImage(named: "clockicon25")
 					if let date = result.time {
 						let calendar = Calendar.current
@@ -405,7 +406,7 @@ class MasterViewController: UITableViewController {
 					}
 				} else if (result.time != nil && result.location != nil && indexPath.row == 1) || (result.time == nil && result.location != nil) {
 					// configure location reminder cell
-					cell.hasReminder.text = "Location Reminder"
+					cell.hasReminder.text = "Location"
 					cell.reminderImage.image = UIImage(named: "locationicon25")
 					if let invalid = result.invalidDate {
 						if invalid < currentDate {
@@ -419,7 +420,7 @@ class MasterViewController: UITableViewController {
 				}
 			} else {
 				// for non-reminder view, show if a reminder exists
-				cell.hasReminder.text = "Reminder Set"
+				cell.hasReminder.text = "Reminder"
 				if result.time != nil && result.location != nil {
 					cell.reminderImage.image = UIImage(named: "both25")
 				} else if result.time != nil && result.location == nil {

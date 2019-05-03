@@ -211,8 +211,8 @@ class TimeReminderViewController: UIViewController {
 	
 	@IBAction func confirmButtonTapped(_ sender: UIButton) {
 		let currentDate = Date()
-		if datePicker.date <= currentDate.addingTimeInterval(500) {
-			showAlert(title: "Cannot save reminder", message: "Please select a date that is in the future - the current date and time cannot be used")
+		if datePicker.date <= currentDate {
+			showAlert(title: "Cannot save reminder", message: "Please select a date that is in the future - the current date and time cannot be used.")
 			return
 		} else {
 			saveEntry()

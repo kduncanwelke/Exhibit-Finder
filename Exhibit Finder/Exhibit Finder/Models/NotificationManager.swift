@@ -18,8 +18,8 @@ struct NotificationManager {
 		let notificationContent = UNMutableNotificationContent()
 		
 		guard let title = reminder.name, let time = reminder.time else { return }
-		notificationContent.title = "Exhibit Finder Reminder"
-		notificationContent.body = "The \(title) exhibit is currently on display."
+		notificationContent.title = "\(title)"
+		notificationContent.body = "This exhibit is currently on display."
 		notificationContent.sound = UNNotificationSound.default
 		
 		var components = DateComponents()

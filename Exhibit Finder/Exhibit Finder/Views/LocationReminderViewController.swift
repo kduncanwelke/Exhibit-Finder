@@ -43,6 +43,8 @@ class LocationReminderViewController: UIViewController {
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		
 		locationManager.delegate = self
+		locationManager.desiredAccuracy = kCLLocationAccuracyBest
+		locationManager.startUpdatingLocation()
 	
 		confirmButton.layer.cornerRadius = 10
 		slider.addTarget(self, action: #selector(sliderChanged(slider:)), for: .valueChanged)
@@ -98,12 +100,12 @@ class LocationReminderViewController: UIViewController {
 				
 				if selectedExhibit.attributes.description.processed.contains("American Art Museum") {
 					performSearch(museum: "American Art Museum")
-					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
+					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
 				} else if selectedExhibit.attributes.description.processed.contains("Renwick Gallery") {
 					performSearch(museum: "Renwick Gallery")
-					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
+					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
 				} else {
-					showAlert(title: "No museum location", message: "The Smithsonian API has not supplied a museum location for this exhibit - please select a location on the map to use instead.")
+					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - please select a location on the map to use instead.")
 				}
 			}
 			
@@ -343,7 +345,7 @@ class LocationReminderViewController: UIViewController {
 		if locationManager.monitoredRegions.count == 20 {
 			showAlert(title: "Unable to save", message: "The maximum of 20 monitored locations has been met - please delete or modify an existing reminder.")
 		} else if mapView.annotations.isEmpty {
-			showAlert(title: "No location selected", message: "Please select a place on the map for this notification")
+			showAlert(title: "No location selected", message: "Please select a place on the map for this notification.")
 		} else {
 			saveEntry()
 			reloadReminders()
@@ -388,7 +390,7 @@ extension LocationReminderViewController: CLLocationManagerDelegate {
 	}
 	
 	func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-		showAlert(title: "Geolocation failed", message: "\(error)")
+		showAlert(title: "Geolocation failed", message: "Please check your data connection or location sharing settings.")
 	}
 }
 

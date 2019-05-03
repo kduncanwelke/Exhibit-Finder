@@ -665,14 +665,14 @@
                                             <rect key="frame" x="174.5" y="39" width="30" height="15"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="IG8-HC-AHN" secondAttribute="height" multiplier="2:1" id="3zC-Am-f2y"/>
-                                                <constraint firstAttribute="height" constant="15" id="4Tb-G2-1LV"/>
+                                                <constraint firstAttribute="height" relation="lessThanOrEqual" constant="15" id="jU2-1z-q0a"/>
                                             </constraints>
                                         </imageView>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="CKV-ww-RwH">
                                             <rect key="frame" x="16" y="61" width="288" height="18"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="N6h-xd-52n">
-                                                    <rect key="frame" x="0.0" y="0.0" width="131" height="18"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="N6h-xd-52n">
+                                                    <rect key="frame" x="0.0" y="0.0" width="129" height="18"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Opens:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Raj-8P-2XL">
                                                             <rect key="frame" x="0.0" y="0.0" width="52.5" height="18"/>
@@ -681,15 +681,15 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="T3Z-ZP-HoA">
-                                                            <rect key="frame" x="57.5" y="0.0" width="73.5" height="18"/>
+                                                            <rect key="frame" x="55.5" y="0.0" width="73.5" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
                                                 </stackView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="SsF-8l-Bzu">
-                                                    <rect key="frame" x="153.5" y="0.0" width="134.5" height="18"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="SsF-8l-Bzu">
+                                                    <rect key="frame" x="155.5" y="0.0" width="132.5" height="18"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Closes:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmG-pZ-VFb">
                                                             <rect key="frame" x="0.0" y="0.0" width="54.5" height="18"/>
@@ -698,7 +698,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Close Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eUF-rP-Rae">
-                                                            <rect key="frame" x="59.5" y="0.0" width="75" height="18"/>
+                                                            <rect key="frame" x="57.5" y="0.0" width="75" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                                             <nil key="highlightedColor"/>
