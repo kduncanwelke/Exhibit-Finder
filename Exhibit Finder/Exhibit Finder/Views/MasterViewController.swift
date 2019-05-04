@@ -22,7 +22,6 @@ class MasterViewController: UITableViewController {
 	// MARK: Variables
 	
 	var exhibitsList: [Exhibition] = []
-	var upcomingExhibits: [Exhibition] = []
 	var currentDate = Date()
 	let dateFormatter = ISO8601DateFormatter()
 	let timeDateFormatter = DateFormatter()
@@ -113,7 +112,7 @@ class MasterViewController: UITableViewController {
 						if openDate <= self.currentDate && closeDate >= self.currentDate {
 							self.exhibitsList.append(exhibit)
 						} else if openDate > self.currentDate {
-							self.upcomingExhibits.append(exhibit)
+							ReminderManager.upcomingExhibits.append(exhibit)
 						}
 						
 						if ReminderManager.reminders.contains(where: { $0.id == exhibit.attributes.path.pid }) {
@@ -274,7 +273,7 @@ class MasterViewController: UITableViewController {
 				if segmentedController.selectedSegmentIndex == 0 {
 					object = exhibitsList[indexPath.row]
 				} else if segmentedController.selectedSegmentIndex == 1 {
-					object = upcomingExhibits[indexPath.row]
+					object = ReminderManager.upcomingExhibits[indexPath.row]
 				} else {
 					object = ReminderManager.exhibitsWithReminders[indexPath.section]
 				}
@@ -341,7 +340,7 @@ class MasterViewController: UITableViewController {
 		} else if segmentedController.selectedSegmentIndex == 0 {
 			return exhibitsList.count
 		} else if segmentedController.selectedSegmentIndex == 1 {
-			return upcomingExhibits.count
+			return ReminderManager.upcomingExhibits.count
 		} else {
 			let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].attributes.path.pid })
 			if result?.time != nil && result?.location != nil {
@@ -365,7 +364,7 @@ class MasterViewController: UITableViewController {
 		} else if segmentedController.selectedSegmentIndex == 0 {
 			object = exhibitsList[indexPath.row]
 		} else if segmentedController.selectedSegmentIndex == 1 {
-			object = upcomingExhibits[indexPath.row]
+			object = ReminderManager.upcomingExhibits[indexPath.row]
 		} else {
 			object = ReminderManager.exhibitsWithReminders[indexPath.section]
 		}
@@ -523,7 +522,7 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
 		if segmentedController.selectedSegmentIndex == 0 {
 			exhibitions = exhibitsList
 		} else if segmentedController.selectedSegmentIndex == 1 {
-			exhibitions = upcomingExhibits
+			exhibitions = ReminderManager.upcomingExhibits
 		} else {
 			exhibitions = ReminderManager.exhibitsWithReminders
 		}

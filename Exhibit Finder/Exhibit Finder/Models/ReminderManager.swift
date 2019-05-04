@@ -12,6 +12,8 @@ struct ReminderManager {
 	
 	static var reminders: [Reminder] = []
 	
+	static var upcomingExhibits: [Exhibition] = []
+	
 	static var currentReminder: Reminder?
 	
 	static var exhibitsWithReminders: [Exhibition] = []

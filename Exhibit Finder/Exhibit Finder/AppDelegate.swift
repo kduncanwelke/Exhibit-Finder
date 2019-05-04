@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 		locationManager.delegate = self
 		locationManager.requestAlwaysAuthorization()
 		locationManager.requestLocation()
+		locationManager.desiredAccuracy = kCLLocationAccuracyBest
+		locationManager.startUpdatingLocation()
 		
 		let notificationCenter = UNUserNotificationCenter.current()
 		notificationCenter.delegate = self

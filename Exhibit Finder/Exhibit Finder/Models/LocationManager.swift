@@ -59,6 +59,7 @@ struct LocationManager {
 			}
 		}()
 		
+		// set up notification
 		notificationContent.title = "\(title)"
 		notificationContent.body = "You are near \(museum)where this exhibit is currently on display."
 		notificationContent.sound = UNNotificationSound.default
@@ -72,6 +73,8 @@ struct LocationManager {
 		
 		let min = Int(minHour)
 		let max = Int(maxHour)
+		
+		// show only if current time is in notification timeframe
 		guard let hour = components.hour, let startDate = retrievedReminder.startDate, let invalidDate = retrievedReminder.invalidDate else { return }
 		
 		if (hour >= min && hour <= max) && (date >= startDate && date <= invalidDate) {

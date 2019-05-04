@@ -352,8 +352,8 @@
                                             </stepper>
                                         </subviews>
                                     </stackView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A notification will be displayed upon when your device enters the marked region" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DwI-fr-IrE">
-                                        <rect key="frame" x="1.5" y="95" width="287.5" height="31.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A notification will be displayed when your device enters the marked region" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DwI-fr-IrE">
+                                        <rect key="frame" x="18.5" y="95" width="253.5" height="31.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
@@ -490,7 +490,7 @@
                                         <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A notification for this exhibit will be displayed on the selected date" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XAc-GJ-yoV">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A notification for this exhibit will be displayed on the selected date and time" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XAc-GJ-yoV">
                                         <rect key="frame" x="6.5" y="125.5" width="277" height="31.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
@@ -597,20 +597,26 @@
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
                             </wkWebView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sPu-cU-FH0">
+                                <rect key="frame" x="150" y="249" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="gFa-ky-LNI" firstAttribute="leading" secondItem="c40-hb-ipN" secondAttribute="leading" id="EHL-Y2-O40"/>
                             <constraint firstItem="gFa-ky-LNI" firstAttribute="top" secondItem="c40-hb-ipN" secondAttribute="top" id="FhV-Kd-FwD"/>
                             <constraint firstItem="c40-hb-ipN" firstAttribute="trailing" secondItem="gFa-ky-LNI" secondAttribute="trailing" id="Hil-Tv-BmF"/>
+                            <constraint firstItem="sPu-cU-FH0" firstAttribute="centerY" secondItem="gFa-ky-LNI" secondAttribute="centerY" id="RMW-X5-xhr"/>
                             <constraint firstItem="c40-hb-ipN" firstAttribute="trailing" secondItem="Wf1-vz-HBo" secondAttribute="trailing" constant="90" id="acA-bb-Sq7"/>
                             <constraint firstItem="Wf1-vz-HBo" firstAttribute="bottom" secondItem="c40-hb-ipN" secondAttribute="bottom" constant="-20" id="fLI-lo-LxL"/>
+                            <constraint firstItem="sPu-cU-FH0" firstAttribute="centerX" secondItem="gFa-ky-LNI" secondAttribute="centerX" id="gp5-kV-vb5"/>
                             <constraint firstItem="Wf1-vz-HBo" firstAttribute="leading" secondItem="c40-hb-ipN" secondAttribute="leading" constant="90" id="x2e-oS-8wS"/>
                             <constraint firstItem="Wf1-vz-HBo" firstAttribute="top" secondItem="gFa-ky-LNI" secondAttribute="bottom" constant="20" id="znC-f9-4Rg"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="c40-hb-ipN"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="sPu-cU-FH0" id="fSV-fb-Qmm"/>
                         <outlet property="dismissButton" destination="Wf1-vz-HBo" id="8v0-rz-IGy"/>
                         <outlet property="webView" destination="gFa-ky-LNI" id="XHX-L9-dRK"/>
                     </connections>

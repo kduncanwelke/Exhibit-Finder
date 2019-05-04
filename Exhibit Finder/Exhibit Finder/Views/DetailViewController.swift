@@ -54,9 +54,9 @@ class DetailViewController: UIViewController {
 			viewOnlineButton.setTitle("No Selection", for: .normal)
 			viewOnlineButton.isEnabled = false
 			reminderButton.setTitle(" No Selection ", for: .normal)
-			
 			return
 		}
+		
 		titleLabel.text = detail.attributes.title
 		museumLabel.text = detail.attributes.museum ?? "No museum listed"
 		let open = detail.attributes.openDate.dropLast(14)
@@ -197,4 +197,3 @@ class DetailViewController: UIViewController {
 	}
 	
 }
-

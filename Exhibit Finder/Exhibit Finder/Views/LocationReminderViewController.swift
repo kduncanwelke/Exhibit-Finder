@@ -43,9 +43,7 @@ class LocationReminderViewController: UIViewController {
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		
 		locationManager.delegate = self
-		locationManager.desiredAccuracy = kCLLocationAccuracyBest
-		locationManager.startUpdatingLocation()
-	
+		
 		confirmButton.layer.cornerRadius = 10
 		slider.addTarget(self, action: #selector(sliderChanged(slider:)), for: .valueChanged)
 		leftStepper.addTarget(self, action: #selector(leftStepperChanged(stepper:)), for: .valueChanged)

@@ -22,6 +22,7 @@ struct NotificationManager {
 		notificationContent.body = "This exhibit is currently on display."
 		notificationContent.sound = UNNotificationSound.default
 		
+		// convert to calendar date
 		var components = DateComponents()
 		components.year = Int(time.year)
 		components.month = Int(time.month)
