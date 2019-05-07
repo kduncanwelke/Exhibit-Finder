@@ -14,7 +14,7 @@ struct DataManager<T: SearchType> {
 		Networker.fetchData(url: url) { result in
 			switch result {
 			case .success(let data):
-				guard let response = try? JSONDecoder.smithsonianApiDecoder.decode(T.self, from: data) else {
+				guard let response = try? XMLParser.smithsonianDecoder.decode(T.self, from: data) else {
 					return
 				}
 				completion(.success(response))
@@ -24,8 +24,8 @@ struct DataManager<T: SearchType> {
 		}
 	}
 	
-	static func fetch(with page: Int?, completion: @escaping (Result<[T]>) -> Void) {
-		fetch(url: T.endpoint.url(with: page)) { result in
+	static func fetch(completion: @escaping (Result<[T]>) -> Void) {
+		fetch(url: T.endpoint.url()) { result in
 			switch result {
 			case .success(let result):
 				var data: [T] = []

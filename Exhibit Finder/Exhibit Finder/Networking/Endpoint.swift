@@ -12,20 +12,14 @@ enum Endpoint {
 	case exhibit
 	
 	private var baseURL: URL {
-		return URL(string: "https://api.si.edu/saam/v1/")!
+		return URL(string: "http://logs2.smithsonian.museum/si-exhibits/exhibits.xml")!
 	}
 	
-	private var key: String {
-		return "xOMCoRA95NTF3Mnced80jpDUGA0WImSdAYNnCsHW"
-	}
-	
-	// generate url based on type
-	func url(with page: Int?) -> URL {
+	// generate url
+	func url() -> URL {
 		switch self {
 		case .exhibit:
-			var components = URLComponents(url: baseURL.appendingPathComponent("exhibitions"), resolvingAgainstBaseURL: false)
-			components!.queryItems = [URLQueryItem(name: "api_key", value: "\(key)"), URLQueryItem(name: "sort", value: "-close_date,-open_date")]
-			return components!.url!
+			return baseURL
 		}
 	}
 }

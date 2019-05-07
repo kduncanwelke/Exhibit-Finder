@@ -19,9 +19,7 @@ class DetailViewController: UIViewController {
 	@IBOutlet weak var museumLabel: UILabel!
 	@IBOutlet weak var openDateLabel: UILabel!
 	@IBOutlet weak var closeDateLabel: UILabel!
-	@IBOutlet weak var permanentLabel: UILabel!
-	@IBOutlet weak var tourLabel: UILabel!
-	@IBOutlet weak var travelingLabel: UILabel!
+	@IBOutlet weak var locationLabel: UILabel!
 	@IBOutlet weak var descriptionLabel: UILabel!
 	
 	@IBOutlet weak var mapView: MKMapView!
@@ -31,7 +29,7 @@ class DetailViewController: UIViewController {
 	
 	// MARK: Variables
 	
-	var detailItem: Exhibition?
+	var detailItem: Exhibit?
 	var museumPinLocation: MKPointAnnotation?
 
 	override func viewDidLoad() {
@@ -57,44 +55,31 @@ class DetailViewController: UIViewController {
 			return
 		}
 		
-		titleLabel.text = detail.attributes.title
-		museumLabel.text = detail.attributes.museum ?? "No museum listed"
-		let open = detail.attributes.openDate.dropLast(14)
-		openDateLabel.text = "\(open)"
-		let close = detail.attributes.closeDate.dropLast(14)
-		closeDateLabel.text = "\(close)"
-	
-		permanentLabel.text = {
-			if detail.attributes.permanentExhibition {
-				return "Yes"
-			} else {
-				return "No"
-			}
-		}()
-	
-		tourLabel.text = {
-			if detail.attributes.offeredForTour {
-				return "Yes"
-			} else {
-				return "No"
-			}
-		}()
-	
-		travelingLabel.text = {
-			if detail.attributes.traveling {
-				return "Yes"
-			} else {
-				return "No"
-			}
-		}()
+		titleLabel.text = detail.exhibit
+		museumLabel.text = detail.museum ?? "No museum listed"
 		
-		if ReminderManager.reminders.contains(where: { $0.id == detail.attributes.path.pid }) {
+		if let open = detail.openingDate?.dropLast(11) {
+			openDateLabel.text = "\(open)"
+		}
+		
+		guard let permanent = detail.closeText?.contains("Indefinitely") else {
+			if let close = detail.closingDate?.dropLast(11) {
+				closeDateLabel.text = "\(close)"
+			}
+			return
+		}
+		closeDateLabel.text = "Available indefinitely"
+
+		
+		locationLabel.text = detail.location ?? "No specific location"
+		
+		if ReminderManager.reminders.contains(where: { $0.id == detail.id }) {
 			reminderButton.setTitle("Edit Reminder", for: .normal)
 		} else {
 			reminderButton.setTitle("Add Reminder", for: .normal)
 		}
 		
-		descriptionLabel.text = detail.attributes.description.processed.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "")
+		descriptionLabel.text = String.removeHTML(from: detail.info ?? "No description available")
 		
 		loadMapView()
 	}
@@ -115,7 +100,7 @@ class DetailViewController: UIViewController {
 		
 		mapView.removeAnnotations(mapView.annotations)
 		
-		guard let museum = detailItem?.attributes.museum else { return }
+		guard let museum = detailItem?.museum else { return }
 		
 		// perform local search for museum by name, if it exists
 		let request = MKLocalSearch.Request()
@@ -147,7 +132,7 @@ class DetailViewController: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.destination is SeeOnlineViewController {
 			let destinationViewController = segue.destination as? SeeOnlineViewController
-			guard let detail = detailItem, let url = URL(string: "https://americanart.si.edu\(detail.attributes.path.alias)") else { return }
+			guard let detail = detailItem, let urlString = detail.exhibitURL, let url = URL(string: "\(urlString)") else { return }
 			destinationViewController?.urlToDisplay = url
 		} else if segue.identifier == "addReminder" {
 			let barViewControllers = segue.destination as! UITabBarController

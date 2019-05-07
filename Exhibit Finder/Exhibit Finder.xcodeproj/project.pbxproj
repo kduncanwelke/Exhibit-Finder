@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D031C2D226932C100F47E75 /* NotificationManager.swift */; };
 		2D130615226A7C2700482D1E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D130614226A7C2700482D1E /* LocationManager.swift */; };
+		2D4C9B352280DE9D00CFA974 /* XMLParsing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D65CE0E2280D80200732F82 /* XMLParsing.framework */; };
 		2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D677BEE2260FD3100A1CC2E /* Reminder.xcdatamodeld */; };
 		2D677BF2226104C900A1CC2E /* CoreDateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D677BF1226104C900A1CC2E /* CoreDateManager.swift */; };
 		2D677BF422613AFC00A1CC2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D677BF322613AFC00A1CC2E /* Assets.xcassets */; };
@@ -49,6 +50,8 @@
 /* Begin PBXFileReference section */
 		2D031C2D226932C100F47E75 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2D130614226A7C2700482D1E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		2D65CE0B2280D63500732F82 /* XMLParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLParsing.framework; path = Carthage/Build/Mac/XMLParsing.framework; sourceTree = "<group>"; };
+		2D65CE0E2280D80200732F82 /* XMLParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLParsing.framework; path = Carthage/Build/iOS/XMLParsing.framework; sourceTree = "<group>"; };
 		2D677BEF2260FD3100A1CC2E /* Reminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Reminder.xcdatamodel; sourceTree = "<group>"; };
 		2D677BF1226104C900A1CC2E /* CoreDateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDateManager.swift; sourceTree = "<group>"; };
 		2D677BF322613AFC00A1CC2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 			files = (
 				2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */,
 				2D68D679225D35200018C59E /* WebKit.framework in Frameworks */,
+				2D4C9B352280DE9D00CFA974 /* XMLParsing.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,6 +107,8 @@
 		2D68D677225D35200018C59E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2D65CE0B2280D63500732F82 /* XMLParsing.framework */,
+				2D65CE0E2280D80200732F82 /* XMLParsing.framework */,
 				2D68D67A225D42060018C59E /* MapKit.framework */,
 				2D68D678225D35200018C59E /* WebKit.framework */,
 			);
@@ -203,6 +209,7 @@
 				2DE50D2622592FA200B924F0 /* Sources */,
 				2DE50D2722592FA200B924F0 /* Frameworks */,
 				2DE50D2822592FA200B924F0 /* Resources */,
+				2D65CE0D2280D6A600732F82 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -293,6 +300,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2D65CE0D2280D6A600732F82 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/XMLParsing.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XMLParsing.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2DE50D2622592FA200B924F0 /* Sources */ = {
@@ -483,6 +512,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A8R365GJ52;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Exhibit Finder/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,6 +535,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A8R365GJ52;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Exhibit Finder/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

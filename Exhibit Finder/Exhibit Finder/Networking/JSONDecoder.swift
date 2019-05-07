@@ -7,12 +7,12 @@
 //
 
 import Foundation
+import XMLParsing
 
 // decoder for snakecase conversion
-extension JSONDecoder {
-	static var smithsonianApiDecoder: JSONDecoder {
-		let decoder = JSONDecoder()
-		decoder.keyDecodingStrategy = .convertFromSnakeCase
+extension XMLParser {
+	static var smithsonianDecoder: XMLDecoder {
+		let decoder = XMLDecoder()
 		return decoder
 	}
 }

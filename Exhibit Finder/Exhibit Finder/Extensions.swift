@@ -36,3 +36,15 @@ extension UIViewController {
 		self.present(alert, animated: true, completion: nil)
 	}
 }
+
+extension String {
+	static func removeHTMLWithoutSpacing(from string: String) -> String {
+		let newString = string.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "").replacingOccurrences(of: "&mdash;", with: "—").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "\'").replacingOccurrences(of: "&amp;", with: "&").replacingOccurrences(of: "&rsquo;", with: "\'")
+		return newString
+	}
+	
+	static func removeHTML(from string: String) -> String {
+		let newString = string.replacingOccurrences(of: "</p>", with: "\n").replacingOccurrences(of: "<li>", with: "-").replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression, range: nil).replacingOccurrences(of: "&nbsp;", with: "").replacingOccurrences(of: "&mdash;", with: "—").replacingOccurrences(of: "&quot;", with: "\"").replacingOccurrences(of: "&apos;", with: "\'").replacingOccurrences(of: "&amp;", with: "&").replacingOccurrences(of: "<li>", with: "-").replacingOccurrences(of: "&rsquo;", with: "\'")
+		return newString
+	}
+}

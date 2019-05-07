@@ -23,7 +23,7 @@ class TimeReminderViewController: UIViewController {
 	
 	// MARK: Variables
 	
-	var exhibit: Exhibition?
+	var exhibit: Exhibit?
 	var openDate: String?
 	var closeDate: String?
 	let dateFormatter = DateFormatter()
@@ -66,8 +66,8 @@ class TimeReminderViewController: UIViewController {
 	
 	func configureView() {
 		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
-		exhibitName.text = selectedExhibit.attributes.title
-		museumName.text = selectedExhibit.attributes.museum ?? "Not applicable"
+		exhibitName.text = selectedExhibit.exhibit
+		museumName.text = selectedExhibit.museum ?? "Not applicable"
 		
 		let minDate = Date()
 		
@@ -85,7 +85,7 @@ class TimeReminderViewController: UIViewController {
 		
 		reminderSelected.text = getStringDate(from: datePicker.date)
 		
-		if let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) {
+		if let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.id }) {
 			guard let date = result.time else { return }
 			ReminderManager.currentReminder = result
 			
@@ -176,8 +176,8 @@ class TimeReminderViewController: UIViewController {
 	
 	func getExhibitData(reminder: Reminder) {
 		guard let currentExhibit = exhibit, let open = openDate, let close = closeDate else { return }
-		reminder.name = currentExhibit.attributes.title
-		reminder.id = Int64(currentExhibit.attributes.path.pid)
+		reminder.name = currentExhibit.exhibit
+		reminder.id = Int64(currentExhibit.id)
 		reminder.startDate = dateFormatter.date(from: open)
 		reminder.invalidDate = dateFormatter.date(from: close)
 	}
@@ -220,7 +220,7 @@ class TimeReminderViewController: UIViewController {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			
 			guard let exhibitWithReminder = exhibit else { return }
-			if ReminderManager.exhibitsWithReminders.contains(where: { $0.attributes.path.pid == exhibitWithReminder.attributes.path.pid }) {
+			if ReminderManager.exhibitsWithReminders.contains(where: { $0.id == exhibitWithReminder.id }) {
 				// reminder existed but was edited
 				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
 			} else {

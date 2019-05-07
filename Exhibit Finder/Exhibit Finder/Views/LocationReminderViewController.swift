@@ -27,7 +27,7 @@ class LocationReminderViewController: UIViewController {
 	
 	// MARK: Variables
 	
-	var exhibit: Exhibition?
+	var exhibit: Exhibit?
 	var openDate: String?
 	var closeDate: String?
 	var museumLocation: MKPointAnnotation?
@@ -74,12 +74,12 @@ class LocationReminderViewController: UIViewController {
 	
 	func configureView() {
 		guard let selectedExhibit = exhibit else { return }
-		exhibitName.text = selectedExhibit.attributes.title
+		exhibitName.text = selectedExhibit.exhibit
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.removeOverlays(mapView.overlays)
 		
 		// if there is a reminder do this
-		guard let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.attributes.path.pid }) else {
+		guard let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.id }) else {
 			// if there is no reminder set do this instead
 			ReminderManager.currentReminder = nil
 			
@@ -96,7 +96,7 @@ class LocationReminderViewController: UIViewController {
 				let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
 				mapView.setRegion(defaultRegion, animated: true)
 				
-				if selectedExhibit.attributes.description.processed.contains("American Art Museum") {
+				/*if selectedExhibit.attributes.description.processed.contains("American Art Museum") {
 					performSearch(museum: "American Art Museum")
 					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
 				} else if selectedExhibit.attributes.description.processed.contains("Renwick Gallery") {
@@ -104,7 +104,7 @@ class LocationReminderViewController: UIViewController {
 					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
 				} else {
 					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - please select a location on the map to use instead.")
-				}
+				}*/
 			}
 			
 			return
@@ -258,10 +258,10 @@ class LocationReminderViewController: UIViewController {
 	func getLocationForReminder(location: Location?) {
 		guard let locationReminder = mapView.annotations.first, let address = locationReminder.title, let currentExhibit = exhibit else { return }
 		location?.address = address
-		location?.museum = currentExhibit.attributes.museum
+		location?.museum = currentExhibit.museum
 		location?.latitude = locationReminder.coordinate.latitude
 		location?.longitude = locationReminder.coordinate.longitude
-		location?.name = currentExhibit.attributes.title
+		location?.name = currentExhibit.exhibit
 		location?.minTime = leftStepper.value
 		location?.maxTime = rightStepper.value
 		guard let overlay = mapView.overlays.first as? MKCircle else { return }
@@ -271,8 +271,8 @@ class LocationReminderViewController: UIViewController {
 	// get exhibit data for reminder
 	func getExhibitData(reminder: Reminder) {
 		guard let currentExhibit = exhibit, let open = openDate, let close = closeDate else { return }
-		reminder.name = currentExhibit.attributes.title
-		reminder.id = Int64(currentExhibit.attributes.path.pid)
+		reminder.name = currentExhibit.exhibit
+		reminder.id = Int64(currentExhibit.id)
 		reminder.startDate = dateFormatter.date(from: open)
 		reminder.invalidDate = dateFormatter.date(from: close)
 	}
@@ -348,13 +348,13 @@ class LocationReminderViewController: UIViewController {
 			saveEntry()
 			reloadReminders()
 			
-			if let pin = mapView.annotations.first, let exhibitWithReminder = exhibit, let circle = mapView.overlays.first as? MKCircle {
+			if let pin = mapView.annotations.first, let exhibitWithReminder = exhibit, let title = exhibitWithReminder.exhibit, let circle = mapView.overlays.first as? MKCircle {
 				
 				let annotation = MKPointAnnotation()
 				let coordinate = CLLocationCoordinate2D(latitude: pin.coordinate.latitude, longitude: pin.coordinate.longitude)
 				annotation.coordinate = coordinate
 				
-				let geofenceArea = LocationManager.getMonitoringRegion(for: annotation, exhibitName: exhibitWithReminder.attributes.title, radius: circle.radius)
+				let geofenceArea = LocationManager.getMonitoringRegion(for: annotation, exhibitName: title, radius: circle.radius)
 		
 				locationManager.startMonitoring(for: geofenceArea)
 				print("\(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
@@ -365,7 +365,7 @@ class LocationReminderViewController: UIViewController {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			
 			guard let exhibitWithReminder = exhibit else { return }
-			if ReminderManager.exhibitsWithReminders.contains(where: { $0.attributes.path.pid == exhibitWithReminder.attributes.path.pid }) {
+			if ReminderManager.exhibitsWithReminders.contains(where: { $0.id == exhibitWithReminder.id }) {
 				// reminder existed but was edited
 				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
 			} else {
