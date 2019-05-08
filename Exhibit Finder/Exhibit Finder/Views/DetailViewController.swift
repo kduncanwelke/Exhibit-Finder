@@ -62,14 +62,13 @@ class DetailViewController: UIViewController {
 			openDateLabel.text = "\(open)"
 		}
 		
-		guard let permanent = detail.closeText?.contains("Indefinitely") else {
+		if let permanent = detail.closeText?.contains("Indefinitely") {
+			closeDateLabel.text = "Permanent"
+		} else {
 			if let close = detail.closingDate?.dropLast(11) {
 				closeDateLabel.text = "\(close)"
 			}
-			return
 		}
-		closeDateLabel.text = "Available indefinitely"
-
 		
 		locationLabel.text = detail.location ?? "No specific location"
 		
@@ -104,7 +103,7 @@ class DetailViewController: UIViewController {
 		
 		// perform local search for museum by name, if it exists
 		let request = MKLocalSearch.Request()
-		request.naturalLanguageQuery = museum
+		request.naturalLanguageQuery = "\(museum) Washington DC"
 		request.region = mapView.region
 		let search = MKLocalSearch(request: request)
 		

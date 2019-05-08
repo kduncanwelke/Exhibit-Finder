@@ -408,7 +408,7 @@ class MasterViewController: UITableViewController {
 		if let close = object.closingDate?.dropLast(11) {
 			cell.closeDate.text = "\(close)"
 		} else if (object.closeText?.contains("Indefinitely")) != nil {
-			cell.closeDate.text = "No date set"
+			cell.closeDate.text = "Permanent"
 		}
 		
 		// set text to show reminder if one matches
