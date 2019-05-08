@@ -8,7 +8,6 @@
 
 import Foundation
 import XMLParsing
-
 // decoder for snakecase conversion
 extension XMLParser {
 	static var smithsonianDecoder: XMLDecoder {

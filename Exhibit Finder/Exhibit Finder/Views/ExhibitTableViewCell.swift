@@ -14,11 +14,13 @@ class ExhibitTableViewCell: UITableViewCell {
 	
 	@IBOutlet weak var title: UILabel!
 	@IBOutlet weak var musuem: UILabel!
-	@IBOutlet weak var openDate: UILabel!
 	@IBOutlet weak var closeDate: UILabel!
 	@IBOutlet weak var hasReminder: UILabel!
 	@IBOutlet weak var briefInfo: UILabel!
 	@IBOutlet weak var reminderImage: UIImageView!
+	@IBOutlet weak var cellImage: UIImageView!
+	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+	
 	
 	static let reuseIdentifier = "exhibitCell"
 

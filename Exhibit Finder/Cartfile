@@ -1,2 +1,3 @@
 
 github "ShawnMoore/XMLParsing"
+github "kean/Nuke" ~> 7.0

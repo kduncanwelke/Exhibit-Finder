@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import UserNotifications
 import CoreLocation
+import Nuke
 import XMLParsing
 
 class MasterViewController: UITableViewController {
@@ -75,7 +76,6 @@ class MasterViewController: UITableViewController {
 		}
 	}
 	
-	
 
 	override func viewWillAppear(_ animated: Bool) {
 		clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
@@ -108,7 +108,10 @@ class MasterViewController: UITableViewController {
 					}
 					
 					for exhibit in response {
-						self.exhibitsList.append(exhibit)
+						// disclude museums outside of Washington DC
+						if exhibit.museum != "Cooper Hewitt, Smithsonian Design Museum" && exhibit.museum != "Air and Space Museum Udvar-Hazy Center" && exhibit.museum != "American Indian Museum Heye Center" {
+							self.exhibitsList.append(exhibit)
+						}
 						
 						/*guard let openDate = self.getDate(from: exhibit.attributes.openDate), let closeDate = self.getDate(from: exhibit.attributes.closeDate) else {
 							return
@@ -394,6 +397,15 @@ class MasterViewController: UITableViewController {
 			cell.title.text = "No title"
 		}
 		
+		cell.activityIndicator.startAnimating()
+		if let urlString = object.imgUrl, let urlToLoad = URL(string: urlString) {
+			// load image with Nuke
+			Nuke.loadImage(with: urlToLoad, options: NukeOptions.options, into: cell.cellImage) { response, _ in
+				cell.cellImage?.image = response?.image
+				cell.activityIndicator.stopAnimating()
+			}
+		}
+		
 		cell.musuem.text = object.museum ?? "No museum listed"
 		
 		if let data = object.infoBrief {
@@ -402,13 +414,10 @@ class MasterViewController: UITableViewController {
 			cell.briefInfo.text = "No description available"
 		}
 		
-		if let open = object.openingDate?.dropLast(11) {
-			cell.openDate.text = "\(open)"
-		}
 		if let close = object.closingDate?.dropLast(11) {
 			cell.closeDate.text = "\(close)"
 		} else if (object.closeText?.contains("Indefinitely")) != nil {
-			cell.closeDate.text = "Permanent"
+			cell.closeDate.text = "Permanent exhibit"
 		}
 		
 		// set text to show reminder if one matches

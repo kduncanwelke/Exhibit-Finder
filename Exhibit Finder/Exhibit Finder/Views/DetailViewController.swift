@@ -63,14 +63,14 @@ class DetailViewController: UIViewController {
 		}
 		
 		if let permanent = detail.closeText?.contains("Indefinitely") {
-			closeDateLabel.text = "Permanent"
+			closeDateLabel.text = "Permanent exhibit"
 		} else {
 			if let close = detail.closingDate?.dropLast(11) {
 				closeDateLabel.text = "\(close)"
 			}
 		}
 		
-		locationLabel.text = detail.location ?? "No specific location"
+		locationLabel.text = "Location: \(detail.location ?? "No specific location")"
 		
 		if ReminderManager.reminders.contains(where: { $0.id == detail.id }) {
 			reminderButton.setTitle("Edit Reminder", for: .normal)
@@ -79,7 +79,6 @@ class DetailViewController: UIViewController {
 		}
 		
 		descriptionLabel.text = String.removeHTML(from: detail.info ?? "No description available")
-		
 		loadMapView()
 	}
 	
