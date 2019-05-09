@@ -78,7 +78,6 @@ class LocationReminderViewController: UIViewController {
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.removeOverlays(mapView.overlays)
 		
-		// if there is a reminder do this
 		guard let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.id }) else {
 			// if there is no reminder set do this instead
 			ReminderManager.currentReminder = nil
@@ -95,21 +94,12 @@ class LocationReminderViewController: UIViewController {
 				let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
 				let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
 				mapView.setRegion(defaultRegion, animated: true)
-				
-				/*if selectedExhibit.attributes.description.processed.contains("American Art Museum") {
-					performSearch(museum: "American Art Museum")
-					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
-				} else if selectedExhibit.attributes.description.processed.contains("Renwick Gallery") {
-					performSearch(museum: "Renwick Gallery")
-					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - a recommended location has been added to the map instead.")
-				} else {
-					showAlert(title: "No museum location", message: "The Smithsonian Art API has not supplied a museum location for this exhibit - please select a location on the map to use instead.")
-				}*/
 			}
 			
 			return
 		}
 		
+		// if there is a reminder with a location do this
 		ReminderManager.currentReminder = result
 			if let reminderInfo = ReminderManager.currentReminder?.location, let address = reminderInfo.address {
 				// show time range selections and region
@@ -256,7 +246,7 @@ class LocationReminderViewController: UIViewController {
 	
 	// get location info for location based reminder
 	func getLocationForReminder(location: Location?) {
-		guard let locationReminder = mapView.annotations.first, let address = locationReminder.title, let currentExhibit = exhibit else { return }
+		guard let locationReminder = museumLocation, let address = locationReminder.title, let currentExhibit = exhibit else { return }
 		location?.address = address
 		location?.museum = currentExhibit.museum
 		location?.latitude = locationReminder.coordinate.latitude
@@ -279,7 +269,7 @@ class LocationReminderViewController: UIViewController {
 	
 	@objc func sliderChanged(slider: UISlider) {
 		selectedRange.text = "\(Int(slider.value))ft"
-		guard let location = mapView.annotations.first else { return }
+		guard let location = museumLocation else { return }
 		let circle = MKCircle(center: location.coordinate, radius: CLLocationDistance(slider.value))
 		mapView.removeOverlays(mapView.overlays)
 		mapView.addOverlay(circle)
@@ -330,15 +320,6 @@ class LocationReminderViewController: UIViewController {
 	
 	// MARK: IBActions
 	
-	@IBAction func mapTapped(_ sender: UITapGestureRecognizer) {
-		if sender.state == .ended {
-			let tappedLocation = sender.location(in: mapView)
-			let coordinate = mapView.convert(tappedLocation, toCoordinateFrom: mapView)
-			let placemark = MKPlacemark(coordinate: coordinate)
-			updateLocation(location: placemark)
-		}
-	}
-	
 	@IBAction func confirmButtonPressed(_ sender: UIButton) {
 		if locationManager.monitoredRegions.count == 20 {
 			showAlert(title: "Unable to save", message: "The maximum of 20 monitored locations has been met - please delete or modify an existing reminder.")
@@ -348,7 +329,7 @@ class LocationReminderViewController: UIViewController {
 			saveEntry()
 			reloadReminders()
 			
-			if let pin = mapView.annotations.first, let exhibitWithReminder = exhibit, let title = exhibitWithReminder.exhibit, let circle = mapView.overlays.first as? MKCircle {
+			if let pin = museumLocation, let exhibitWithReminder = exhibit, let title = exhibitWithReminder.exhibit, let circle = mapView.overlays.first as? MKCircle {
 				
 				let annotation = MKPointAnnotation()
 				let coordinate = CLLocationCoordinate2D(latitude: pin.coordinate.latitude, longitude: pin.coordinate.longitude)

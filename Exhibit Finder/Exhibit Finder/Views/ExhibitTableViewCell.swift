@@ -27,6 +27,8 @@ class ExhibitTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+		cellImage.layer.cornerRadius = cellImage.frame.height / 2
+		cellImage.clipsToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

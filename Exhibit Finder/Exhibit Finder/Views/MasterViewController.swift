@@ -32,11 +32,11 @@ class MasterViewController: UITableViewController {
 	let searchController = UISearchController(searchResultsController: nil)
 	var searchResults = [Exhibit]()
 	var activityIndicator = UIActivityIndicatorView()
-
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
-		let items = ["Current", "Upcoming", "My Reminders"]
+		let items = ["Smithsonian Exhibits", "My Reminders"]
 		segmentedController = UISegmentedControl(items: items)
 		segmentedController.tintColor = UIColor(red:1.00, green:0.58, blue:0.00, alpha:1.0)
 		segmentedController.selectedSegmentIndex = 0
@@ -56,7 +56,7 @@ class MasterViewController: UITableViewController {
 		navigationItem.hidesSearchBarWhenScrolling = false
 		
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
-		let currentDate = Date()
+		//let currentDate = Date()
 		
 		activityIndicator.color = .gray
 		tableView.backgroundView = activityIndicator
@@ -103,7 +103,7 @@ class MasterViewController: UITableViewController {
 			case .success(let response):
 				DispatchQueue.main.async {
 					guard let response = response.first?.exhibits else {
-						self.showAlert(title: "Connection failed", message: "Json response failed, please try again later.")
+						self.showAlert(title: "Connection failed", message: "XML response failed, please try again later.")
 						return
 					}
 					
@@ -155,7 +155,7 @@ class MasterViewController: UITableViewController {
 	
 	// use to reload list of exhibits with reminders when a reminder has been edited
 	@objc func reminderEdited() {
-		if segmentedController.selectedSegmentIndex == 2 {
+		if segmentedController.selectedSegmentIndex == 1 {
 			tableView.reloadData()
 		}
 	}
@@ -207,8 +207,8 @@ class MasterViewController: UITableViewController {
 			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
 		}
 	
-		// if section 2 (where deletion occurs) is selected, don't reload table view as it breaks fade animation
-		if segmentedController.selectedSegmentIndex != 2 {
+		// if section 1 (where deletion occurs) is selected, don't reload table view as it breaks fade animation
+		if segmentedController.selectedSegmentIndex != 1 {
 			tableView.reloadData()
 		}
 	}
@@ -282,8 +282,6 @@ class MasterViewController: UITableViewController {
 					object = searchResults[indexPath.row]
 				} else if segmentedController.selectedSegmentIndex == 0 {
 					object = exhibitsList[indexPath.row]
-				} else if segmentedController.selectedSegmentIndex == 1 {
-					object = ReminderManager.upcomingExhibits[indexPath.row]
 				} else {
 					object = ReminderManager.exhibitsWithReminders[indexPath.section]
 				}
@@ -299,7 +297,6 @@ class MasterViewController: UITableViewController {
 				controller.detailItem = object
 		        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
 		        controller.navigationItem.leftItemsSupplementBackButton = true
-
 		    }
 		}
 	}
@@ -311,10 +308,10 @@ class MasterViewController: UITableViewController {
 			tableView.backgroundView = activityIndicator
 			tableView.separatorStyle = .none
 			return 1
-		} else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 2 {
+		} else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
 			tableView.separatorStyle = .singleLine
 			return searchResults.count
-		} else if segmentedController.selectedSegmentIndex == 2 {
+		} else if segmentedController.selectedSegmentIndex == 1 {
 			if ReminderManager.reminders.count == 0 {
 				tableView.backgroundView = noDataView
 				tableView.separatorStyle = .none
@@ -331,11 +328,11 @@ class MasterViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 2 {
+		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
 			return searchResults[section].exhibit
 		} else if isFilteringBySearch() {
 			return nil
-		} else if segmentedController.selectedSegmentIndex == 2 {
+		} else if segmentedController.selectedSegmentIndex == 1 {
 			return ReminderManager.exhibitsWithReminders[section].exhibit
 		} else {
 			return nil
@@ -343,7 +340,7 @@ class MasterViewController: UITableViewController {
 	}
 
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 2 {
+		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
 			let result = ReminderManager.reminders.first(where: { $0.id == searchResults[section].id })
 			if result?.time != nil && result?.location != nil {
 				return 2
@@ -354,8 +351,6 @@ class MasterViewController: UITableViewController {
 			return searchResults.count
 		} else if segmentedController.selectedSegmentIndex == 0 {
 			return exhibitsList.count
-		} else if segmentedController.selectedSegmentIndex == 1 {
-			return ReminderManager.upcomingExhibits.count
 		} else {
 			let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].id })
 			if result?.time != nil && result?.location != nil {
@@ -372,27 +367,26 @@ class MasterViewController: UITableViewController {
 		var object: Exhibit
 		
 		// check if items are being filtered or not, and use appropriate array
-		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 2 {
+		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
 			object = searchResults[indexPath.section]
-		} else if isFilteringBySearch() {
+		} else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 0 {
 			object = searchResults[indexPath.row]
 		} else if segmentedController.selectedSegmentIndex == 0 {
 			object = exhibitsList[indexPath.row]
-		} else if segmentedController.selectedSegmentIndex == 1 {
-			object = ReminderManager.upcomingExhibits[indexPath.row]
 		} else {
 			object = ReminderManager.exhibitsWithReminders[indexPath.section]
 		}
 		
 		// change cell title color if reminders segment
-		if segmentedController.selectedSegmentIndex == 2 {
+		if segmentedController.selectedSegmentIndex == 1 {
 			cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
 		} else {
 			cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
 		}
 		
 		if let title = object.exhibit {
-			cell.title.text = String.removeHTMLWithoutSpacing(from: title)
+			let decoded = title.decodingHTMLEntities()
+			cell.title.text = String.removeHTMLWithoutSpacing(from: decoded)
 		} else {
 			cell.title.text = "No title"
 		}
@@ -409,7 +403,8 @@ class MasterViewController: UITableViewController {
 		cell.musuem.text = object.museum ?? "No museum listed"
 		
 		if let data = object.infoBrief {
-			cell.briefInfo.text = String.removeHTMLWithoutSpacing(from: data)
+			let decoded = data.decodingHTMLEntities()
+			cell.briefInfo.text = String.removeHTMLWithoutSpacing(from: decoded)
 		} else {
 			cell.briefInfo.text = "No description available"
 		}
@@ -422,7 +417,7 @@ class MasterViewController: UITableViewController {
 		
 		// set text to show reminder if one matches
 		if let result = ReminderManager.reminders.first(where: { $0.id == object.id }) {
-			if segmentedController.selectedSegmentIndex == 2 {
+			if segmentedController.selectedSegmentIndex == 1 {
 				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
 					// configure time reminder cell
 					cell.hasReminder.text = "Time"
@@ -476,7 +471,7 @@ class MasterViewController: UITableViewController {
 
 	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 		// Return false if you do not want the specified item to be editable.
-		if segmentedController.selectedSegmentIndex == 0 || segmentedController.selectedSegmentIndex == 1 {
+		if segmentedController.selectedSegmentIndex == 0 {
 			return false
 		} else {
 			return true
@@ -559,8 +554,6 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
 		
 		if segmentedController.selectedSegmentIndex == 0 {
 			exhibitions = exhibitsList
-		} else if segmentedController.selectedSegmentIndex == 1 {
-			exhibitions = ReminderManager.upcomingExhibits
 		} else {
 			exhibitions = ReminderManager.exhibitsWithReminders
 		}
@@ -570,6 +563,12 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
 		})
 		
 		tableView.reloadData()
+		
+		// scroll to top upon showing results
+		if searchResults.count != 0 {
+			let indexPath = IndexPath(row: 0, section: 0)
+			self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+		}
 	}
 	
 	func isFilteringBySearch() -> Bool {

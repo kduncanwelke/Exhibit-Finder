@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import CoreLocation
 import MapKit
+import Nuke
 
 class DetailViewController: UIViewController {
 
@@ -22,6 +23,7 @@ class DetailViewController: UIViewController {
 	@IBOutlet weak var locationLabel: UILabel!
 	@IBOutlet weak var descriptionLabel: UILabel!
 	
+	@IBOutlet weak var exhibitImage: UIImageView!
 	@IBOutlet weak var mapView: MKMapView!
 	
 	@IBOutlet weak var reminderButton: UIButton!
@@ -30,6 +32,7 @@ class DetailViewController: UIViewController {
 	// MARK: Variables
 	
 	var detailItem: Exhibit?
+	var image: UIImage?
 	var museumPinLocation: MKPointAnnotation?
 
 	override func viewDidLoad() {
@@ -37,6 +40,8 @@ class DetailViewController: UIViewController {
 		// Do any additional setup after loading the view.
 		viewOnlineButton.layer.cornerRadius = 10
 		reminderButton.layer.cornerRadius = 10
+		exhibitImage.layer.cornerRadius = exhibitImage.frame.height / 2
+		exhibitImage.clipsToBounds = true
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(updateButton), name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 		
@@ -55,15 +60,23 @@ class DetailViewController: UIViewController {
 			return
 		}
 		
-		titleLabel.text = detail.exhibit
+		if let urlString = detail.imgUrl, let urlToLoad = URL(string: urlString) {
+			// load image with Nuke
+			Nuke.loadImage(with: urlToLoad, options: NukeOptions.options, into: exhibitImage) { [unowned self] response, _ in
+				self.exhibitImage.image = response?.image
+			}
+		}
+		
+		let decodedTitle = detail.exhibit?.decodingHTMLEntities()
+		titleLabel.text = String.removeHTMLWithoutSpacing(from: decodedTitle ?? "No title")
 		museumLabel.text = detail.museum ?? "No museum listed"
 		
 		if let open = detail.openingDate?.dropLast(11) {
 			openDateLabel.text = "\(open)"
 		}
 		
-		if let permanent = detail.closeText?.contains("Indefinitely") {
-			closeDateLabel.text = "Permanent exhibit"
+		if (detail.closeText?.contains("Indefinitely")) != nil {
+			closeDateLabel.text = "Indefinite"
 		} else {
 			if let close = detail.closingDate?.dropLast(11) {
 				closeDateLabel.text = "\(close)"
@@ -78,7 +91,8 @@ class DetailViewController: UIViewController {
 			reminderButton.setTitle("Add Reminder", for: .normal)
 		}
 		
-		descriptionLabel.text = String.removeHTML(from: detail.info ?? "No description available")
+		let decoded = detail.info?.decodingHTMLEntities()
+		descriptionLabel.text = String.removeHTML(from: decoded ?? "No description available")
 		loadMapView()
 	}
 	

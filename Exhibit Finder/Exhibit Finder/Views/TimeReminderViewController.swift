@@ -65,23 +65,26 @@ class TimeReminderViewController: UIViewController {
 	// MARK: Custom functions
 	
 	func configureView() {
-		guard let selectedExhibit = exhibit, let open = openDate, let close = closeDate else { return }
+		guard let selectedExhibit = exhibit, let close = closeDate else { return }
 		exhibitName.text = selectedExhibit.exhibit
 		museumName.text = selectedExhibit.museum ?? "Not applicable"
 		
 		let minDate = Date()
+		datePicker.minimumDate = minDate
 		
-		guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
+		/*guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
 		if convertedOpenDate > minDate {
 			time.text = "\(open) to \(close)"
 		} else {
 			time.text = "Today to \(close)"
+		}*/
+
+		if close != "Indefinite" {
+			let maxDate = getDate(from: close)
+			datePicker.maximumDate = maxDate
 		}
 		
-		let maxDate = getDate(from: close)
-		
-		datePicker.minimumDate = minDate
-		datePicker.maximumDate = maxDate
+		time.text = "Today to \(close)"
 		
 		reminderSelected.text = getStringDate(from: datePicker.date)
 		
