@@ -11,9 +11,7 @@ import Foundation
 struct ReminderManager {
 	
 	static var reminders: [Reminder] = []
-	
-	static var upcomingExhibits: [Exhibit] = []
-	
+
 	static var currentReminder: Reminder?
 	
 	static var exhibitsWithReminders: [Exhibit] = []

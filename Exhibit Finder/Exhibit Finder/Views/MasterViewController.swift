@@ -94,6 +94,12 @@ class MasterViewController: UITableViewController {
 	
 	@objc func segmentSelected() {
 		tableView.reloadData()
+		
+		// return to top of table if new section has been loaded
+		if tableView.visibleCells.isEmpty != true {
+			let indexPath = IndexPath(row: 0, section: 0)
+			self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+		}
 	}
 	
 	func loadExhibitions() {
@@ -304,7 +310,7 @@ class MasterViewController: UITableViewController {
 	// MARK: - Table View
 
 	override func numberOfSections(in tableView: UITableView) -> Int {
-		if exhibitsList.isEmpty {
+		if segmentedController.selectedSegmentIndex == 0 && exhibitsList.isEmpty {
 			tableView.backgroundView = activityIndicator
 			tableView.separatorStyle = .none
 			return 1
@@ -312,7 +318,8 @@ class MasterViewController: UITableViewController {
 			tableView.separatorStyle = .singleLine
 			return searchResults.count
 		} else if segmentedController.selectedSegmentIndex == 1 {
-			if ReminderManager.reminders.count == 0 {
+			// prevent table from loading if there are no reminders or if exhibits have not been loaded
+			if ReminderManager.reminders.count == 0 || exhibitsList.isEmpty {
 				tableView.backgroundView = noDataView
 				tableView.separatorStyle = .none
 			} else {
@@ -333,7 +340,11 @@ class MasterViewController: UITableViewController {
 		} else if isFilteringBySearch() {
 			return nil
 		} else if segmentedController.selectedSegmentIndex == 1 {
-			return ReminderManager.exhibitsWithReminders[section].exhibit
+			if ReminderManager.exhibitsWithReminders.isEmpty {
+				return nil
+			} else {
+				return ReminderManager.exhibitsWithReminders[section].exhibit
+			}
 		} else {
 			return nil
 		}
@@ -352,11 +363,15 @@ class MasterViewController: UITableViewController {
 		} else if segmentedController.selectedSegmentIndex == 0 {
 			return exhibitsList.count
 		} else {
-			let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].id })
-			if result?.time != nil && result?.location != nil {
-				return 2
-			} else {
+			if ReminderManager.reminders.isEmpty {
 				return 1
+			} else {
+				let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].id })
+				if result?.time != nil && result?.location != nil {
+					return 2
+				} else {
+					return 1
+				}
 			}
 		}
 	}
@@ -412,7 +427,7 @@ class MasterViewController: UITableViewController {
 		if let close = object.closingDate?.dropLast(11) {
 			cell.closeDate.text = "\(close)"
 		} else if (object.closeText?.contains("Indefinitely")) != nil {
-			cell.closeDate.text = "Permanent exhibit"
+			cell.closeDate.text = "Indefinite"
 		}
 		
 		// set text to show reminder if one matches

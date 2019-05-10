@@ -45,6 +45,14 @@ class DetailViewController: UIViewController {
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(updateButton), name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 		
+		if detailItem == nil {
+			reminderButton.isEnabled = false
+			viewOnlineButton.isEnabled = false
+		} else {
+			reminderButton.isEnabled = true
+			viewOnlineButton.isEnabled = true
+		}
+		
 		configureView()
 	}
 
