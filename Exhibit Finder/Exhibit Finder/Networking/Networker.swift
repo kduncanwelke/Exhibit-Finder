@@ -9,7 +9,7 @@
 import Foundation
 
 struct Networker {
-	private static let session = URLSession(configuration: .default)
+	private static var session = URLSession(configuration: .default)
 	
 	static func getURL(endpoint: URL, completion: @escaping (Result<Data>) -> Void) {
 		fetchData(url: endpoint, completion: completion)

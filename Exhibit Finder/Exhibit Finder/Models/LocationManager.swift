@@ -36,7 +36,7 @@ struct LocationManager {
 		
 		let managedContext = CoreDataManager.shared.managedObjectContext
 		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
-		fetchRequest.predicate = NSPredicate(format: "location.name == %@", identifier)
+		fetchRequest.predicate = NSPredicate(format: "name == %@", identifier)
 		
 		// load particular reminder for triggered geofence using predicate
 		var reminders: [Reminder] = []
@@ -45,23 +45,15 @@ struct LocationManager {
 		} catch let error as NSError {
 			print("could not fetch, \(error), \(error.userInfo)")
 		}
-		
-		guard let retrievedReminder = reminders.first, let title = retrievedReminder.location?.name, let minHour = retrievedReminder.location?.minTime, let maxHour = retrievedReminder.location?.maxTime else { return }
+	
+		guard let retrievedReminder = reminders.first, let title = retrievedReminder.location?.name, let museum = retrievedReminder.location?.museum, let minHour = retrievedReminder.location?.minTime, let maxHour = retrievedReminder.location?.maxTime else { return }
 		
 		let notificationCenter = UNUserNotificationCenter.current()
 		let notificationContent = UNMutableNotificationContent()
 		
-		let museum: String = { ()
-			if let museum = retrievedReminder.location?.museum {
-				return "the \(museum) "
-			} else {
-				return ""
-			}
-		}()
-		
 		// set up notification
 		notificationContent.title = "\(title)"
-		notificationContent.body = "You are near \(museum)where this exhibit is currently on display."
+		notificationContent.body = "You are near the \(museum) where this exhibit is currently on display."
 		notificationContent.sound = UNNotificationSound.default
 		
 		let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
@@ -75,17 +67,31 @@ struct LocationManager {
 		let max = Int(maxHour)
 		
 		// show only if current time is in notification timeframe
-		guard let hour = components.hour, let startDate = retrievedReminder.startDate, let invalidDate = retrievedReminder.invalidDate else { return }
+		guard let hour = components.hour, let startDate = retrievedReminder.startDate else { return }
 		
-		if (hour >= min && hour <= max) && (date >= startDate && date <= invalidDate) {
-			notificationCenter.add(request) { (error) in
-				if error != nil {
-					print("Error adding notification with identifier: \(identifier)")
+		// check if invalid date exists - if not exhibit is permanent
+		if let invalidDate = retrievedReminder.invalidDate {
+			if (hour >= min && hour <= max) && (date >= startDate && date <= invalidDate) {
+				notificationCenter.add(request) { (error) in
+					if error != nil {
+						print("Error adding notification with identifier: \(identifier)")
+					}
 				}
+				
+				print("notification added")
 			}
-			
-			print("notification added")
+		} else {
+			if (hour >= min && hour <= max) && date >= startDate {
+				notificationCenter.add(request) { (error) in
+					if error != nil {
+						print("Error adding notification with identifier: \(identifier)")
+					}
+				}
+				
+				print("notification added")
+			}
 		}
+		
 	}
 	
 	static func parseAddress(selectedItem: CLPlacemark) -> String {

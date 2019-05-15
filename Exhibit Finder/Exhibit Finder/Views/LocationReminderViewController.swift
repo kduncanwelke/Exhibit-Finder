@@ -78,7 +78,7 @@ class LocationReminderViewController: UIViewController {
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.removeOverlays(mapView.overlays)
 		
-		guard let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.id }) else {
+		guard let result = ReminderManager.reminderDictionary[selectedExhibit.id] else {
 			// if there is no reminder set do this instead
 			ReminderManager.currentReminder = nil
 			
@@ -159,14 +159,14 @@ class LocationReminderViewController: UIViewController {
 		request.region = mapView.region
 		let search = MKLocalSearch(request: request)
 		
-		search.start { [weak self] response, _ in
+		search.start { [unowned self] response, _ in
 			guard let response = response else {
 				return
 			}
 			
 			guard let result = response.mapItems.first?.placemark else { return }
 			// add to map
-			self?.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125)
+			self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125)
 		}
 	}
 	
@@ -342,16 +342,18 @@ class LocationReminderViewController: UIViewController {
 				print("started monitoring")
 			}
 			
-			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			
 			guard let exhibitWithReminder = exhibit else { return }
-			if ReminderManager.exhibitsWithReminders.contains(where: { $0.id == exhibitWithReminder.id }) {
+			if ReminderManager.reminderDictionary[exhibitWithReminder.id] != nil {
 				// reminder existed but was edited
 				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
 			} else {
 				ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
 			}
+			
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
+			
 			dismiss(animated: true, completion: nil)
 		}
 	}

@@ -16,9 +16,9 @@ enum Errors: Error {
 	var localizedDescription: String {
 		switch self {
 		case .networkError:
-			return "The Smithsonian API could not be reached successfully at this time - please try again later."
+			return "The Smithsonian data could not be reached successfully at this time - please try again later."
 		case .otherError:
-			return "The network could not be reached successfully - check your data connection or wifi connection and try again."
+			return "The network could not be reached successfully - please check your network connection and try again."
 		}
 	}
 }

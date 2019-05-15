@@ -38,6 +38,9 @@ class DetailViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+		navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+		navigationItem.leftItemsSupplementBackButton = true
+		
 		viewOnlineButton.layer.cornerRadius = 10
 		reminderButton.layer.cornerRadius = 10
 		exhibitImage.layer.cornerRadius = exhibitImage.frame.height / 2
@@ -55,7 +58,7 @@ class DetailViewController: UIViewController {
 		
 		configureView()
 	}
-
+	
 	// MARK: Custom functions
 	
 	func configureView() {
@@ -93,7 +96,7 @@ class DetailViewController: UIViewController {
 		
 		locationLabel.text = "Location: \(detail.location ?? "No specific location")"
 		
-		if ReminderManager.reminders.contains(where: { $0.id == detail.id }) {
+		if ReminderManager.reminderDictionary[detail.id] != nil {
 			reminderButton.setTitle("Edit Reminder", for: .normal)
 		} else {
 			reminderButton.setTitle("Add Reminder", for: .normal)
@@ -128,7 +131,7 @@ class DetailViewController: UIViewController {
 		request.region = mapView.region
 		let search = MKLocalSearch(request: request)
 		
-		search.start { [weak self] response, _ in
+		search.start { [unowned self] response, _ in
 			guard let response = response else {
 				return
 			}
@@ -138,12 +141,12 @@ class DetailViewController: UIViewController {
 			guard let result = response.mapItems.first?.placemark else { return }
 			annotation.coordinate = result.coordinate
 			annotation.title = "\(museum) \n \(result.title ?? "")"
-			self?.mapView.addAnnotation(annotation)
-			self?.museumPinLocation = annotation
+			self.mapView.addAnnotation(annotation)
+			self.museumPinLocation = annotation
 			
 			// recenter map on added annotation
 			let region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-			self?.mapView.setRegion(region, animated: true)
+			self.mapView.setRegion(region, animated: true)
 		}
 	}
 	
@@ -152,7 +155,7 @@ class DetailViewController: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.destination is SeeOnlineViewController {
 			let destinationViewController = segue.destination as? SeeOnlineViewController
-			guard let detail = detailItem, let urlString = detail.exhibitURL, let url = URL(string: "\(urlString)") else { return }
+			guard let detail = detailItem, let urlString = detail.exhibitURL, let url = URL(string: urlString) else { return }
 			destinationViewController?.urlToDisplay = url
 		} else if segue.identifier == "addReminder" {
 			let barViewControllers = segue.destination as! UITabBarController

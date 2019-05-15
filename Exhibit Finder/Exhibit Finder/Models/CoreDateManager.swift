@@ -11,18 +11,18 @@ import CoreData
 
 class CoreDataManager {
 	
-	static let shared = CoreDataManager()
+	static var shared = CoreDataManager()
 	
-	lazy var managedObjectContext: NSManagedObjectContext = {
-		let container = self.persistentContainer
+	lazy var managedObjectContext: NSManagedObjectContext = { [unowned self] in
+		var container = self.persistentContainer
 		return container.viewContext
 	}()
 	
 	private lazy var persistentContainer: NSPersistentContainer = {
-		let container = NSPersistentContainer(name: "Reminder")
+		var container = NSPersistentContainer(name: "Reminder")
 		
 		container.loadPersistentStores() { storeDescription, error in
-			if let error = error as NSError? {
+			if var error = error as NSError? {
 				fatalError("unresolved error \(error), \(error.userInfo)")
 			}
 			

@@ -15,4 +15,9 @@ struct ReminderManager {
 	static var currentReminder: Reminder?
 	
 	static var exhibitsWithReminders: [Exhibit] = []
+	
+	static var exhibitDictionary: [Int64: Exhibit] = [:]
+	
+	static var reminderDictionary: [Int64: Reminder] = [:]
 }
+

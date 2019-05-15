@@ -19,7 +19,7 @@ class MasterViewController: UITableViewController {
 	
 	@IBOutlet var noDataView: UIView!
 	
-	var detailViewController: DetailViewController? = nil
+	//weak var detailViewController: DetailViewController? = nil
 	
 	// MARK: Variables
 	
@@ -29,7 +29,7 @@ class MasterViewController: UITableViewController {
 	let timeDateFormatter = DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
-	let searchController = UISearchController(searchResultsController: nil)
+	var searchController = UISearchController(searchResultsController: nil)
 	var searchResults = [Exhibit]()
 	var activityIndicator = UIActivityIndicatorView()
 	
@@ -56,15 +56,14 @@ class MasterViewController: UITableViewController {
 		navigationItem.hidesSearchBarWhenScrolling = false
 		
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
-		//let currentDate = Date()
 		
 		activityIndicator.color = .gray
 		tableView.backgroundView = activityIndicator
 		
 		if let split = splitViewController {
-		    let controllers = split.viewControllers
-		    detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-			detailViewController = nil
+		   // let controllers = split.viewControllers
+		    //var detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+			//detailViewController = nil
 			
 			// handle split view behavior
 			if split.displayMode == .primaryHidden {
@@ -98,7 +97,7 @@ class MasterViewController: UITableViewController {
 		// return to top of table if new section has been loaded
 		if tableView.visibleCells.isEmpty != true {
 			let indexPath = IndexPath(row: 0, section: 0)
-			self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+			tableView.scrollToRow(at: indexPath, at: .top, animated: false)
 		}
 	}
 	
@@ -109,31 +108,34 @@ class MasterViewController: UITableViewController {
 			case .success(let response):
 				DispatchQueue.main.async {
 					guard let response = response.first?.exhibits else {
-						self.showAlert(title: "Connection failed", message: "XML response failed, please try again later.")
+						self.showAlert(title: "Connection failed", message: "Data response failed, please try again later.")
 						return
 					}
 					
 					for exhibit in response {
 						// disclude museums outside of Washington DC
 						if exhibit.museum != "Cooper Hewitt, Smithsonian Design Museum" && exhibit.museum != "Air and Space Museum Udvar-Hazy Center" && exhibit.museum != "American Indian Museum Heye Center" {
+							
 							self.exhibitsList.append(exhibit)
+							
+							// add exhibit to exhibit dictionary
+							ReminderManager.exhibitDictionary[exhibit.id] = exhibit
+							
+							// if exhibit is in reminder dictionary, add to list of exhibits that have reminders
+							if ReminderManager.reminderDictionary[exhibit.id] != nil {
+								
+								// add to array of exhibits that have reminder
+								ReminderManager.exhibitsWithReminders.append(exhibit)
+							} else {
+								// nothing
+							}
 						}
 						
-						/*guard let openDate = self.getDate(from: exhibit.attributes.openDate), let closeDate = self.getDate(from: exhibit.attributes.closeDate) else {
-							return
-						}
-						
-						if openDate <= self.currentDate && closeDate >= self.currentDate {
-							self.exhibitsList.append(exhibit)
-						} else if openDate > self.currentDate {
-							ReminderManager.upcomingExhibits.append(exhibit)
-						}*/
-						
-						if ReminderManager.reminders.contains(where: { $0.id == exhibit.id }) {
+						/*if ReminderManager.reminders.contains(where: { $0.id == exhibit.id }) {
 							ReminderManager.exhibitsWithReminders.append(exhibit)
 						} else {
 							// not
-						}
+						}*/
 					}
 					self.hasBeenLoaded = true
 					self.tableView.reloadData()
@@ -209,6 +211,15 @@ class MasterViewController: UITableViewController {
 		do {
 			ReminderManager.reminders = try managedContext.fetch(fetchRequest)
 			print("reminders loaded")
+			
+			// remove all from dictionary to prevent empty keys
+			if ReminderManager.reminderDictionary.isEmpty != true {
+				ReminderManager.reminderDictionary.removeAll()
+			}
+			
+			for reminder in ReminderManager.reminders {
+				ReminderManager.reminderDictionary[reminder.id] = reminder
+			}
 		} catch let error as NSError {
 			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
 		}
@@ -298,11 +309,8 @@ class MasterViewController: UITableViewController {
 					ReminderManager.currentReminder = nil
 				}
 				
-				let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-				
-				controller.detailItem = object
-		        controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-		        controller.navigationItem.leftItemsSupplementBackButton = true
+				let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController
+				destinationViewController?.detailItem = object
 		    }
 		}
 	}
@@ -315,7 +323,11 @@ class MasterViewController: UITableViewController {
 			tableView.separatorStyle = .none
 			return 1
 		} else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
-			tableView.separatorStyle = .singleLine
+			if searchResults.isEmpty {
+				tableView.separatorStyle = .none
+			} else {
+				tableView.separatorStyle = .singleLine
+			}
 			return searchResults.count
 		} else if segmentedController.selectedSegmentIndex == 1 {
 			// prevent table from loading if there are no reminders or if exhibits have not been loaded
@@ -399,20 +411,22 @@ class MasterViewController: UITableViewController {
 			cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
 		}
 		
+		DispatchQueue.main.async {
+			cell.activityIndicator.startAnimating()
+			if let urlString = object.imgUrl, let urlToLoad = URL(string: urlString) {
+				// load image with Nuke
+				Nuke.loadImage(with: urlToLoad, options: NukeOptions.options, into: cell.cellImage) { response, _ in
+					cell.cellImage?.image = response?.image
+					cell.activityIndicator.stopAnimating()
+				}
+			}
+		}
+		
 		if let title = object.exhibit {
 			let decoded = title.decodingHTMLEntities()
 			cell.title.text = String.removeHTMLWithoutSpacing(from: decoded)
 		} else {
 			cell.title.text = "No title"
-		}
-		
-		cell.activityIndicator.startAnimating()
-		if let urlString = object.imgUrl, let urlToLoad = URL(string: urlString) {
-			// load image with Nuke
-			Nuke.loadImage(with: urlToLoad, options: NukeOptions.options, into: cell.cellImage) { response, _ in
-				cell.cellImage?.image = response?.image
-				cell.activityIndicator.stopAnimating()
-			}
 		}
 		
 		cell.musuem.text = object.museum ?? "No museum listed"
@@ -430,9 +444,9 @@ class MasterViewController: UITableViewController {
 			cell.closeDate.text = "Indefinite"
 		}
 		
-		// set text to show reminder if one matches
-		if let result = ReminderManager.reminders.first(where: { $0.id == object.id }) {
-			if segmentedController.selectedSegmentIndex == 1 {
+		// in reminders view, configure cells
+		if segmentedController.selectedSegmentIndex == 1 {
+			if let result = ReminderManager.reminderDictionary[object.id] {
 				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
 					// configure time reminder cell
 					cell.hasReminder.text = "Time"
@@ -464,7 +478,9 @@ class MasterViewController: UITableViewController {
 						}
 					}
 				}
-			} else {
+			}
+		} else { // in exhibits view, configure cells
+			if let result = ReminderManager.reminderDictionary[object.id] {
 				// for non-reminder view, show if a reminder exists
 				cell.hasReminder.text = "Reminder"
 				if result.time != nil && result.location != nil {
@@ -474,11 +490,11 @@ class MasterViewController: UITableViewController {
 				} else if result.time == nil && result.location != nil {
 					cell.reminderImage.image = UIImage(named: "locationicon25")
 				}
+			} else {
+				// otherwise no reminder for exhibit exists
+				cell.hasReminder.text = "No Reminder"
+				cell.reminderImage.image = nil
 			}
-		} else {
-			// otherwise reminder does not exist
-			cell.hasReminder.text = "No Reminder"
-			cell.reminderImage.image = nil
 		}
 
 		return cell
@@ -498,11 +514,11 @@ class MasterViewController: UITableViewController {
 			var result: Reminder?
 			
 			if isFilteringBySearch() {
-				if let reminder = ReminderManager.reminders.first(where: { $0.id == searchResults[indexPath.section].id }) {
+				if let reminder = ReminderManager.reminderDictionary[searchResults[indexPath.section].id] {
 					result = reminder
 				}
 			} else {
-				if let reminder = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[indexPath.section].id }) {
+				if let reminder = ReminderManager.reminderDictionary[ReminderManager.exhibitsWithReminders[indexPath.section].id] {
 					result = reminder
 				}
 			}
@@ -512,6 +528,7 @@ class MasterViewController: UITableViewController {
 				guard let result = result else { return }
 				let new = ReminderManager.exhibitsWithReminders.filter({ $0.id != result.id })
 				ReminderManager.exhibitsWithReminders = new
+				
 				ReminderManager.currentReminder = nil
 				
 				fullDelete(result: result)
@@ -525,7 +542,10 @@ class MasterViewController: UITableViewController {
 					fullDelete(result: result)
 					
 					ReminderManager.exhibitsWithReminders.remove(at: indexPath.section)
+				
 					ReminderManager.currentReminder = nil
+				
+				print(ReminderManager.reminderDictionary)
 					
 					// delete entire section to prevent '0 row in section' warning
 					tableView.deleteSections([indexPath.section], with: .fade)
@@ -582,7 +602,7 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
 		// scroll to top upon showing results
 		if searchResults.count != 0 {
 			let indexPath = IndexPath(row: 0, section: 0)
-			self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+			tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 		}
 	}
 	

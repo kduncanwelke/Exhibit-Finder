@@ -88,7 +88,7 @@ class TimeReminderViewController: UIViewController {
 		
 		reminderSelected.text = getStringDate(from: datePicker.date)
 		
-		if let result = ReminderManager.reminders.first(where: { $0.id == selectedExhibit.id }) {
+		if let result = ReminderManager.reminderDictionary[selectedExhibit.id] {
 			guard let date = result.time else { return }
 			ReminderManager.currentReminder = result
 			
@@ -219,16 +219,18 @@ class TimeReminderViewController: UIViewController {
 			return
 		} else {
 			saveEntry()
-			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			
 			guard let exhibitWithReminder = exhibit else { return }
-			if ReminderManager.exhibitsWithReminders.contains(where: { $0.id == exhibitWithReminder.id }) {
+			if ReminderManager.reminderDictionary[exhibitWithReminder.id] != nil {
 				// reminder existed but was edited
 				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
 			} else {
+				// reminder did not exist, add to array
 				ReminderManager.exhibitsWithReminders.append(exhibitWithReminder)
 			}
+			
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			dismiss(animated: true, completion: nil)
 		}
 	}
