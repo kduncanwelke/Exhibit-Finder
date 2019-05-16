@@ -186,7 +186,7 @@ class LocationReminderViewController: UIViewController {
 	}
 
 	func saveEntry() {
-		let managedContext = CoreDataManager.shared.managedObjectContext
+		var managedContext = CoreDataManager.shared.managedObjectContext
 		
 		guard let currentReminder = ReminderManager.currentReminder else {
 			// if there's no reminder selected, create a new one
@@ -229,18 +229,6 @@ class LocationReminderViewController: UIViewController {
 		} catch {
 			// this should never be displayed but is here to cover the possibility
 			showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
-		}
-	}
-	
-	func reloadReminders() {
-		let managedContext = CoreDataManager.shared.managedObjectContext
-		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
-		
-		do {
-			ReminderManager.reminders = try managedContext.fetch(fetchRequest)
-			print("reminders reloaded")
-		} catch let error as NSError {
-			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
 		}
 	}
 	
@@ -327,7 +315,6 @@ class LocationReminderViewController: UIViewController {
 			showAlert(title: "No location selected", message: "Please select a place on the map for this notification.")
 		} else {
 			saveEntry()
-			reloadReminders()
 			
 			if let pin = museumLocation, let exhibitWithReminder = exhibit, let title = exhibitWithReminder.exhibit, let circle = mapView.overlays.first as? MKCircle {
 				

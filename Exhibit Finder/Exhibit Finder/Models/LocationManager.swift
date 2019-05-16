@@ -34,8 +34,8 @@ struct LocationManager {
 		print("location event handled")
 		let identifier = region.identifier
 		
-		let managedContext = CoreDataManager.shared.managedObjectContext
-		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
+		var managedContext = CoreDataManager.shared.managedObjectContext
+		var fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
 		fetchRequest.predicate = NSPredicate(format: "name == %@", identifier)
 		
 		// load particular reminder for triggered geofence using predicate

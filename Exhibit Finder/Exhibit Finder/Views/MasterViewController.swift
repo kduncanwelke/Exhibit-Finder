@@ -25,8 +25,8 @@ class MasterViewController: UITableViewController {
 	
 	var exhibitsList: [Exhibit] = []
 	var currentDate = Date()
-	let dateFormatter = ISO8601DateFormatter()
-	let timeDateFormatter = DateFormatter()
+	var dateFormatter = ISO8601DateFormatter()
+	var timeDateFormatter = DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
 	var searchController = UISearchController(searchResultsController: nil)
@@ -118,6 +118,10 @@ class MasterViewController: UITableViewController {
 							
 							self.exhibitsList.append(exhibit)
 							
+							if let urlString = exhibit.imgUrl, let url = URL(string: urlString) {
+								ReminderManager.urls[exhibit.id] = url
+							}
+							
 							// add exhibit to exhibit dictionary
 							ReminderManager.exhibitDictionary[exhibit.id] = exhibit
 							
@@ -130,12 +134,6 @@ class MasterViewController: UITableViewController {
 								// nothing
 							}
 						}
-						
-						/*if ReminderManager.reminders.contains(where: { $0.id == exhibit.id }) {
-							ReminderManager.exhibitsWithReminders.append(exhibit)
-						} else {
-							// not
-						}*/
 					}
 					self.hasBeenLoaded = true
 					self.tableView.reloadData()
@@ -169,8 +167,8 @@ class MasterViewController: UITableViewController {
 	}
 
 	func deleteExpiredReminders() {
-		let managedContext = CoreDataManager.shared.managedObjectContext
-		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
+		var managedContext = CoreDataManager.shared.managedObjectContext
+		var fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
 		let now = Date()
 		
 		fetchRequest.predicate = NSPredicate(format: "invalidDate < %@", now as CVarArg)
@@ -205,8 +203,8 @@ class MasterViewController: UITableViewController {
 	
 	// load reminders from core data
 	func loadReminders() {
-		let managedContext = CoreDataManager.shared.managedObjectContext
-		let fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
+		var managedContext = CoreDataManager.shared.managedObjectContext
+		var fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
 		
 		do {
 			ReminderManager.reminders = try managedContext.fetch(fetchRequest)
@@ -231,7 +229,7 @@ class MasterViewController: UITableViewController {
 	}
 	
 	func resave() {
-		let managedContext = CoreDataManager.shared.managedObjectContext
+		var managedContext = CoreDataManager.shared.managedObjectContext
 		
 		do {
 			try managedContext.save()
@@ -243,7 +241,7 @@ class MasterViewController: UITableViewController {
 	}
 	
 	func fullDelete(result: Reminder) {
-		let managedContext = CoreDataManager.shared.managedObjectContext
+		var managedContext = CoreDataManager.shared.managedObjectContext
 		
 		clearNotification(result: result)
 		endLocationMonitoring(result: result)
@@ -303,7 +301,7 @@ class MasterViewController: UITableViewController {
 					object = ReminderManager.exhibitsWithReminders[indexPath.section]
 				}
 				
-				if let result = ReminderManager.reminders.first(where: { Int($0.id) == object.id }) {
+				if let result = ReminderManager.reminderDictionary[object.id] {
 					ReminderManager.currentReminder = result
 				} else {
 					ReminderManager.currentReminder = nil
@@ -364,7 +362,7 @@ class MasterViewController: UITableViewController {
 
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
-			let result = ReminderManager.reminders.first(where: { $0.id == searchResults[section].id })
+			let result = ReminderManager.reminderDictionary[searchResults[section].id]
 			if result?.time != nil && result?.location != nil {
 				return 2
 			} else {
@@ -378,7 +376,7 @@ class MasterViewController: UITableViewController {
 			if ReminderManager.reminders.isEmpty {
 				return 1
 			} else {
-				let result = ReminderManager.reminders.first(where: { $0.id == ReminderManager.exhibitsWithReminders[section].id })
+				let result = ReminderManager.reminderDictionary[ReminderManager.exhibitsWithReminders[section].id]
 				if result?.time != nil && result?.location != nil {
 					return 2
 				} else {
@@ -410,17 +408,28 @@ class MasterViewController: UITableViewController {
 		} else {
 			cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
 		}
-		
+	
 		DispatchQueue.main.async {
-			cell.activityIndicator.startAnimating()
-			if let urlString = object.imgUrl, let urlToLoad = URL(string: urlString) {
-				// load image with Nuke
-				Nuke.loadImage(with: urlToLoad, options: NukeOptions.options, into: cell.cellImage) { response, _ in
+			if let url = ReminderManager.urls[object.id] {
+				let request = ImageRequest(
+					url: url,
+					targetSize: CGSize(width: 140, height: 140),
+					contentMode: .aspectFill)
+				
+				Nuke.loadImage(with: request, options: NukeOptions.options, into: cell.cellImage) { response, _ in
 					cell.cellImage?.image = response?.image
-					cell.activityIndicator.stopAnimating()
 				}
 			}
 		}
+		
+		/*DispatchQueue.main.async {
+			// load image with Nuke
+			if let url = ReminderManager.urls[object.id] {
+				Nuke.loadImage(with: url, options: NukeOptions.options, into: cell.cellImage) { response, _ in
+					cell.cellImage?.image = response?.image
+				}
+			}
+		}*/
 		
 		if let title = object.exhibit {
 			let decoded = title.decodingHTMLEntities()
@@ -442,6 +451,24 @@ class MasterViewController: UITableViewController {
 			cell.closeDate.text = "\(close)"
 		} else if (object.closeText?.contains("Indefinitely")) != nil {
 			cell.closeDate.text = "Indefinite"
+		}
+		
+		if segmentedController.selectedSegmentIndex == 0 {
+			if let result = ReminderManager.reminderDictionary[object.id] {
+				// for non-reminder view, show if a reminder exists
+				cell.hasReminder.text = "Reminder"
+				if result.time != nil && result.location != nil {
+					cell.reminderImage.image = UIImage(named: "both25")
+				} else if result.time != nil && result.location == nil {
+					cell.reminderImage.image = UIImage(named: "clockicon25")
+				} else if result.time == nil && result.location != nil {
+					cell.reminderImage.image = UIImage(named: "locationicon25")
+				}
+			} else {
+				// otherwise no reminder for exhibit exists
+				cell.hasReminder.text = "No Reminder"
+				cell.reminderImage.image = nil
+			}
 		}
 		
 		// in reminders view, configure cells
@@ -478,22 +505,6 @@ class MasterViewController: UITableViewController {
 						}
 					}
 				}
-			}
-		} else { // in exhibits view, configure cells
-			if let result = ReminderManager.reminderDictionary[object.id] {
-				// for non-reminder view, show if a reminder exists
-				cell.hasReminder.text = "Reminder"
-				if result.time != nil && result.location != nil {
-					cell.reminderImage.image = UIImage(named: "both25")
-				} else if result.time != nil && result.location == nil {
-					cell.reminderImage.image = UIImage(named: "clockicon25")
-				} else if result.time == nil && result.location != nil {
-					cell.reminderImage.image = UIImage(named: "locationicon25")
-				}
-			} else {
-				// otherwise no reminder for exhibit exists
-				cell.hasReminder.text = "No Reminder"
-				cell.reminderImage.image = nil
 			}
 		}
 

@@ -125,7 +125,7 @@ class TimeReminderViewController: UIViewController {
 	}
 	
 	func saveEntry() {
-		let managedContext = CoreDataManager.shared.managedObjectContext
+		var managedContext = CoreDataManager.shared.managedObjectContext
 		
 		// save new entry if no reminder is being edited
 		guard let currentReminder = ReminderManager.currentReminder else {

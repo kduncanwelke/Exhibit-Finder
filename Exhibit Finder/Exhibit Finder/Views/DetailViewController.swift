@@ -34,6 +34,7 @@ class DetailViewController: UIViewController {
 	var detailItem: Exhibit?
 	var image: UIImage?
 	var museumPinLocation: MKPointAnnotation?
+	var url: URL?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -55,7 +56,7 @@ class DetailViewController: UIViewController {
 			reminderButton.isEnabled = true
 			viewOnlineButton.isEnabled = true
 		}
-		
+	
 		configureView()
 	}
 	
@@ -71,10 +72,16 @@ class DetailViewController: UIViewController {
 			return
 		}
 		
-		if let urlString = detail.imgUrl, let urlToLoad = URL(string: urlString) {
-			// load image with Nuke
-			Nuke.loadImage(with: urlToLoad, options: NukeOptions.options, into: exhibitImage) { [unowned self] response, _ in
-				self.exhibitImage.image = response?.image
+		DispatchQueue.main.async {
+			if let url = ReminderManager.urls[detail.id] {
+				// load image with Nuke
+				Nuke.loadImage(with: url, options: NukeOptions.options, into: self.exhibitImage) { [unowned self] response, _ in
+					self.exhibitImage.image = response?.image
+				}
+			}
+			
+			if let stringUrl = detail.exhibitURL, let generatedUrl = URL(string: stringUrl) {
+				self.url = generatedUrl
 			}
 		}
 		
@@ -121,15 +128,15 @@ class DetailViewController: UIViewController {
 		
 		mapView.setRegion(defaultRegion, animated: true)
 		
-		mapView.removeAnnotations(mapView.annotations)
+		//mapView.removeAnnotations(mapView.annotations)
 		
 		guard let museum = detailItem?.museum else { return }
 		
 		// perform local search for museum by name, if it exists
-		let request = MKLocalSearch.Request()
+		var request = MKLocalSearch.Request()
 		request.naturalLanguageQuery = "\(museum) Washington DC"
 		request.region = mapView.region
-		let search = MKLocalSearch(request: request)
+		var search = MKLocalSearch(request: request)
 		
 		search.start { [unowned self] response, _ in
 			guard let response = response else {
@@ -137,15 +144,15 @@ class DetailViewController: UIViewController {
 			}
 
 			// create annotation and add to map
-			let annotation = MKPointAnnotation()
-			guard let result = response.mapItems.first?.placemark else { return }
+			var annotation = MKPointAnnotation()
+			guard var result = response.mapItems.first?.placemark else { return }
 			annotation.coordinate = result.coordinate
 			annotation.title = "\(museum) \n \(result.title ?? "")"
 			self.mapView.addAnnotation(annotation)
 			self.museumPinLocation = annotation
 			
 			// recenter map on added annotation
-			let region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+			var region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
 			self.mapView.setRegion(region, animated: true)
 		}
 	}
@@ -153,20 +160,16 @@ class DetailViewController: UIViewController {
 	// MARK: Navigation
 	
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if segue.destination is SeeOnlineViewController {
-			let destinationViewController = segue.destination as? SeeOnlineViewController
-			guard let detail = detailItem, let urlString = detail.exhibitURL, let url = URL(string: urlString) else { return }
-			destinationViewController?.urlToDisplay = url
-		} else if segue.identifier == "addReminder" {
-			let barViewControllers = segue.destination as! UITabBarController
+		if segue.identifier == "addReminder" {
+			var barViewControllers = segue.destination as! UITabBarController
 			
-				let destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
+				var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
 				guard let detail = detailItem else { return }
 				destinationViewControllerOne?.exhibit = detail
 				destinationViewControllerOne?.openDate = openDateLabel.text
 				destinationViewControllerOne?.closeDate = closeDateLabel.text
 				
-				let destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
+				var destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
 				destinationViewControllerTwo?.exhibit = detail
 				destinationViewControllerTwo?.openDate = openDateLabel.text
 				destinationViewControllerTwo?.closeDate = closeDateLabel.text
@@ -197,7 +200,8 @@ class DetailViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func viewOnlineButtonTapped(_ sender: UIButton) {
-		performSegue(withIdentifier: "viewOnline", sender: Any?.self)
+		guard let url = url else { return }
+		UIApplication.shared.open(url, options: [:], completionHandler: nil)
 	}
 	
 	@IBAction func addReminderButtonTapped(_ sender: UIButton) {

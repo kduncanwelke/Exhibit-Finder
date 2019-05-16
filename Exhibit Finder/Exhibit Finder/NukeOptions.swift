@@ -8,6 +8,7 @@
 
 import Foundation
 import Nuke
+import CoreGraphics
 
 struct NukeOptions {
 	// loading options used by Nuke

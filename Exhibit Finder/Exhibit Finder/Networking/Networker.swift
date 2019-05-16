@@ -16,9 +16,9 @@ struct Networker {
 	}
 	
 	static func fetchData(url: URL, completion: @escaping (Result<Data>) -> Void) {
-		let request = URLRequest(url: url)
+		var request = URLRequest(url: url)
 		
-		let task = session.dataTask(with: request) { data, response, error in
+		var task = session.dataTask(with: request) { data, response, error in
 			
 			guard let httpResponse = response as? HTTPURLResponse else {
 				completion(.failure(Errors.otherError))

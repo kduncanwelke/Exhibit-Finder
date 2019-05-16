@@ -19,7 +19,6 @@ class ExhibitTableViewCell: UITableViewCell {
 	@IBOutlet weak var briefInfo: UILabel!
 	@IBOutlet weak var reminderImage: UIImageView!
 	@IBOutlet weak var cellImage: UIImageView!
-	@IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 	
 	
 	static let reuseIdentifier = "exhibitCell"

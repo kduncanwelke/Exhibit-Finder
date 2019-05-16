@@ -19,5 +19,7 @@ struct ReminderManager {
 	static var exhibitDictionary: [Int64: Exhibit] = [:]
 	
 	static var reminderDictionary: [Int64: Reminder] = [:]
+	
+	static var urls: [Int64: URL] = [:]
 }
 
