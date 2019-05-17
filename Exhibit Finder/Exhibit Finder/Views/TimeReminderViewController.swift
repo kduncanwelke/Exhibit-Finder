@@ -71,13 +71,6 @@ class TimeReminderViewController: UIViewController {
 		
 		let minDate = Date()
 		datePicker.minimumDate = minDate
-		
-		/*guard let convertedOpenDate = dateFormatter.date(from: open) else { return }
-		if convertedOpenDate > minDate {
-			time.text = "\(open) to \(close)"
-		} else {
-			time.text = "Today to \(close)"
-		}*/
 
 		if close != "Indefinite" {
 			let maxDate = getDate(from: close)
@@ -96,6 +89,12 @@ class TimeReminderViewController: UIViewController {
 			let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
 			
 			guard let dateToUse = calendar.date(from: components) else { return }
+			
+			// if loading an old reminder, set its past date as the minimum picker date
+			if dateToUse < minDate {
+				datePicker.minimumDate = dateToUse
+			}
+			
 			reminderSelected.text = getStringDate(from: dateToUse)
 			datePicker.date = dateToUse
 			confirmButton.setTitle("Save Changes", for: .normal)
@@ -180,6 +179,7 @@ class TimeReminderViewController: UIViewController {
 	func getExhibitData(reminder: Reminder) {
 		guard let currentExhibit = exhibit, let open = openDate, let close = closeDate else { return }
 		reminder.name = currentExhibit.exhibit
+		reminder.museum = currentExhibit.museum
 		reminder.id = Int64(currentExhibit.id)
 		reminder.startDate = dateFormatter.date(from: open)
 		reminder.invalidDate = dateFormatter.date(from: close)

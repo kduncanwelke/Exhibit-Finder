@@ -14,6 +14,7 @@
     <entity name="Reminder" representedClassName="Reminder" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="invalidDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="museum" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="location" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Location" inverseName="reminder" inverseEntity="Location" syncable="YES"/>
@@ -29,7 +30,7 @@
     </entity>
     <elements>
         <element name="Location" positionX="-54" positionY="9" width="128" height="180"/>
-        <element name="Reminder" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Reminder" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="Time" positionX="-45" positionY="72" width="128" height="135"/>
     </elements>
 </model>

@@ -17,7 +17,7 @@ struct NotificationManager {
 		let notificationCenter = UNUserNotificationCenter.current()
 		let notificationContent = UNMutableNotificationContent()
 		
-		guard let title = reminder.name, let time = reminder.time, let museum = reminder.location?.museum else { return }
+		guard let title = reminder.name, let time = reminder.time, let museum = reminder.museum else { return }
 		notificationContent.title = "\(title)"
 		notificationContent.body = "This exhibit is currently on display at the \(museum)."
 		notificationContent.sound = UNNotificationSound.default

@@ -90,6 +90,10 @@ class LocationReminderViewController: UIViewController {
 				let circle = MKCircle(center: location.coordinate, radius: 125)
 				mapView.addOverlay(circle)
 			} else {
+				// if segue was made too quickly, museum location may not have passed, so perform search
+				if let museum = selectedExhibit.museum {
+					performSearch(museum: "\(museum) Washington DC")
+				}
 				// if there is no location associated with the selected exhibit, show national mall
 				let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
 				let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)

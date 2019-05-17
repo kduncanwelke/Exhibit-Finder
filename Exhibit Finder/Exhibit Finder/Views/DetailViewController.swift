@@ -139,7 +139,7 @@ class DetailViewController: UIViewController {
 		var search = MKLocalSearch(request: request)
 		
 		search.start { [unowned self] response, _ in
-			guard let response = response else {
+			guard var response = response else {
 				return
 			}
 
@@ -177,13 +177,8 @@ class DetailViewController: UIViewController {
 				destinationViewControllerTwo?.region = mapView.region
 			
 			guard let currentReminder = ReminderManager.currentReminder else {
-				// if showing a location, segue to location based reminder view
-				if museumPinLocation != nil {
-					barViewControllers.selectedIndex = 1
-				} else {
-					barViewControllers.selectedIndex = 0
-				}
-				
+				// go to time reminder by default if there is no reminder
+				barViewControllers.selectedIndex = 0
 				return
 			}
 			

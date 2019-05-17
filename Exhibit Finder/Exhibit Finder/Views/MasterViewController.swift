@@ -25,7 +25,7 @@ class MasterViewController: UITableViewController {
 	
 	var exhibitsList: [Exhibit] = []
 	var currentDate = Date()
-	var dateFormatter = ISO8601DateFormatter()
+	var dateFormatter = DateFormatter()
 	var timeDateFormatter = DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
@@ -55,16 +55,13 @@ class MasterViewController: UITableViewController {
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
 		
+		dateFormatter.dateFormat = "yyyy-MM-dd" //'at' hh:mm a"
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
 		activityIndicator.color = .gray
 		tableView.backgroundView = activityIndicator
 		
 		if let split = splitViewController {
-		   // let controllers = split.viewControllers
-		    //var detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
-			//detailViewController = nil
-			
 			// handle split view behavior
 			if split.displayMode == .primaryHidden {
 				split.preferredDisplayMode = .allVisible
@@ -113,25 +110,26 @@ class MasterViewController: UITableViewController {
 					}
 					
 					for exhibit in response {
+						let closeDate = self.getDate(from: exhibit.closingDate)
+						
 						// disclude museums outside of Washington DC
 						if exhibit.museum != "Cooper Hewitt, Smithsonian Design Museum" && exhibit.museum != "Air and Space Museum Udvar-Hazy Center" && exhibit.museum != "American Indian Museum Heye Center" {
 							
-							self.exhibitsList.append(exhibit)
-							
-							if let urlString = exhibit.imgUrl, let url = URL(string: urlString) {
-								ReminderManager.urls[exhibit.id] = url
-							}
-							
-							// add exhibit to exhibit dictionary
-							ReminderManager.exhibitDictionary[exhibit.id] = exhibit
-							
-							// if exhibit is in reminder dictionary, add to list of exhibits that have reminders
-							if ReminderManager.reminderDictionary[exhibit.id] != nil {
+							// only add exhibit if closedate is in the future
+							if closeDate >= self.currentDate {
+								self.exhibitsList.append(exhibit)
 								
+								// add exhibit to exhibit dictionary
+								ReminderManager.exhibitDictionary[exhibit.id] = exhibit
+								
+								// if exhibit is in reminder dictionary, add to list of exhibits that have reminders
+								if ReminderManager.reminderDictionary[exhibit.id] != nil {
+									
 								// add to array of exhibits that have reminder
 								ReminderManager.exhibitsWithReminders.append(exhibit)
-							} else {
-								// nothing
+								} else {
+									// nothing
+								}
 							}
 						}
 					}
@@ -139,6 +137,12 @@ class MasterViewController: UITableViewController {
 					self.tableView.reloadData()
 					
 					self.activityIndicator.stopAnimating()
+					
+					for exhibit in self.exhibitsList {
+						if let urlString = exhibit.imgUrl, let url = URL(string: urlString) {
+							ReminderManager.urls[exhibit.id] = url
+						}
+					}
 				}
 			case .failure(let error):
 				DispatchQueue.main.async {
@@ -272,10 +276,9 @@ class MasterViewController: UITableViewController {
 	
 	
 	// turn date into string to pass into search
-	func getDate(from stringDate: String) -> Date? {
-		guard let createdDate = dateFormatter.date(from: stringDate) else {
-			print("date conversion failed")
-			return nil
+	func getDate(from stringDate: String?) -> Date {
+		guard let shortenedDate = stringDate?.dropLast(11), let createdDate = dateFormatter.date(from: String(shortenedDate)) else {
+			return currentDate
 		}
 		return createdDate
 	}
@@ -469,10 +472,7 @@ class MasterViewController: UITableViewController {
 				cell.hasReminder.text = "No Reminder"
 				cell.reminderImage.image = nil
 			}
-		}
-		
-		// in reminders view, configure cells
-		if segmentedController.selectedSegmentIndex == 1 {
+		} else if segmentedController.selectedSegmentIndex == 1 { // in reminders view, configure cells
 			if let result = ReminderManager.reminderDictionary[object.id] {
 				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
 					// configure time reminder cell
@@ -482,12 +482,22 @@ class MasterViewController: UITableViewController {
 						let calendar = Calendar.current
 						let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
 						
-						if let dateToUse = calendar.date(from: components), let invalid = result.invalidDate {
-							if dateToUse < currentDate || invalid < currentDate {
-								cell.title.text = "This reminder has expired"
+						currentDate = Date()
+						if let dateToUse = calendar.date(from: components) {
+							if let invalid = result.invalidDate {
+								if dateToUse < currentDate || invalid < currentDate {
+									cell.title.text = "This reminder has expired"
+								} else {
+									let stringDate = getStringDate(from: dateToUse)
+									cell.title.text = "For \(stringDate)"
+								}
 							} else {
-								let stringDate = getStringDate(from: dateToUse)
-								cell.title.text = "For \(stringDate)"
+								if dateToUse < currentDate {
+									cell.title.text = "This reminder has expired"
+								} else {
+									let stringDate = getStringDate(from: dateToUse)
+									cell.title.text = "For \(stringDate)"
+								}
 							}
 						}
 					}
@@ -495,14 +505,14 @@ class MasterViewController: UITableViewController {
 					// configure location reminder cell
 					cell.hasReminder.text = "Location"
 					cell.reminderImage.image = UIImage(named: "locationicon25")
+					
+					currentDate = Date()
 					if let invalid = result.invalidDate {
 						if invalid < currentDate {
 							cell.title.text = "This reminder has expired"
-						} else {
-							if let radius = result.location?.radius {
-								cell.title.text = "Within \(Int(radius)) foot radius of museum"
-							}
 						}
+					} else if let radius = result.location?.radius {
+						cell.title.text = "Within \(Int(radius)) foot radius of museum"
 					}
 				}
 			}
@@ -555,8 +565,6 @@ class MasterViewController: UITableViewController {
 					ReminderManager.exhibitsWithReminders.remove(at: indexPath.section)
 				
 					ReminderManager.currentReminder = nil
-				
-				print(ReminderManager.reminderDictionary)
 					
 					// delete entire section to prevent '0 row in section' warning
 					tableView.deleteSections([indexPath.section], with: .fade)
@@ -605,7 +613,7 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
 		}
 		
 		searchResults = exhibitions.filter({(exhibit: Exhibit) -> Bool in
-			return (exhibit.exhibit?.lowercased().contains(searchText.lowercased()))! || (exhibit.info?.lowercased().contains(searchText.lowercased()))!
+			return (exhibit.exhibit?.lowercased().contains(searchText.lowercased()))! || (exhibit.info?.lowercased().contains(searchText.lowercased()))! || (exhibit.closingDate?.contains(searchText.lowercased()) ?? false)
 		})
 		
 		tableView.reloadData()
