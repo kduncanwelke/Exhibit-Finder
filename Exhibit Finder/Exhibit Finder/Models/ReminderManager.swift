@@ -9,7 +9,7 @@
 import Foundation
 
 struct ReminderManager {
-	
+
 	static var reminders: [Reminder] = []
 
 	static var currentReminder: Reminder?

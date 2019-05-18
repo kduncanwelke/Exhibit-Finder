@@ -93,8 +93,9 @@ class MasterViewController: UITableViewController {
 		
 		// return to top of table if new section has been loaded
 		if tableView.visibleCells.isEmpty != true {
-			let indexPath = IndexPath(row: 0, section: 0)
-			tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+			//let indexPath = IndexPath(row: 0, section: 0)
+			//tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+			self.tableView.setContentOffset( CGPoint(x: 0, y: 0) , animated: false)
 		}
 	}
 	
@@ -588,6 +589,13 @@ class MasterViewController: UITableViewController {
 		    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
 		}
 	}
+	
+	// MARK: IBActions
+	
+	@IBAction func viewAppInfoTapped(_ sender: UIButton) {
+		performSegue(withIdentifier: "goToInfo", sender: Any?.self)
+	}
+	
 }
 
 // MARK: Extensions

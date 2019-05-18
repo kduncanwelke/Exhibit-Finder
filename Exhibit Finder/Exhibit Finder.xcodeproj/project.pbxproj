@@ -15,6 +15,7 @@
 		2D677BF422613AFC00A1CC2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D677BF322613AFC00A1CC2E /* Assets.xcassets */; };
 		2D68D679225D35200018C59E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D678225D35200018C59E /* WebKit.framework */; };
 		2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D67A225D42060018C59E /* MapKit.framework */; };
+		2D72302E2290918B0064BE8D /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D72302D2290918B0064BE8D /* InfoViewController.swift */; };
 		2D955CDF2283854400D00C16 /* XMLParsing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D955CDE2283854400D00C16 /* XMLParsing.framework */; };
 		2D955CE122838CC600D00C16 /* NukeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D955CE022838CC600D00C16 /* NukeOptions.swift */; };
 		2D956B4F226529B10079BA2A /* ReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D956B4E226529B10079BA2A /* ReminderManager.swift */; };
@@ -58,6 +59,7 @@
 		2D677BF322613AFC00A1CC2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D68D678225D35200018C59E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		2D68D67A225D42060018C59E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2D72302D2290918B0064BE8D /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		2D955CDC228383CE00D00C16 /* XMLParsing.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = XMLParsing.framework.dSYM; path = Carthage/Build/iOS/XMLParsing.framework.dSYM; sourceTree = "<group>"; };
 		2D955CDE2283854400D00C16 /* XMLParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLParsing.framework; path = Carthage/Build/iOS/XMLParsing.framework; sourceTree = "<group>"; };
 		2D955CE022838CC600D00C16 /* NukeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NukeOptions.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				2DE50D3122592FA200B924F0 /* DetailViewController.swift */,
 				2DB45141225E7A1E008E2E2C /* TimeReminderViewController.swift */,
 				2DB45143225E7A28008E2E2C /* LocationReminderViewController.swift */,
+				2D72302D2290918B0064BE8D /* InfoViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				2D955CE122838CC600D00C16 /* NukeOptions.swift in Sources */,
 				2DB9D3E3225BF6B00025535D /* Extensions.swift in Sources */,
 				2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */,
+				2D72302E2290918B0064BE8D /* InfoViewController.swift in Sources */,
 				2D677BF2226104C900A1CC2E /* CoreDateManager.swift in Sources */,
 				2DE50D2E22592FA200B924F0 /* AppDelegate.swift in Sources */,
 				2DB45142225E7A1E008E2E2C /* TimeReminderViewController.swift in Sources */,
