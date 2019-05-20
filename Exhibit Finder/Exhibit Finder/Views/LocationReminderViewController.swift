@@ -316,7 +316,7 @@ class LocationReminderViewController: UIViewController {
 		if locationManager.monitoredRegions.count == 20 {
 			showAlert(title: "Unable to save", message: "The maximum of 20 monitored locations has been met - please delete or modify an existing reminder.")
 		} else if mapView.annotations.isEmpty {
-			showAlert(title: "No location selected", message: "Please select a place on the map for this notification.")
+			showAlert(title: "No museum displayed", message: "A location was not loaded. Please check your network connection and try again.")
 		} else {
 			saveEntry()
 			

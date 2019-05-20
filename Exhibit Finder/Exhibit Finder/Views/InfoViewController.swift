@@ -46,6 +46,8 @@ class InfoViewController: UIViewController {
 	}
 	
 	@IBAction func privacyButtonPressed(_ sender: UIButton) {
+		guard let url = URL(string: "") else { return }
+		UIApplication.shared.open(url, options: [:], completionHandler: nil)
 	}
 
 }

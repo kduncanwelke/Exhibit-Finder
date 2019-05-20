@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import UIKit
 import Nuke
 import CoreGraphics
 
 struct NukeOptions {
 	// loading options used by Nuke
-	static let options = ImageLoadingOptions(transition: .fadeIn(duration: 0.33))
+	static let options = ImageLoadingOptions(placeholder: UIImage(named: "noimage"), transition: .fadeIn(duration: 0.33), failureImage: UIImage(named: "noimage"))
 }

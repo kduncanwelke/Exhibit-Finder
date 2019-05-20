@@ -55,20 +55,14 @@ class MasterViewController: UITableViewController {
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
 		
-		dateFormatter.dateFormat = "yyyy-MM-dd" //'at' hh:mm a"
+		dateFormatter.dateFormat = "yyyy-MM-dd"
 		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
 		activityIndicator.color = .gray
 		tableView.backgroundView = activityIndicator
 		
 		if let split = splitViewController {
-			// handle split view behavior
-			if split.displayMode == .primaryHidden {
-				split.preferredDisplayMode = .allVisible
-				// prevent collapsing to detail
-			} else {
-				return
-			}
+			split.preferredDisplayMode = .allVisible
 		}
 	}
 	
@@ -420,20 +414,15 @@ class MasterViewController: UITableViewController {
 					targetSize: CGSize(width: 140, height: 140),
 					contentMode: .aspectFill)
 				
-				Nuke.loadImage(with: request, options: NukeOptions.options, into: cell.cellImage) { response, _ in
+				Nuke.loadImage(with: request, options: NukeOptions.options, into: cell.cellImage) { response, err in
+					if err != nil {
+						cell.cellImage.image = NukeOptions.options.failureImage
+					} else {
 					cell.cellImage?.image = response?.image
+					}
 				}
 			}
 		}
-		
-		/*DispatchQueue.main.async {
-			// load image with Nuke
-			if let url = ReminderManager.urls[object.id] {
-				Nuke.loadImage(with: url, options: NukeOptions.options, into: cell.cellImage) { response, _ in
-					cell.cellImage?.image = response?.image
-				}
-			}
-		}*/
 		
 		if let title = object.exhibit {
 			let decoded = title.decodingHTMLEntities()

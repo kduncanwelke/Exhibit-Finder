@@ -277,7 +277,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="KCY-v1-0nv">
-                                <rect key="frame" x="15" y="284" width="290" height="214.5"/>
+                                <rect key="frame" x="15" y="284" width="290" height="166.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="g2u-vk-qN8">
                                         <rect key="frame" x="99" y="0.0" width="92.5" height="18"/>
@@ -357,19 +357,19 @@
                                             <action selector="confirmButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="jJU-K7-VBP"/>
                                         </connections>
                                     </button>
-                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tnt-si-Shv">
-                                        <rect key="frame" x="121" y="176.5" width="48" height="38"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <inset key="contentEdgeInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Cancel"/>
-                                        <connections>
-                                            <action selector="cancelButtonPressed:" destination="mzP-ih-LIQ" eventType="touchUpInside" id="hdZ-Wr-TrE"/>
-                                            <action selector="cancelButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="zHo-b8-Z5G"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                             </stackView>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tnt-si-Shv">
+                                <rect key="frame" x="136" y="461" width="48" height="38"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" destination="mzP-ih-LIQ" eventType="touchUpInside" id="hdZ-Wr-TrE"/>
+                                    <action selector="cancelButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="zHo-b8-Z5G"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -381,10 +381,12 @@
                             <constraint firstItem="tmP-LY-Nc5" firstAttribute="leading" secondItem="Xma-fK-IUo" secondAttribute="leading" constant="20" id="UVe-yO-MoR"/>
                             <constraint firstItem="wi7-W1-SvQ" firstAttribute="top" secondItem="tmP-LY-Nc5" secondAttribute="bottom" constant="10" id="V1q-UY-gnS"/>
                             <constraint firstItem="ynr-zY-6HN" firstAttribute="top" secondItem="wi7-W1-SvQ" secondAttribute="bottom" constant="10" id="VyI-Uz-n9J"/>
-                            <constraint firstItem="ycr-k2-sI2" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="KCY-v1-0nv" secondAttribute="bottom" constant="10" id="XJc-8q-LC0"/>
+                            <constraint firstItem="Tnt-si-Shv" firstAttribute="centerX" secondItem="Xma-fK-IUo" secondAttribute="centerX" id="ZGk-bT-06s"/>
+                            <constraint firstItem="ycr-k2-sI2" firstAttribute="bottom" secondItem="Tnt-si-Shv" secondAttribute="bottom" constant="20" id="fn2-wp-alu"/>
                             <constraint firstItem="ycr-k2-sI2" firstAttribute="trailing" secondItem="tmP-LY-Nc5" secondAttribute="trailing" constant="20" id="gS9-e7-MVA"/>
                             <constraint firstItem="wi7-W1-SvQ" firstAttribute="leading" secondItem="ycr-k2-sI2" secondAttribute="leading" id="lbe-rY-E2K"/>
                             <constraint firstItem="ycr-k2-sI2" firstAttribute="trailing" secondItem="ynr-zY-6HN" secondAttribute="trailing" constant="10" id="oXk-jg-Yg7"/>
+                            <constraint firstItem="Tnt-si-Shv" firstAttribute="top" relation="lessThanOrEqual" secondItem="KCY-v1-0nv" secondAttribute="bottom" constant="100" id="ojO-oE-gIF"/>
                             <constraint firstItem="tmP-LY-Nc5" firstAttribute="top" secondItem="ycr-k2-sI2" secondAttribute="top" constant="10" id="oop-BS-UCQ"/>
                             <constraint firstAttribute="trailing" secondItem="KCY-v1-0nv" secondAttribute="trailing" constant="15" id="r0A-EU-uLG"/>
                         </constraints>
@@ -423,11 +425,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <datePicker contentMode="scaleToFill" verticalHuggingPriority="253" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="Lzw-AF-Pgm">
-                                <rect key="frame" x="0.0" y="58" width="320" height="191"/>
+                                <rect key="frame" x="0.0" y="58" width="320" height="155.5"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" id="aVG-F1-EX8"/>
-                                </constraints>
                                 <date key="date" timeIntervalSinceReferenceDate="576617957.65475905">
                                     <!--2019-04-10 19:39:17 +0000-->
                                 </date>
@@ -441,7 +440,7 @@
                                 </userDefinedRuntimeAttributes>
                             </datePicker>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jwu-B1-HdA">
-                                <rect key="frame" x="15" y="264" width="290" height="245"/>
+                                <rect key="frame" x="15" y="228.5" width="290" height="197"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="Ckx-dE-ytE">
                                         <rect key="frame" x="96.5" y="0.0" width="97" height="58"/>
@@ -503,29 +502,32 @@
                                             <action selector="confirmButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="rHk-iG-reE"/>
                                         </connections>
                                     </button>
-                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5O-qn-ebq">
-                                        <rect key="frame" x="121" y="207" width="48" height="38"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <inset key="contentEdgeInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
-                                        <state key="normal" title="Cancel"/>
-                                        <connections>
-                                            <action selector="cancelButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="c59-pR-eVm"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                             </stackView>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m5O-qn-ebq">
+                                <rect key="frame" x="136" y="461" width="48" height="38"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="20" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelButtonTapped:" destination="0w6-6v-vPB" eventType="touchUpInside" id="c59-pR-eVm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="m5O-qn-ebq" firstAttribute="top" relation="lessThanOrEqual" secondItem="jwu-B1-HdA" secondAttribute="bottom" constant="100" id="2f9-h4-0Nv"/>
+                            <constraint firstItem="m5O-qn-ebq" firstAttribute="centerX" secondItem="CqE-FR-5TI" secondAttribute="centerX" id="9Ai-Tj-mYW"/>
                             <constraint firstItem="Lzw-AF-Pgm" firstAttribute="leading" secondItem="r9i-la-Yrk" secondAttribute="leading" id="9dP-gE-dRt"/>
                             <constraint firstItem="jwu-B1-HdA" firstAttribute="leading" secondItem="r9i-la-Yrk" secondAttribute="leading" constant="15" id="D0G-fJ-rVu"/>
                             <constraint firstItem="Lzw-AF-Pgm" firstAttribute="top" secondItem="UUK-lW-r4a" secondAttribute="bottom" constant="10" id="FKI-Xw-6jJ"/>
                             <constraint firstItem="jwu-B1-HdA" firstAttribute="top" secondItem="Lzw-AF-Pgm" secondAttribute="bottom" constant="15" id="Wyf-3b-P1y"/>
-                            <constraint firstItem="r9i-la-Yrk" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="jwu-B1-HdA" secondAttribute="bottom" constant="10" id="ZbB-XP-B1D"/>
                             <constraint firstItem="r9i-la-Yrk" firstAttribute="trailing" secondItem="UUK-lW-r4a" secondAttribute="trailing" constant="20" id="bjh-Mw-COX"/>
                             <constraint firstItem="r9i-la-Yrk" firstAttribute="trailing" secondItem="Lzw-AF-Pgm" secondAttribute="trailing" id="g3t-iH-4uW"/>
                             <constraint firstItem="UUK-lW-r4a" firstAttribute="top" secondItem="r9i-la-Yrk" secondAttribute="top" constant="10" id="ky9-Ne-Y0O"/>
+                            <constraint firstItem="r9i-la-Yrk" firstAttribute="bottom" secondItem="m5O-qn-ebq" secondAttribute="bottom" constant="20" id="nbM-oU-zog"/>
                             <constraint firstAttribute="trailing" secondItem="jwu-B1-HdA" secondAttribute="trailing" constant="15" id="oFU-oU-2lR"/>
+                            <constraint firstItem="Lzw-AF-Pgm" firstAttribute="height" secondItem="CqE-FR-5TI" secondAttribute="height" multiplier="0.3" id="upl-4Q-Zc6"/>
                             <constraint firstItem="UUK-lW-r4a" firstAttribute="leading" secondItem="r9i-la-Yrk" secondAttribute="leading" constant="20" id="w3T-in-gU5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="r9i-la-Yrk"/>

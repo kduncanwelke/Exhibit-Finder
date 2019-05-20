@@ -75,8 +75,12 @@ class DetailViewController: UIViewController {
 		DispatchQueue.main.async {
 			if let url = ReminderManager.urls[detail.id] {
 				// load image with Nuke
-				Nuke.loadImage(with: url, options: NukeOptions.options, into: self.exhibitImage) { [unowned self] response, _ in
-					self.exhibitImage.image = response?.image
+				Nuke.loadImage(with: url, options: NukeOptions.options, into: self.exhibitImage) { [unowned self] response, err in
+					if err != nil {
+						self.exhibitImage.image = NukeOptions.options.failureImage
+					} else {
+						self.exhibitImage.image = response?.image
+					}
 				}
 			}
 			
