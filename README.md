@@ -5,6 +5,17 @@ This app uses information from the [Smithsonian Institution](https://www.si.edu/
 
 Users can set time based reminders to receive a notification about an exhibit for a given time and date, and also set location based reminders, which will be triggered when their device is in proximity to the relevant museum. Reminders can be readily edited and deleted from the reminders list. Maps, location services, and local notifications are used to fulfill these features.
 
+![Screenshot of the app Exhibit Finder DC](https://i.ibb.co/d6PSVg3/Screen-Shot-2020-08-10-at-2-45-04-PM.png)
+
+## Description
+Discover and set reminders for your favorite exhibits currently on view at Smithsonian museums in Washington, D.C.!
+
+Browse the list of current exhibits, search for museum names and exhibit descriptions, and set time or location based reminders for exhibitions you want to visit. Exhibit descriptions, locations, and links to further information will ensure the information you need is right at your fingertips.
+
+Set time based reminders to receive exhibit notifications at your preferred time and date, and select location based reminders to be notified when your device is in proximity to the museum your chosen exhibit is displayed at. Easily refer to a list of your set reminders, and edit or delete them as needed.
+
+Whether you are a new visitor to Washington D.C., or are familiar with the area, be certain you'll never miss out on your favorite Smithsonian exhibits before they close, or before you pass them by!
+
 ## Dependencies
 [Nuke](https://github.com/kean/Nuke) is used in this project to handle image downloads and display, and [XMLParsing](https://github.com/ShawnMoore/XMLParsing) has been used to handle parsing the XML file which contains the exhibit data. [Carthage](https://github.com/Carthage/Carthage) has been used as the dependency manager for this project - please refer to Carthage documentation for details.
 
