@@ -38,3 +38,9 @@ enum Section {
     case exhibits
     case reminders
 }
+
+enum WithReminder {
+    case time
+    case location
+    case both
+}

@@ -32,8 +32,6 @@ class DetailViewController: UIViewController {
 	// MARK: Variables
 	
     var selection: IndexPath?
-	var detailItem: Exhibit?
-	var image: UIImage?
 	var museumPinLocation: MKPointAnnotation?
     
     private let reminderViewModel = ReminderViewModel()
@@ -150,33 +148,39 @@ class DetailViewController: UIViewController {
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "addReminder" {
 			var barViewControllers = segue.destination as! UITabBarController
+            
+            guard let index = selection else { return }
 			
-				var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
-				guard let detail = detailItem else { return }
-				destinationViewControllerOne?.exhibit = detail
-				destinationViewControllerOne?.openDate = openDateLabel.text
-				destinationViewControllerOne?.closeDate = closeDateLabel.text
+            // there is a reminder
+            if let reminder = exhibitsViewModel.getReminderForExhibit(index: index) {
+                
+                var type: WithReminder
+                guard let typeOfReminder = reminderViewModel.getReminderType() else { return }
+                
+                type = typeOfReminder
+                    
+                // set selected view based on which reminders exist
+                switch type {
+                case .both, .time:
+                    // go to time reminder if there is a time reminder or both time and location
+                    barViewControllers.selectedIndex = 0
+                case .location:
+                    barViewControllers.selectedIndex = 1
+                }
+                
+                // pass indexpath along to both views, map data to location view
+                var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
+				destinationViewControllerOne?.selection = index
 				
 				var destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
-				destinationViewControllerTwo?.exhibit = detail
-				destinationViewControllerTwo?.openDate = openDateLabel.text
-				destinationViewControllerTwo?.closeDate = closeDateLabel.text
+                destinationViewControllerTwo?.selection = index
 				destinationViewControllerTwo?.museumLocation = museumPinLocation
 				destinationViewControllerTwo?.region = mapView.region
-			
-			guard let currentReminder = ReminderManager.currentReminder else {
-				// go to time reminder by default if there is no reminder
-				barViewControllers.selectedIndex = 0
-				return
-			}
-			
-			if currentReminder.time != nil {
-				barViewControllers.selectedIndex = 0
-			} else if currentReminder.location != nil {
-				barViewControllers.selectedIndex = 1
-			} else {
-				return
-			}
+            } else {
+                // there is no reminder
+                // go to time reminder by default if there is no reminder
+                barViewControllers.selectedIndex = 0
+            }
 		}
 	}
 	
