@@ -57,7 +57,7 @@ class LocationReminderViewController: UIViewController {
 		if CLLocationManager.locationServicesEnabled() {
 			switch CLLocationManager.authorizationStatus() {
 			case .notDetermined, .restricted, .denied:
-				showSettingsAlert(title: "Location service disabled", message: "Proximity reminders require use of location services in order to provide region-based notifications. These notifications will not be displayed unless settings are adjusted.")
+				showSettingsAlert(title: "Location service not enabled", message: "Proximity reminders require use of location services to provide region-based notifications. These notifications will not be displayed until settings are adjusted.")
 			case .authorizedAlways:
 				print("access")
 			case .authorizedWhenInUse:

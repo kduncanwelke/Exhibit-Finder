@@ -23,3 +23,18 @@ struct ReminderManager {
 	static var urls: [Int64: URL] = [:]
 }
 
+struct ExhibitManager {
+    
+    static var exhibitsList: [Exhibit] = []
+    static var searchResults: [Exhibit] = []
+}
+
+enum Removing {
+    case time
+    case location
+}
+
+enum Section {
+    case exhibits
+    case reminders
+}

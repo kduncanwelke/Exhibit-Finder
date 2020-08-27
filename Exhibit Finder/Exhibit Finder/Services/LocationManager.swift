@@ -28,6 +28,14 @@ struct LocationManager {
 
 		locationManager.stopMonitoring(for: selectedRegion)
 	}
+    
+    // stop monitoring location based on reminder
+    static func endLocationMonitoring(result: Reminder) {
+        if let location = result.location, let name = result.name {
+            LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
+            print("stopped monitoring")
+        }
+    }
 	
 	// add location based notification
 	static func showLocationBasedNotification(for region: CLRegion) {
@@ -115,6 +123,7 @@ struct LocationManager {
 			// state
 			selectedItem.administrativeArea ?? ""
 		)
+	
 		return addressLine
 	}
 }

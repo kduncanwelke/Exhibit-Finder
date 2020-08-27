@@ -13,25 +13,23 @@ import CoreLocation
 import Nuke
 import XMLParsing
 
-class MasterViewController: UITableViewController {
+class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDisplayDelegate {
 
 	// MARK: IBOutlets
 	
 	@IBOutlet var noDataView: UIView!
 	
-	//weak var detailViewController: DetailViewController? = nil
-	
 	// MARK: Variables
 	
-	var exhibitsList: [Exhibit] = []
-	var currentDate = Date()
-	var dateFormatter = DateFormatter()
-	var timeDateFormatter = DateFormatter()
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
 	var searchController = UISearchController(searchResultsController: nil)
-	var searchResults = [Exhibit]()
 	var activityIndicator = UIActivityIndicatorView()
+    
+    weak var reminderDelegate: ReminderDelegate?
+    
+    private let reminderViewModel = ReminderViewModel()
+    private let exhibitsViewModel = ExhibitsViewModel()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -45,8 +43,12 @@ class MasterViewController: UITableViewController {
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(reload), name: NSNotification.Name(rawValue: "reload"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(reminderEdited), name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
-		
-		// search setup
+    
+        exhibitsViewModel.exhibitDelegate = self
+        exhibitsViewModel.alertDelegate = self
+        reminderViewModel.alertDelegate = self
+        
+        // search setup
 		searchController.delegate = self
 		searchController.searchResultsUpdater = self
 		searchController.obscuresBackgroundDuringPresentation = false
@@ -54,9 +56,6 @@ class MasterViewController: UITableViewController {
 		searchController.searchBar.placeholder = "Type to search . . ."
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
-		
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-		timeDateFormatter.dateFormat = "yyyy-MM-dd 'at' hh:mm a"
 		
 		activityIndicator.color = .gray
 		tableView.backgroundView = activityIndicator
@@ -66,7 +65,6 @@ class MasterViewController: UITableViewController {
 		}
 	}
 	
-
 	override func viewWillAppear(_ animated: Bool) {
 		clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
 		super.viewWillAppear(animated)
@@ -74,88 +72,37 @@ class MasterViewController: UITableViewController {
 		if hasBeenLoaded {
 			return
 		} else {
-			deleteExpiredReminders()
-			loadExhibitions()
+            reminderViewModel.deleteExpiredReminders()
+            activityIndicator.startAnimating()
+            exhibitsViewModel.loadExhibitions()
 		}
-		loadReminders()
+		
+        reminderViewModel.loadReminders()
 	}
 	
 	// MARK: Custom functions
 	
 	@objc func segmentSelected() {
-		tableView.reloadData()
+        var type: DataType
+        
+        if segmentedController.selectedSegmentIndex == 0 {
+            type = .exhibitsOnly
+        } else {
+            type = .exhibitsWithReminders
+        }
+        
+        exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
 		
+        tableView.reloadData()
+        
 		// return to top of table if new section has been loaded
 		if tableView.visibleCells.isEmpty != true {
-			//let indexPath = IndexPath(row: 0, section: 0)
-			//tableView.scrollToRow(at: indexPath, at: .top, animated: false)
 			self.tableView.setContentOffset( CGPoint(x: 0, y: 0) , animated: false)
 		}
 	}
 	
-	func loadExhibitions() {
-		activityIndicator.startAnimating()
-		DataManager<Exhibits>.fetch() { [unowned self] result in
-			switch result {
-			case .success(let response):
-				DispatchQueue.main.async {
-					guard let response = response.first?.exhibits else {
-						self.showAlert(title: "Connection failed", message: "Data response failed, please try again later.")
-						return
-					}
-					
-					for exhibit in response {
-						let closeDate = self.getDate(from: exhibit.closingDate)
-						
-						// disclude museums outside of Washington DC
-						if exhibit.museum != "Cooper Hewitt, Smithsonian Design Museum" && exhibit.museum != "Air and Space Museum Udvar-Hazy Center" && exhibit.museum != "American Indian Museum Heye Center" {
-							
-							// only add exhibit if closedate is in the future
-							if closeDate >= self.currentDate {
-								self.exhibitsList.append(exhibit)
-								
-								// add exhibit to exhibit dictionary
-								ReminderManager.exhibitDictionary[exhibit.id] = exhibit
-								
-								// if exhibit is in reminder dictionary, add to list of exhibits that have reminders
-								if ReminderManager.reminderDictionary[exhibit.id] != nil {
-									
-								// add to array of exhibits that have reminder
-								ReminderManager.exhibitsWithReminders.append(exhibit)
-								} else {
-									// nothing
-								}
-							}
-						}
-					}
-					self.hasBeenLoaded = true
-					self.tableView.reloadData()
-					
-					self.activityIndicator.stopAnimating()
-					
-					for exhibit in self.exhibitsList {
-						if let urlString = exhibit.imgUrl, let url = URL(string: urlString) {
-							ReminderManager.urls[exhibit.id] = url
-						}
-					}
-				}
-			case .failure(let error):
-				DispatchQueue.main.async {
-					switch error {
-					case Errors.networkError:
-						self.showAlert(title: "Networking failed", message: "\(Errors.networkError.localizedDescription)")
-						self.activityIndicator.stopAnimating()
-					default:
-						self.showAlert(title: "Networking failed", message: "\(Errors.otherError.localizedDescription)")
-						self.activityIndicator.stopAnimating()
-					}
-				}
-			}
-		}
-	}
-	
 	@objc func reload() {
-		loadReminders()
+        reminderViewModel.loadReminders()
 	}
 	
 	// use to reload list of exhibits with reminders when a reminder has been edited
@@ -163,126 +110,7 @@ class MasterViewController: UITableViewController {
 		if segmentedController.selectedSegmentIndex == 1 {
 			tableView.reloadData()
 		}
-	}
-
-	func deleteExpiredReminders() {
-		var managedContext = CoreDataManager.shared.managedObjectContext
-		var fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
-		let now = Date()
-		
-		fetchRequest.predicate = NSPredicate(format: "invalidDate < %@", now as CVarArg)
-		
-		var remindersToDelete: [Reminder] = []
-		do {
-			remindersToDelete = try managedContext.fetch(fetchRequest)
-		} catch let error as NSError {
-			print("could not fetch, \(error), \(error.userInfo)")
-		}
-		
-		if remindersToDelete.count > 0 {
-			for reminder in remindersToDelete {
-				managedContext.delete(reminder)
-				print("deleted")
-				
-				// clear notifications and geofenced areas associated with reminder
-				clearNotification(result: reminder)
-				endLocationMonitoring(result: reminder)
-			}
-			
-			do {
-				try managedContext.save()
-			} catch {
-				print("Failed to save")
-			}
-		} else {
-			return
-		}
-		
-	}
-	
-	// load reminders from core data
-	func loadReminders() {
-		var managedContext = CoreDataManager.shared.managedObjectContext
-		var fetchRequest = NSFetchRequest<Reminder>(entityName: "Reminder")
-		
-		do {
-			ReminderManager.reminders = try managedContext.fetch(fetchRequest)
-			print("reminders loaded")
-			
-			// remove all from dictionary to prevent empty keys
-			if ReminderManager.reminderDictionary.isEmpty != true {
-				ReminderManager.reminderDictionary.removeAll()
-			}
-			
-			for reminder in ReminderManager.reminders {
-				ReminderManager.reminderDictionary[reminder.id] = reminder
-			}
-		} catch let error as NSError {
-			showAlert(title: "Could not retrieve data", message: "\(error.userInfo)")
-		}
-	
-		// if section 1 (where deletion occurs) is selected, don't reload table view as it breaks fade animation
-		if segmentedController.selectedSegmentIndex != 1 {
-			tableView.reloadData()
-		}
-	}
-	
-	func resave() {
-		var managedContext = CoreDataManager.shared.managedObjectContext
-		
-		do {
-			try managedContext.save()
-			print("resave successful")
-		} catch {
-			// this should never be displayed but is here to cover the possibility
-			showAlert(title: "Save failed", message: "Notice: Data has not successfully been saved.")
-		}
-	}
-	
-	func fullDelete(result: Reminder) {
-		var managedContext = CoreDataManager.shared.managedObjectContext
-		
-		clearNotification(result: result)
-		endLocationMonitoring(result: result)
-		
-		managedContext.delete(result)
-		
-		do {
-			try managedContext.save()
-			print("delete successful")
-		} catch {
-			print("Failed to save")
-		}
-	}
-	
-	func endLocationMonitoring(result: Reminder) {
-		if let location = result.location, let name = result.name {
-			LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
-			print("stopped monitoring")
-		}
-	}
-	
-	func clearNotification(result: Reminder) {
-		// remove existing time-based notification
-		let notificationCenter = UNUserNotificationCenter.current()
-		let identifier = "\(result.id)"
-		notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
-	}
-	
-	
-	// turn date into string to pass into search
-	func getDate(from stringDate: String?) -> Date {
-		guard let shortenedDate = stringDate?.dropLast(11), let createdDate = dateFormatter.date(from: String(shortenedDate)) else {
-			return currentDate
-		}
-		return createdDate
-	}
-	
-	// get string from date
-	func getStringDate(from date: Date) -> String {
-		let createdDate = timeDateFormatter.string(from: date)
-		return createdDate
-	}
+    }
 
 	// MARK: - Segues
 
@@ -290,304 +118,194 @@ class MasterViewController: UITableViewController {
 		if segue.identifier == "showDetail" {
 		    if let indexPath = tableView.indexPathForSelectedRow {
 				
-				var object: Exhibit
-				if isFilteringBySearch() {
-					object = searchResults[indexPath.row]
-				} else if segmentedController.selectedSegmentIndex == 0 {
-					object = exhibitsList[indexPath.row]
-				} else {
-					object = ReminderManager.exhibitsWithReminders[indexPath.section]
-				}
+               /* var type: DataType
+                
+                if segmentedController.selectedSegmentIndex == 0 {
+                    type = .exhibitsOnly
+                } else {
+                    type = .exhibitsWithReminders
+                }
+                
+                let data = exhibitsViewModel.retrieveSource()
+                var object: Exhibit
+                
+                switch type {
+                case .exhibitsOnly:
+                    object = data[indexPath.row]
+                case .exhibitsWithReminders:
+                    object = data[indexPath.section]
+                }
 				
-				if let result = ReminderManager.reminderDictionary[object.id] {
-					ReminderManager.currentReminder = result
-				} else {
-					ReminderManager.currentReminder = nil
-				}
+                reminderViewModel.getReminder(id: object.id)*/
 				
 				let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController
-				destinationViewController?.detailItem = object
+				destinationViewController?.selection = indexPath
 		    }
 		}
 	}
 
-	// MARK: - Table View
-
-	override func numberOfSections(in tableView: UITableView) -> Int {
-		if segmentedController.selectedSegmentIndex == 0 && exhibitsList.isEmpty {
-			tableView.backgroundView = activityIndicator
-			tableView.separatorStyle = .none
-			return 1
-		} else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
-			if searchResults.isEmpty {
-				tableView.separatorStyle = .none
-			} else {
-				tableView.separatorStyle = .singleLine
-			}
-			return searchResults.count
-		} else if segmentedController.selectedSegmentIndex == 1 {
-			// prevent table from loading if there are no reminders or if exhibits have not been loaded
-			if ReminderManager.reminders.count == 0 || exhibitsList.isEmpty {
-				tableView.backgroundView = noDataView
-				tableView.separatorStyle = .none
-			} else {
-				tableView.separatorStyle = .singleLine
-				tableView.backgroundView = nil
-			}
-			return ReminderManager.exhibitsWithReminders.count
-		} else {
-			tableView.separatorStyle = .singleLine
-			tableView.backgroundView = nil
-			return 1
-		}
-	}
-	
-	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
-			return searchResults[section].exhibit
-		} else if isFilteringBySearch() {
-			return nil
-		} else if segmentedController.selectedSegmentIndex == 1 {
-			if ReminderManager.exhibitsWithReminders.isEmpty {
-				return nil
-			} else {
-				return ReminderManager.exhibitsWithReminders[section].exhibit
-			}
-		} else {
-			return nil
-		}
-	}
-
-	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
-			let result = ReminderManager.reminderDictionary[searchResults[section].id]
-			if result?.time != nil && result?.location != nil {
-				return 2
-			} else {
-				return 1
-			}
-		} else if isFilteringBySearch() {
-			return searchResults.count
-		} else if segmentedController.selectedSegmentIndex == 0 {
-			return exhibitsList.count
-		} else {
-			if ReminderManager.reminders.isEmpty {
-				return 1
-			} else {
-				let result = ReminderManager.reminderDictionary[ReminderManager.exhibitsWithReminders[section].id]
-				if result?.time != nil && result?.location != nil {
-					return 2
-				} else {
-					return 1
-				}
-			}
-		}
-	}
-
-	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: "exhibitCell", for: indexPath) as! ExhibitTableViewCell
-
-		var object: Exhibit
-		
-		// check if items are being filtered or not, and use appropriate array
-		if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
-			object = searchResults[indexPath.section]
-		} else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 0 {
-			object = searchResults[indexPath.row]
-		} else if segmentedController.selectedSegmentIndex == 0 {
-			object = exhibitsList[indexPath.row]
-		} else {
-			object = ReminderManager.exhibitsWithReminders[indexPath.section]
-		}
-		
-		// change cell title color if reminders segment
-		if segmentedController.selectedSegmentIndex == 1 {
-			cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
-		} else {
-			cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
-		}
-	
-		DispatchQueue.main.async {
-			if let url = ReminderManager.urls[object.id] {
-				let request = ImageRequest(
-					url: url,
-					targetSize: CGSize(width: 140, height: 140),
-					contentMode: .aspectFill)
-				
-				Nuke.loadImage(with: request, options: NukeOptions.options, into: cell.cellImage) { response, err in
-					if err != nil {
-						cell.cellImage.image = NukeOptions.options.failureImage
-					} else {
-					cell.cellImage?.image = response?.image
-					}
-				}
-			}
-		}
-		
-		if let title = object.exhibit {
-			let decoded = title.decodingHTMLEntities()
-			cell.title.text = String.removeHTMLWithoutSpacing(from: decoded)
-		} else {
-			cell.title.text = "No title"
-		}
-		
-		cell.musuem.text = object.museum ?? "No museum listed"
-		
-		if let data = object.infoBrief {
-			let decoded = data.decodingHTMLEntities()
-			cell.briefInfo.text = String.removeHTMLWithoutSpacing(from: decoded)
-		} else {
-			cell.briefInfo.text = "No description available"
-		}
-		
-		if let close = object.closingDate?.dropLast(11) {
-			cell.closeDate.text = "\(close)"
-		} else if (object.closeText?.contains("Indefinitely")) != nil {
-			cell.closeDate.text = "Indefinite"
-		}
-		
-		if segmentedController.selectedSegmentIndex == 0 {
-			if let result = ReminderManager.reminderDictionary[object.id] {
-				// for non-reminder view, show if a reminder exists
-				cell.hasReminder.text = "Reminder"
-				if result.time != nil && result.location != nil {
-					cell.reminderImage.image = UIImage(named: "both25")
-				} else if result.time != nil && result.location == nil {
-					cell.reminderImage.image = UIImage(named: "clockicon25")
-				} else if result.time == nil && result.location != nil {
-					cell.reminderImage.image = UIImage(named: "locationicon25")
-				}
-			} else {
-				// otherwise no reminder for exhibit exists
-				cell.hasReminder.text = "No Reminder"
-				cell.reminderImage.image = nil
-			}
-		} else if segmentedController.selectedSegmentIndex == 1 { // in reminders view, configure cells
-			if let result = ReminderManager.reminderDictionary[object.id] {
-				if (result.time != nil && result.location != nil && indexPath.row == 0) || (result.time != nil && result.location == nil) {
-					// configure time reminder cell
-					cell.hasReminder.text = "Time"
-					cell.reminderImage.image = UIImage(named: "clockicon25")
-					if let date = result.time {
-						let calendar = Calendar.current
-						let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
-						
-						currentDate = Date()
-						if let dateToUse = calendar.date(from: components) {
-							if let invalid = result.invalidDate {
-								if dateToUse < currentDate || invalid < currentDate {
-									cell.title.text = "This reminder has expired"
-								} else {
-									let stringDate = getStringDate(from: dateToUse)
-									cell.title.text = "For \(stringDate)"
-								}
-							} else {
-								if dateToUse < currentDate {
-									cell.title.text = "This reminder has expired"
-								} else {
-									let stringDate = getStringDate(from: dateToUse)
-									cell.title.text = "For \(stringDate)"
-								}
-							}
-						}
-					}
-				} else if (result.time != nil && result.location != nil && indexPath.row == 1) || (result.time == nil && result.location != nil) {
-					// configure location reminder cell
-					cell.hasReminder.text = "Location"
-					cell.reminderImage.image = UIImage(named: "locationicon25")
-					
-					currentDate = Date()
-					if let invalid = result.invalidDate {
-						if invalid < currentDate {
-							cell.title.text = "This reminder has expired"
-						}
-					} else if let radius = result.location?.radius {
-						cell.title.text = "Within \(Int(radius)) foot radius of museum"
-					}
-				}
-			}
-		}
-
-		return cell
-	}
-
-	override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-		// Return false if you do not want the specified item to be editable.
-		if segmentedController.selectedSegmentIndex == 0 {
-			return false
-		} else {
-			return true
-		}
-	}
-
-	override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-		if editingStyle == .delete {
-			var result: Reminder?
-			
-			if isFilteringBySearch() {
-				if let reminder = ReminderManager.reminderDictionary[searchResults[indexPath.section].id] {
-					result = reminder
-				}
-			} else {
-				if let reminder = ReminderManager.reminderDictionary[ReminderManager.exhibitsWithReminders[indexPath.section].id] {
-					result = reminder
-				}
-			}
-				
-			if isFilteringBySearch() && tableView.numberOfRows(inSection: indexPath.section) == 1 {
-				// remove exhibit from list of exhibits with reminders
-				guard let result = result else { return }
-				let new = ReminderManager.exhibitsWithReminders.filter({ $0.id != result.id })
-				ReminderManager.exhibitsWithReminders = new
-				
-				ReminderManager.currentReminder = nil
-				
-				fullDelete(result: result)
-				searchResults.remove(at: indexPath.section)
-				
-				tableView.deleteSections([indexPath.section], with: .fade)
-				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-			} else if isFilteringBySearch() == false && tableView.numberOfRows(inSection: indexPath.section) == 1 {
-				guard let result = result else { return }
-				// if there is only one reminder shown, delete it
-					fullDelete(result: result)
-					
-					ReminderManager.exhibitsWithReminders.remove(at: indexPath.section)
-				
-					ReminderManager.currentReminder = nil
-					
-					// delete entire section to prevent '0 row in section' warning
-					tableView.deleteSections([indexPath.section], with: .fade)
-					NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-			} else {
-				guard let result = result else { return }
-				if indexPath.row == 0 {
-					result.time = nil
-					clearNotification(result: result)
-				} else if indexPath.row == 1 { // if second, remove location based reminder
-					endLocationMonitoring(result: result)
-					result.location = nil
-				}
-				
-				resave()
-				tableView.deleteRows(at: [indexPath], with: .fade)
-				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
-			}
-			
-		} else if editingStyle == .insert {
-		    // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-		}
-	}
 	
 	// MARK: IBActions
 	
 	@IBAction func viewAppInfoTapped(_ sender: UIButton) {
 		performSegue(withIdentifier: "goToInfo", sender: Any?.self)
 	}
-	
+    
+    // MARK: - Table View
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        var data = exhibitsViewModel.retrieveSource()
+        
+        if data.isEmpty {
+            if segmentedController.selectedSegmentIndex == 0 {
+                tableView.backgroundView = activityIndicator
+                tableView.separatorStyle = .none
+            } else {
+                if isFilteringBySearch() {
+                    tableView.separatorStyle = .none
+                } else {
+                    tableView.backgroundView = noDataView
+                    tableView.separatorStyle = .none
+                }
+            }
+            
+            return 0
+        } else {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView = nil
+            return data.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if let title = exhibitsViewModel.hasTitle(section: section) {
+            return title
+        } else {
+            return nil
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        var data = exhibitsViewModel.retrieveSource()
+        
+        // exhibit section, return count
+        if segmentedController.selectedSegmentIndex == 0 {
+            return data.count
+        } else {
+            // rows vary for reminder section
+            return reminderViewModel.getRowCount(section: section)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "exhibitCell", for: indexPath) as! ExhibitTableViewCell
+        
+        var type: DataType
+        
+        // get type based on segment selection, change cell title color if reminders segment
+        if segmentedController.selectedSegmentIndex == 0 {
+            cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
+            type = .exhibitsOnly
+        } else {
+            cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
+            type = .exhibitsWithReminders
+        }
+        
+        var data = exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
+    
+        DispatchQueue.main.async {
+            if let url = self.exhibitsViewModel.getImageUrl(index: indexPath) {
+                let request = ImageRequest(
+                    url: url,
+                    targetSize: CGSize(width: 140, height: 140),
+                    contentMode: .aspectFill)
+                
+                Nuke.loadImage(with: request, options: NukeOptions.options, into: cell.cellImage) { response, err in
+                    if err != nil {
+                        cell.cellImage.image = NukeOptions.options.failureImage
+                    } else {
+                        cell.cellImage?.image = response?.image
+                    }
+                }
+            }
+        }
+        
+        cell.title.text = exhibitsViewModel.getTitle(index: indexPath)
+        cell.musuem.text = exhibitsViewModel.getMuseum(index: indexPath)
+        cell.briefInfo.text = exhibitsViewModel.getInfo(index: indexPath)
+        cell.closeDate.text = exhibitsViewModel.getCloseDate(index: indexPath)
+        
+        cell.hasReminder.text = exhibitsViewModel.hasReminder(index: indexPath)
+        cell.reminderImage.image = exhibitsViewModel.reminderImage(index: indexPath)
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        if segmentedController.selectedSegmentIndex == 0 {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            var result: Reminder?
+            
+            var data = exhibitsViewModel.retrieveSource()
+            
+            result = exhibitsViewModel.getReminderForExhibit(index: indexPath)
+            
+            if tableView.numberOfRows(inSection: indexPath.section) == 1 {
+                guard let result = result else { return }
+                // there is only one reminder shown, delete it
+                reminderViewModel.fullDelete(result: result)
+                
+                data.remove(at: indexPath.row)
+                // delete entire section to prevent '0 row in section' warning
+                tableView.deleteSections([indexPath.section], with: .fade)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+            } else {
+                guard let result = result else { return }
+                if indexPath.row == 0 {
+                    reminderViewModel.resave(result: result, removing: .time)
+                } else if indexPath.row == 1 { // if second, remove location based reminder
+                    reminderViewModel.resave(result: result, removing: .location)
+                }
+                
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
+            }
+            
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+        }
+    }
 }
 
 // MARK: Extensions
+
+extension MasterViewController {
+    // delegate methods
+    
+    func displayAlert(with title: String, message: String) {
+        showAlert(title: title, message: message)
+    }
+    
+    func loadExhibits(success: Bool) {
+        print("exhibit delegate called")
+        if success {
+            hasBeenLoaded = true
+            tableView.reloadData()
+            
+            activityIndicator.stopAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+}
 
 extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdating {
 	func updateSearchResults(for searchController: UISearchController) {
@@ -601,22 +319,22 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
 	
 	// return search results based on title and entry body text
 	func filterSearch(_ searchText: String) {
-		var exhibitions: [Exhibit]
-		
-		if segmentedController.selectedSegmentIndex == 0 {
-			exhibitions = exhibitsList
-		} else {
-			exhibitions = ReminderManager.exhibitsWithReminders
-		}
-		
-		searchResults = exhibitions.filter({(exhibit: Exhibit) -> Bool in
-			return (exhibit.exhibit?.lowercased().contains(searchText.lowercased()))! || (exhibit.info?.lowercased().contains(searchText.lowercased()))! || (exhibit.closingDate?.contains(searchText.lowercased()) ?? false)
-		})
+        
+        var type: DataType
+        
+        if segmentedController.selectedSegmentIndex == 0 {
+            type = .exhibitsOnly
+        } else {
+            type = .exhibitsWithReminders
+        }
+        
+        var data = exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
 		
 		tableView.reloadData()
-		
+
+        
 		// scroll to top upon showing results
-		if searchResults.count != 0 {
+		if data.count != 0 {
 			let indexPath = IndexPath(row: 0, section: 0)
 			tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 		}

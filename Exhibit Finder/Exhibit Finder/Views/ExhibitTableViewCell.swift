@@ -20,7 +20,6 @@ class ExhibitTableViewCell: UITableViewCell {
 	@IBOutlet weak var reminderImage: UIImageView!
 	@IBOutlet weak var cellImage: UIImageView!
 	
-	
 	static let reuseIdentifier = "exhibitCell"
 
     override func awakeFromNib() {

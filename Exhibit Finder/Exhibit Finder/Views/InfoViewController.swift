@@ -15,11 +15,6 @@ class InfoViewController: UIViewController {
 	@IBOutlet weak var websiteButton: UIButton!
 	@IBOutlet weak var privacyButton: UIButton!
 	
-	// MARK: Variables
-	
-	var dateFormatter = DateFormatter()
-	var currentDate = Date()
-	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -46,7 +41,7 @@ class InfoViewController: UIViewController {
 	}
 	
 	@IBAction func privacyButtonPressed(_ sender: UIButton) {
-		guard let url = URL(string: "") else { return }
+		guard let url = URL(string: "http://kduncan-welke.com/exhibitfinderdcprivacy.php") else { return }
 		UIApplication.shared.open(url, options: [:], completionHandler: nil)
 	}
 

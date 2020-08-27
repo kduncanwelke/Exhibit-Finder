@@ -41,4 +41,11 @@ struct NotificationManager {
 		
 		print("notification added")
 	}
+    
+    static func clearNotification(result: Reminder) {
+        // remove existing time-based notification
+        let notificationCenter = UNUserNotificationCenter.current()
+        let identifier = "\(result.id)"
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+    }
 }
