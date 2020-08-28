@@ -100,29 +100,21 @@ class LocationReminderViewController: UIViewController {
                 
             // create pin from a reminder
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            addItemToMap(title: address, coordinate: coordinate, radius: radius)
+            LocationManager.addItemToMap(title: address, coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView)
         } else if exhibitsViewModel.getReminderForExhibit(index: index) != nil && reminderViewModel.hasLocation() == false {
             // there is a reminder but no location, so show museum
             if let location = museumLocation, let mapRegion = region {
-                mapView.addAnnotation(location)
-                mapView.setRegion(mapRegion, animated: true)
-                
-                let circle = MKCircle(center: location.coordinate, radius: 125)
-                mapView.addOverlay(circle)
+                LocationManager.showMuseum(museumLocation: location, mapView: mapView, region: mapRegion)
             }
         } else {
             // there is no existing location reminder
             // if a museum location is in use, display it
             if let location = museumLocation, let mapRegion = region {
-                mapView.addAnnotation(location)
-                mapView.setRegion(mapRegion, animated: true)
-                
-                let circle = MKCircle(center: location.coordinate, radius: 125)
-                mapView.addOverlay(circle)
+                LocationManager.showMuseum(museumLocation: location, mapView: mapView, region: mapRegion)
             } else {
                 // if segue was made too quickly, museum location may not have passed, so perform search
                 let museum = exhibitsViewModel.getMuseum(index: index)
-                performSearch(museum: "\(museum) Washington DC")
+                LocationManager.performSearch(museum: "\(museum) Washington DC", mapView: mapView)
                 
                 // if there is no location associated with the selected exhibit, show national mall
                 let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
@@ -130,63 +122,6 @@ class LocationReminderViewController: UIViewController {
                 mapView.setRegion(defaultRegion, animated: true)
             }
         }
-	}
-	
-	func updateLocation(location: MKPlacemark) {
-		// wipe annotations if location was updated
-		mapView.removeAnnotations(mapView.annotations)
-		mapView.removeOverlays(mapView.overlays)
-		
-		let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-		let locale = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-		let geocoder = CLGeocoder()
-		
-		// parse address to assign it to title for pin
-		geocoder.reverseGeocodeLocation(locale, completionHandler: { [unowned self] (placemarks, error) in
-			if error == nil {
-				guard let firstLocation = placemarks?[0] else { return }
-				// add to map
-				let radius = Double(self.slider.value)
-				self.addItemToMap(title: "\(firstLocation.name ?? "") \n \(LocationManager.parseAddress(selectedItem: firstLocation))", coordinate: coordinate, radius: radius)
-			}
-			else {
-				// an error occurred during geocoding
-				self.showAlert(title: "Error geocoding", message: "Location could not be parsed")
-			}
-		})
-	}
-
-	func performSearch(museum: String) {
-		// perform local search for museum by name, if it exists
-		let request = MKLocalSearch.Request()
-		request.naturalLanguageQuery = museum
-		request.region = mapView.region
-		let search = MKLocalSearch(request: request)
-		
-		search.start { [unowned self] response, _ in
-			guard let response = response else {
-				return
-			}
-			
-			guard let result = response.mapItems.first?.placemark else { return }
-			// add to map
-			self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125)
-		}
-	}
-	
-	func addItemToMap(title: String, coordinate: CLLocationCoordinate2D, radius: Double) {
-		let annotation = MKPointAnnotation()
-		annotation.coordinate = coordinate
-		annotation.title = title
-		mapView.addAnnotation(annotation)
-		
-		// recenter map on added annotation
-		let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-		mapView.setRegion(region, animated: true)
-		
-		// add overlay for region
-		let circle = MKCircle(center: coordinate, radius: radius)
-		mapView.addOverlay(circle)
 	}
 	
 	@objc func sliderChanged(slider: UISlider) {
@@ -243,7 +178,7 @@ class LocationReminderViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func confirmButtonPressed(_ sender: UIButton) {
-		if locationManager.monitoredRegions.count == 20 {
+        if LocationManager.getGeofenceCount() == 20 {
 			showAlert(title: "Unable to save", message: "The maximum of 20 monitored locations has been met - please delete or modify an existing reminder.")
 		} else if mapView.annotations.isEmpty {
 			showAlert(title: "No museum displayed", message: "A location was not loaded. Please check your network connection and try again.")
@@ -254,19 +189,8 @@ class LocationReminderViewController: UIViewController {
             reminderViewModel.saveLocation(museumLocation: museumLocation, min: leftStepper.value, max: rightStepper.value, circle: mapView.overlays.first as? MKCircle, index: index)
 			
             // create geofence and start monitoring
-            if let pin = museumLocation, let title = reminderViewModel.getExhibitForReminder(index: index)?.exhibit, let circle = mapView.overlays.first as? MKCircle {
-				
-				let annotation = MKPointAnnotation()
-				let coordinate = CLLocationCoordinate2D(latitude: pin.coordinate.latitude, longitude: pin.coordinate.longitude)
-				annotation.coordinate = coordinate
-				
-				let geofenceArea = LocationManager.getMonitoringRegion(for: annotation, exhibitName: title, radius: circle.radius)
-		
-				locationManager.startMonitoring(for: geofenceArea)
-				print("\(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
-				print("started monitoring")
-			}
-			
+            LocationManager.addGeofence(museumLocation: museumLocation, exhibit: reminderViewModel.getExhibitForReminder(index: index), map: mapView)
+            
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)
 			

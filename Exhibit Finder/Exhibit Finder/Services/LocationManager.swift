@@ -13,6 +13,77 @@ import UserNotifications
 import CoreData
 
 struct LocationManager {
+    
+    static let locationManager = CLLocationManager()
+    
+    static func getGeofenceCount() -> Int {
+        return locationManager.monitoredRegions.count
+    }
+    
+    static func showMuseum(museumLocation: MKPointAnnotation, mapView: MKMapView, region: MKCoordinateRegion) {
+        mapView.addAnnotation(location)
+        mapView.setRegion(region, animated: true)
+        
+        let circle = MKCircle(center: location.coordinate, radius: 125)
+        mapView.addOverlay(circle)
+    }
+    
+    static func addItemToMap(title: String, coordinate: CLLocationCoordinate2D, radius: Double, regionRadius: CLLocationDistance, mapView: MKMapView) {
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+        annotation.title = title
+        mapView.addAnnotation(annotation)
+        
+        // recenter map on added annotation
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+        mapView.setRegion(region, animated: true)
+        
+        // add overlay for region
+        let circle = MKCircle(center: coordinate, radius: radius)
+        mapView.addOverlay(circle)
+    }
+    
+    static func performSearch(museum: String, mapView: MKMapView) {
+        // perform local search for museum by name, if it exists
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = museum
+        request.region = mapView.region
+        let search = MKLocalSearch(request: request)
+        
+        search.start { response, _ in
+            guard let response = response else {
+                return
+            }
+            
+            guard let result = response.mapItems.first?.placemark else { return }
+            // add to map
+            self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125, regionRadius: 1000, mapView: mapView)
+        }
+    }
+    
+    static func updateLocation(location: MKPlacemark, mapView: MKMapView, radius: Double) {
+        // wipe annotations if location was updated
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.removeOverlays(mapView.overlays)
+        
+        let coordinate = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let locale = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let geocoder = CLGeocoder()
+        
+        // parse address to assign it to title for pin
+        geocoder.reverseGeocodeLocation(locale, completionHandler: { (placemarks, error) in
+            if error == nil {
+                guard let firstLocation = placemarks?[0] else { return }
+                // add to map
+                LocationManager.addItemToMap(title: "\(firstLocation.name ?? "") \n \(LocationManager.parseAddress(selectedItem: firstLocation))", coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView)
+            }
+            else {
+                // an error occurred during geocoding
+                print("not work")
+            }
+        })
+    }
+    
 	// get region to monitor geofence for
 	static func getMonitoringRegion(for location: MKPointAnnotation, exhibitName: String, radius: Double) -> CLCircularRegion {
 		let coordinate = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
@@ -34,6 +105,22 @@ struct LocationManager {
         if let location = result.location, let name = result.name {
             LocationManager.stopMonitoringRegion(latitude: location.latitude, longitude: location.longitude, exhibitName: name, radius: location.radius)
             print("stopped monitoring")
+        }
+    }
+    
+    static func addGeofence(museumLocation: MKPointAnnotation?, exhibit: Exhibit?, map: MKMapView) {
+        // create geofence and start monitoring
+        if let pin = museumLocation, let title = exhibit?.exhibit, let circle = map.overlays.first as? MKCircle {
+            
+            let annotation = MKPointAnnotation()
+            let coordinate = CLLocationCoordinate2D(latitude: pin.coordinate.latitude, longitude: pin.coordinate.longitude)
+            annotation.coordinate = coordinate
+            
+            let geofenceArea = LocationManager.getMonitoringRegion(for: annotation, exhibitName: title, radius: circle.radius)
+            
+            locationManager.startMonitoring(for: geofenceArea)
+            print("\(annotation.coordinate.latitude), \(annotation.coordinate.longitude)")
+            print("started monitoring")
         }
     }
 	
