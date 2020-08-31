@@ -14,6 +14,9 @@ import CoreLocation
 public class ReminderViewModel {
     
     weak var alertDelegate: AlertDisplayDelegate?
+    let defaultMinTime = 8.0
+    let defaultMaxTime = 17.0
+    let defaultRadius = 125.0
     
     public func reminderCount() -> Int {
         return ReminderManager.reminders.count
@@ -24,7 +27,7 @@ public class ReminderViewModel {
     }
     
     func getExhibitForReminder(index: IndexPath) -> Exhibit? {
-        return ReminderManager.exhibitDictionary[Int64(index.row)].id
+        return ExhibitManager.exhibitsList[index.row]
     }
     
     public func getAddress() -> String? {
@@ -64,9 +67,11 @@ public class ReminderViewModel {
     
     func getMinTime() -> Double {
         if let reminder = ReminderManager.currentReminder, let min = reminder.location?.minTime {
+            print("min time")
+            print(min)
             return min
         } else {
-            return 8.0
+            return defaultMinTime
         }
     }
     
@@ -74,7 +79,7 @@ public class ReminderViewModel {
         if let reminder = ReminderManager.currentReminder, let max = reminder.location?.maxTime {
             return max
         } else {
-            return 17.0
+            return defaultMaxTime
         }
     }
     
@@ -82,19 +87,23 @@ public class ReminderViewModel {
         if let reminder = ReminderManager.currentReminder, let radius = reminder.location?.radius {
             return radius
         } else {
-            return 125.0
+            return defaultRadius
         }
     }
     
     func getLat() -> Double {
         if let reminder = ReminderManager.currentReminder, let lat = reminder.location?.latitude {
             return lat
+        } else {
+            return LocationManager.defaultLat
         }
     }
     
     func getLong() -> Double {
         if let reminder = ReminderManager.currentReminder, let long = reminder.location?.longitude {
             return long
+        } else {
+            return LocationManager.defaultLong
         }
     }
     
@@ -162,7 +171,9 @@ public class ReminderViewModel {
     }
     
     private func getLocationForReminder(location: Location?, museumLocation: MKPointAnnotation?, min: Double, max: Double, circle: MKCircle?, index: IndexPath) {
-        guard let pin = museumLocation, let address = pin.title, let exhibit = self.getExhibitForReminder(index: index) else { return }
+        guard let pin = museumLocation, let address = pin.title, let exhibit = self.getExhibitForReminder(index: index) else {
+            print("guard falling through")
+            return }
         
         location?.address = address
         location?.museum = exhibit.museum

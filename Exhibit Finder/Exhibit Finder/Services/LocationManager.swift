@@ -16,34 +16,50 @@ struct LocationManager {
     
     static let locationManager = CLLocationManager()
     
+    // national mall coordinates
+    static let defaultLat = 38.8897468
+    static let defaultLong = -77.0143747
+    static var museumPinLocation: MKPointAnnotation?
+    
+    static func getRegion() -> MKCoordinateRegion {
+        let coordinate = CLLocationCoordinate2D(latitude: defaultLat, longitude: defaultLong)
+        let regionRadius: CLLocationDistance = 1000
+        
+        return MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+    }
+    
     static func getGeofenceCount() -> Int {
         return locationManager.monitoredRegions.count
     }
     
     static func showMuseum(museumLocation: MKPointAnnotation, mapView: MKMapView, region: MKCoordinateRegion) {
-        mapView.addAnnotation(location)
+        mapView.addAnnotation(museumLocation)
         mapView.setRegion(region, animated: true)
         
-        let circle = MKCircle(center: location.coordinate, radius: 125)
+        let circle = MKCircle(center: museumLocation.coordinate, radius: 125)
         mapView.addOverlay(circle)
     }
     
-    static func addItemToMap(title: String, coordinate: CLLocationCoordinate2D, radius: Double, regionRadius: CLLocationDistance, mapView: MKMapView) {
+    static func addItemToMap(title: String, coordinate: CLLocationCoordinate2D, radius: Double, regionRadius: CLLocationDistance, mapView: MKMapView, withOverlay: Bool) {
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title = title
+        
+        museumPinLocation = annotation
         mapView.addAnnotation(annotation)
         
         // recenter map on added annotation
         let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(region, animated: true)
         
-        // add overlay for region
-        let circle = MKCircle(center: coordinate, radius: radius)
-        mapView.addOverlay(circle)
+        if withOverlay {
+            // add overlay for region
+            let circle = MKCircle(center: coordinate, radius: radius)
+            mapView.addOverlay(circle)
+        }
     }
     
-    static func performSearch(museum: String, mapView: MKMapView) {
+    static func performSearch(museum: String, mapView: MKMapView, withOverlay: Bool) {
         // perform local search for museum by name, if it exists
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = museum
@@ -57,11 +73,11 @@ struct LocationManager {
             
             guard let result = response.mapItems.first?.placemark else { return }
             // add to map
-            self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125, regionRadius: 1000, mapView: mapView)
+            self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125, regionRadius: 1000, mapView: mapView, withOverlay: withOverlay)
         }
     }
     
-    static func updateLocation(location: MKPlacemark, mapView: MKMapView, radius: Double) {
+    /*static func updateLocation(location: MKPlacemark, mapView: MKMapView, radius: Double) {
         // wipe annotations if location was updated
         mapView.removeAnnotations(mapView.annotations)
         mapView.removeOverlays(mapView.overlays)
@@ -75,14 +91,14 @@ struct LocationManager {
             if error == nil {
                 guard let firstLocation = placemarks?[0] else { return }
                 // add to map
-                LocationManager.addItemToMap(title: "\(firstLocation.name ?? "") \n \(LocationManager.parseAddress(selectedItem: firstLocation))", coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView)
+                LocationManager.addItemToMap(title: "\(firstLocation.name ?? "") \n \(LocationManager.parseAddress(selectedItem: firstLocation))", coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView, withOverlay: true)
             }
             else {
                 // an error occurred during geocoding
                 print("not work")
             }
         })
-    }
+    }*/
     
 	// get region to monitor geofence for
 	static func getMonitoringRegion(for location: MKPointAnnotation, exhibitName: String, radius: Double) -> CLCircularRegion {

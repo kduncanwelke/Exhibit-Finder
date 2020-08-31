@@ -25,9 +25,7 @@ class LocationReminderViewController: UIViewController {
 	@IBOutlet weak var exhibitName: UILabel!
 	
 	// MARK: Variables
-	
-	var museumLocation: MKPointAnnotation?
-	var region: MKCoordinateRegion?
+
 	let dateFormatter = DateFormatter()
 	let locationManager = CLLocationManager()
 	let regionRadius: CLLocationDistance = 1000
@@ -48,6 +46,10 @@ class LocationReminderViewController: UIViewController {
 		leftStepper.addTarget(self, action: #selector(leftStepperChanged(stepper:)), for: .valueChanged)
 		rightStepper.addTarget(self, action: #selector(rightStepperChanged(stepper:)), for: .valueChanged)
 		
+        // set stepper values care apparently the storyboard ones aren't respected
+        leftStepper.value = 8.0
+        rightStepper.value = 17.0
+        
 		configureView()
     }
 	
@@ -80,7 +82,7 @@ class LocationReminderViewController: UIViewController {
 		
         // there is an existing location reminder
         if exhibitsViewModel.getReminderForExhibit(index: index) != nil && reminderViewModel.hasLocation() {
-            
+            print("has reminder")
             // show time range selections and region
             let address = reminderViewModel.getAddress() ?? ""
             let min = reminderViewModel.getMinTime()
@@ -95,38 +97,44 @@ class LocationReminderViewController: UIViewController {
             endTime.text = returnTime(inputValue: max)
                 
             slider.value = Float(radius)
+            print(radius)
                 
             confirmButton.setTitle("Save Changes", for: .normal)
                 
+            checkForLocation(index: index, withOverlay: false)
+            
             // create pin from a reminder
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            LocationManager.addItemToMap(title: address, coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView)
+            LocationManager.addItemToMap(title: address, coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView, withOverlay: true)
         } else if exhibitsViewModel.getReminderForExhibit(index: index) != nil && reminderViewModel.hasLocation() == false {
+            print("reminder with no location")
             // there is a reminder but no location, so show museum
-            if let location = museumLocation, let mapRegion = region {
-                LocationManager.showMuseum(museumLocation: location, mapView: mapView, region: mapRegion)
-            }
+            checkForLocation(index: index, withOverlay: true)
         } else {
+            print("no reminder")
             // there is no existing location reminder
             // if a museum location is in use, display it
-            if let location = museumLocation, let mapRegion = region {
-                LocationManager.showMuseum(museumLocation: location, mapView: mapView, region: mapRegion)
-            } else {
-                // if segue was made too quickly, museum location may not have passed, so perform search
-                let museum = exhibitsViewModel.getMuseum(index: index)
-                LocationManager.performSearch(museum: "\(museum) Washington DC", mapView: mapView)
-                
-                // if there is no location associated with the selected exhibit, show national mall
-                let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
-                let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-                mapView.setRegion(defaultRegion, animated: true)
-            }
+            checkForLocation(index: index, withOverlay: true)
         }
 	}
+    
+    func checkForLocation(index: IndexPath, withOverlay: Bool) {
+        mapView.setRegion(LocationManager.getRegion(), animated: true)
+        
+        guard let index = selection else { return }
+        let museum = exhibitsViewModel.getMuseum(index: index)
+        
+        if museum == "No museum listed" {
+            return
+        }
+        
+        // perform local search for museum by name, if it exists
+        LocationManager.performSearch(museum: museum, mapView: mapView, withOverlay: withOverlay)
+    }
 	
 	@objc func sliderChanged(slider: UISlider) {
 		selectedRange.text = "\(Int(slider.value))ft"
-		guard let location = museumLocation else { return }
+        guard let location = mapView.annotations.first else { return }
 		let circle = MKCircle(center: location.coordinate, radius: CLLocationDistance(slider.value))
 		mapView.removeOverlays(mapView.overlays)
 		mapView.addOverlay(circle)
@@ -186,10 +194,10 @@ class LocationReminderViewController: UIViewController {
             guard let index = selection else { return }
             
             // save location
-            reminderViewModel.saveLocation(museumLocation: museumLocation, min: leftStepper.value, max: rightStepper.value, circle: mapView.overlays.first as? MKCircle, index: index)
-			
+            reminderViewModel.saveLocation(museumLocation: LocationManager.museumPinLocation, min: leftStepper.value, max: rightStepper.value, circle: mapView.overlays.first as? MKCircle, index: index)
+        
             // create geofence and start monitoring
-            LocationManager.addGeofence(museumLocation: museumLocation, exhibit: reminderViewModel.getExhibitForReminder(index: index), map: mapView)
+            LocationManager.addGeofence(museumLocation: LocationManager.museumPinLocation, exhibit: reminderViewModel.getExhibitForReminder(index: index), map: mapView)
             
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateButton"), object: nil)

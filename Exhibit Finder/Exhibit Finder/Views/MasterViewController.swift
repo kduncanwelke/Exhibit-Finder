@@ -103,6 +103,7 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 	
 	@objc func reload() {
         reminderViewModel.loadReminders()
+        tableView.reloadData()
 	}
 	
 	// use to reload list of exhibits with reminders when a reminder has been edited
@@ -117,27 +118,6 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if segue.identifier == "showDetail" {
 		    if let indexPath = tableView.indexPathForSelectedRow {
-				
-               /* var type: DataType
-                
-                if segmentedController.selectedSegmentIndex == 0 {
-                    type = .exhibitsOnly
-                } else {
-                    type = .exhibitsWithReminders
-                }
-                
-                let data = exhibitsViewModel.retrieveSource()
-                var object: Exhibit
-                
-                switch type {
-                case .exhibitsOnly:
-                    object = data[indexPath.row]
-                case .exhibitsWithReminders:
-                    object = data[indexPath.section]
-                }
-				
-                reminderViewModel.getReminder(id: object.id)*/
-				
 				let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController
 				destinationViewController?.selection = indexPath
 		    }

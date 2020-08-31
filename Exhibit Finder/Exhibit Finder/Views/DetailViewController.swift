@@ -70,8 +70,8 @@ class DetailViewController: UIViewController {
             reminderButton.setTitle("Edit Reminder", for: .normal)
         } else {
             // no reminder
-            reminderButton.isEnabled = false
-            viewOnlineButton.isEnabled = false
+            reminderButton.isEnabled = true
+            viewOnlineButton.isEnabled = true
             reminderButton.setTitle("Add Reminder", for: .normal)
         }
 		
@@ -103,13 +103,7 @@ class DetailViewController: UIViewController {
 	
 	func loadMapView() {
 		// coordinates for the national mall
-		let coordinate = CLLocationCoordinate2D(latitude: 38.8897468, longitude: -77.0143747)
-		
-		let regionRadius: CLLocationDistance = 1000
-		
-		let defaultRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-		
-		mapView.setRegion(defaultRegion, animated: true)
+        mapView.setRegion(LocationManager.getRegion(), animated: true)
 		
         guard let index = selection else { return }
         let museum = exhibitsViewModel.getMuseum(index: index)
@@ -119,28 +113,7 @@ class DetailViewController: UIViewController {
         }
 		
 		// perform local search for museum by name, if it exists
-		var request = MKLocalSearch.Request()
-		request.naturalLanguageQuery = "\(museum) Washington DC"
-		request.region = mapView.region
-		var search = MKLocalSearch(request: request)
-		
-		search.start { [unowned self] response, _ in
-			guard var response = response else {
-				return
-			}
-
-			// create annotation and add to map
-			var annotation = MKPointAnnotation()
-			guard var result = response.mapItems.first?.placemark else { return }
-			annotation.coordinate = result.coordinate
-			annotation.title = "\(museum) \n \(result.title ?? "")"
-			self.mapView.addAnnotation(annotation)
-			self.museumPinLocation = annotation
-			
-			// recenter map on added annotation
-			var region = MKCoordinateRegion(center: result.coordinate, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-			self.mapView.setRegion(region, animated: true)
-		}
+        LocationManager.performSearch(museum: museum, mapView: mapView, withOverlay: false)
 	}
 	
 	// MARK: Navigation
@@ -150,7 +123,14 @@ class DetailViewController: UIViewController {
 			var barViewControllers = segue.destination as! UITabBarController
             
             guard let index = selection else { return }
-			
+            
+            // pass indexpath along to both views, map data to location view
+            var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
+            destinationViewControllerOne?.selection = index
+            
+            var destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
+            destinationViewControllerTwo?.selection = index
+            
             // there is a reminder
             if let reminder = exhibitsViewModel.getReminderForExhibit(index: index) {
                 
@@ -167,15 +147,6 @@ class DetailViewController: UIViewController {
                 case .location:
                     barViewControllers.selectedIndex = 1
                 }
-                
-                // pass indexpath along to both views, map data to location view
-                var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
-				destinationViewControllerOne?.selection = index
-				
-				var destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
-                destinationViewControllerTwo?.selection = index
-				destinationViewControllerTwo?.museumLocation = museumPinLocation
-				destinationViewControllerTwo?.region = mapView.region
             } else {
                 // there is no reminder
                 // go to time reminder by default if there is no reminder
