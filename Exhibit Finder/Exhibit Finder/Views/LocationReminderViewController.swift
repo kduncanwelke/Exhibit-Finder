@@ -97,7 +97,6 @@ class LocationReminderViewController: UIViewController {
             endTime.text = returnTime(inputValue: max)
                 
             slider.value = Float(radius)
-            print(radius)
                 
             confirmButton.setTitle("Save Changes", for: .normal)
                 
