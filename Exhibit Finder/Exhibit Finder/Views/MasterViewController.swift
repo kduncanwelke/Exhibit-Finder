@@ -180,44 +180,8 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "exhibitCell", for: indexPath) as! ExhibitTableViewCell
         
-        var type: DataType
-        
-        // get type based on segment selection, change cell title color if reminders segment
-        if segmentedController.selectedSegmentIndex == 0 {
-            cell.title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
-            type = .exhibitsOnly
-        } else {
-            cell.title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
-            type = .exhibitsWithReminders
-        }
-        
-        var data = exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
+        cell.configure(index: indexPath, segment: segmentedController.selectedSegmentIndex, searchText: searchController.searchBar.text)
     
-        DispatchQueue.main.async {
-            if let url = self.exhibitsViewModel.getImageUrl(index: indexPath) {
-                let request = ImageRequest(
-                    url: url,
-                    targetSize: CGSize(width: 140, height: 140),
-                    contentMode: .aspectFill)
-                
-                Nuke.loadImage(with: request, options: NukeOptions.options, into: cell.cellImage) { response, err in
-                    if err != nil {
-                        cell.cellImage.image = NukeOptions.options.failureImage
-                    } else {
-                        cell.cellImage?.image = response?.image
-                    }
-                }
-            }
-        }
-        
-        cell.title.text = exhibitsViewModel.getTitle(index: indexPath)
-        cell.musuem.text = exhibitsViewModel.getMuseum(index: indexPath)
-        cell.briefInfo.text = exhibitsViewModel.getInfo(index: indexPath)
-        cell.closeDate.text = exhibitsViewModel.getCloseDate(index: indexPath)
-        
-        cell.hasReminder.text = exhibitsViewModel.hasReminder(index: indexPath)
-        cell.reminderImage.image = exhibitsViewModel.reminderImage(index: indexPath)
-        
         return cell
     }
     

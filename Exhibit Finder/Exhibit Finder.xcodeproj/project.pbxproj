@@ -14,6 +14,9 @@
 		2D3FC3F924F045CA00C65022 /* ExhibitsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3F824F045CA00C65022 /* ExhibitsViewModel.swift */; };
 		2D3FC3FB24F04A9E00C65022 /* AlertDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3FA24F04A9E00C65022 /* AlertDelegate.swift */; };
 		2D3FC3FD24F06E4600C65022 /* ExhibitLoadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3FC24F06E4600C65022 /* ExhibitLoadDelegate.swift */; };
+		2D4D2518251000B5002ECF70 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D2517251000B5002ECF70 /* DetailViewModel.swift */; };
+		2D4D251A25100AF6002ECF70 /* TimeReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D251925100AF6002ECF70 /* TimeReminderViewModel.swift */; };
+		2D4D251C25100CA3002ECF70 /* LocationReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4D251B25100CA3002ECF70 /* LocationReminderViewModel.swift */; };
 		2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D677BEE2260FD3100A1CC2E /* Reminder.xcdatamodeld */; };
 		2D677BF2226104C900A1CC2E /* CoreDateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D677BF1226104C900A1CC2E /* CoreDateManager.swift */; };
 		2D677BF422613AFC00A1CC2E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D677BF322613AFC00A1CC2E /* Assets.xcassets */; };
@@ -62,6 +65,9 @@
 		2D3FC3F824F045CA00C65022 /* ExhibitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitsViewModel.swift; sourceTree = "<group>"; };
 		2D3FC3FA24F04A9E00C65022 /* AlertDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDelegate.swift; sourceTree = "<group>"; };
 		2D3FC3FC24F06E4600C65022 /* ExhibitLoadDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitLoadDelegate.swift; sourceTree = "<group>"; };
+		2D4D2517251000B5002ECF70 /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DetailViewModel.swift; path = "Exhibit Finder/View Models/DetailViewModel.swift"; sourceTree = SOURCE_ROOT; };
+		2D4D251925100AF6002ECF70 /* TimeReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeReminderViewModel.swift; sourceTree = "<group>"; };
+		2D4D251B25100CA3002ECF70 /* LocationReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationReminderViewModel.swift; sourceTree = "<group>"; };
 		2D677BEF2260FD3100A1CC2E /* Reminder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Reminder.xcdatamodel; sourceTree = "<group>"; };
 		2D677BF1226104C900A1CC2E /* CoreDateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDateManager.swift; sourceTree = "<group>"; };
 		2D677BF322613AFC00A1CC2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -146,6 +152,9 @@
 			children = (
 				2D3FC3F624F044C500C65022 /* ReminderViewModel.swift */,
 				2D3FC3F824F045CA00C65022 /* ExhibitsViewModel.swift */,
+				2D4D2517251000B5002ECF70 /* DetailViewModel.swift */,
+				2D4D251925100AF6002ECF70 /* TimeReminderViewModel.swift */,
+				2D4D251B25100CA3002ECF70 /* LocationReminderViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -385,10 +394,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DE50D612259574800B924F0 /* Exhibit.swift in Sources */,
+				2D4D251C25100CA3002ECF70 /* LocationReminderViewModel.swift in Sources */,
 				2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */,
 				2DE50D55225940CA00B924F0 /* XMLParser.swift in Sources */,
 				2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */,
 				2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */,
+				2D4D251A25100AF6002ECF70 /* TimeReminderViewModel.swift in Sources */,
 				2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */,
 				2DE50D592259412300B924F0 /* Endpoint.swift in Sources */,
 				2D3FC3FB24F04A9E00C65022 /* AlertDelegate.swift in Sources */,
@@ -407,6 +418,7 @@
 				2D956B4F226529B10079BA2A /* InfoManager.swift in Sources */,
 				2DCF1A522284D35B00FFF67F /* HTMLEncodingRemoval.swift in Sources */,
 				2D130615226A7C2700482D1E /* LocationManager.swift in Sources */,
+				2D4D2518251000B5002ECF70 /* DetailViewModel.swift in Sources */,
 				2DB45144225E7A28008E2E2C /* LocationReminderViewController.swift in Sources */,
 				2DE50D512259409200B924F0 /* Networker.swift in Sources */,
 				2DE50D57225940EE00B924F0 /* Errors.swift in Sources */,

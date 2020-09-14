@@ -33,6 +33,7 @@ class LocationReminderViewController: UIViewController {
     
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
+    private let locationReminderViewModel = LocationReminderViewModel()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,44 +93,29 @@ class LocationReminderViewController: UIViewController {
             let long = reminderViewModel.getLong()
             
             leftStepper.value = min
-            startTime.text = returnTime(inputValue: min)
+            startTime.text = locationReminderViewModel.returnTime(inputValue: min)
             rightStepper.value = max
-            endTime.text = returnTime(inputValue: max)
+            endTime.text = locationReminderViewModel.returnTime(inputValue: max)
                 
             slider.value = Float(radius)
                 
             confirmButton.setTitle("Save Changes", for: .normal)
                 
-            checkForLocation(index: index, withOverlay: false)
+            locationReminderViewModel.checkForLocation(mapView: mapView, selection: index, withOverlay: false)
             
             // create pin from a reminder
-            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            LocationManager.addItemToMap(title: address, coordinate: coordinate, radius: radius, regionRadius: 1000, mapView: mapView, withOverlay: true)
+            LocationManager.addItemToMap(title: address, lat: lat, long: long, radius: radius, regionRadius: 1000, mapView: mapView, withOverlay: true)
         } else if exhibitsViewModel.getReminderForExhibit(index: index) != nil && reminderViewModel.hasLocation() == false {
             print("reminder with no location")
             // there is a reminder but no location, so show museum
-            checkForLocation(index: index, withOverlay: true)
+            locationReminderViewModel.checkForLocation(mapView: mapView, selection: index, withOverlay: true)
         } else {
             print("no reminder")
             // there is no existing location reminder
             // if a museum location is in use, display it
-            checkForLocation(index: index, withOverlay: true)
+            locationReminderViewModel.checkForLocation(mapView: mapView, selection: index, withOverlay: true)
         }
 	}
-    
-    func checkForLocation(index: IndexPath, withOverlay: Bool) {
-        mapView.setRegion(LocationManager.getRegion(), animated: true)
-        
-        guard let index = selection else { return }
-        let museum = exhibitsViewModel.getMuseum(index: index)
-        
-        if museum == "No museum listed" {
-            return
-        }
-        
-        // perform local search for museum by name, if it exists
-        LocationManager.performSearch(museum: museum, mapView: mapView, withOverlay: withOverlay)
-    }
 	
 	@objc func sliderChanged(slider: UISlider) {
 		selectedRange.text = "\(Int(slider.value))ft"
@@ -142,7 +128,7 @@ class LocationReminderViewController: UIViewController {
 	@objc func leftStepperChanged(stepper: UIStepper) {
 		rightStepper.minimumValue = stepper.value + 1
 		leftStepper.maximumValue = rightStepper.value - 1
-		let valueToDisplay = returnTime(inputValue: stepper.value)
+        let valueToDisplay = locationReminderViewModel.returnTime(inputValue: stepper.value)
 		
 		startTime.text = valueToDisplay
 	}
@@ -150,27 +136,11 @@ class LocationReminderViewController: UIViewController {
 	@objc func rightStepperChanged(stepper: UIStepper) {
 		rightStepper.minimumValue = leftStepper.value + 1
 		leftStepper.maximumValue = stepper.value - 1
-		let valueToDisplay = returnTime(inputValue: stepper.value)
+        let valueToDisplay = locationReminderViewModel.returnTime(inputValue: stepper.value)
 		
 		endTime.text = valueToDisplay
 	}
-	
-	// return time to display on labels, converting 24-hour time used in stepper to 12-hour time
-	func returnTime(inputValue: Double) -> String {
-		if inputValue < 12 {
-			let value = Int(inputValue)
-			return "\(value)am"
-		} else if inputValue == 12 {
-			let value = Int(inputValue)
-			return "\(value)pm"
-		} else if inputValue == 24 {
-			let value = Int(inputValue) - 12
-			return "\(value)am"
-		} else {
-			let value = Int(inputValue) - 12
-			return "\(value)pm"
-		}
-	}
+
 	
     /*
     // MARK: - Navigation

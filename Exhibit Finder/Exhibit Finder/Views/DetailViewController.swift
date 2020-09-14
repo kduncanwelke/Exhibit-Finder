@@ -36,6 +36,7 @@ class DetailViewController: UIViewController {
     
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
+    private let detailViewModel = DetailViewModel()
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -94,26 +95,11 @@ class DetailViewController: UIViewController {
         closeDateLabel.text = exhibitsViewModel.getCloseDate(index: index)
         locationLabel.text = exhibitsViewModel.getLocation(index: index)
         descriptionLabel.text = exhibitsViewModel.getVerboseInfo(index: index)
-		loadMapView()
+        detailViewModel.loadMapView(mapView: mapView, selection: index)
 	}
 	
 	@objc func updateButton() {
 		reminderButton.setTitle("Edit Reminder", for: .normal)
-	}
-	
-	func loadMapView() {
-		// coordinates for the national mall
-        mapView.setRegion(LocationManager.getRegion(), animated: true)
-		
-        guard let index = selection else { return }
-        let museum = exhibitsViewModel.getMuseum(index: index)
-        
-        if museum == "No museum listed" {
-            return
-        }
-		
-		// perform local search for museum by name, if it exists
-        LocationManager.performSearch(museum: museum, mapView: mapView, withOverlay: false)
 	}
 	
 	// MARK: Navigation
@@ -124,34 +110,14 @@ class DetailViewController: UIViewController {
             
             guard let index = selection else { return }
             
-            // pass indexpath along to both views, map data to location view
+            // pass indexpath along to both views
             var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
             destinationViewControllerOne?.selection = index
             
             var destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
             destinationViewControllerTwo?.selection = index
             
-            // there is a reminder
-            if let reminder = exhibitsViewModel.getReminderForExhibit(index: index) {
-                
-                var type: WithReminder
-                guard let typeOfReminder = reminderViewModel.getReminderType() else { return }
-                
-                type = typeOfReminder
-                    
-                // set selected view based on which reminders exist
-                switch type {
-                case .both, .time:
-                    // go to time reminder if there is a time reminder or both time and location
-                    barViewControllers.selectedIndex = 0
-                case .location:
-                    barViewControllers.selectedIndex = 1
-                }
-            } else {
-                // there is no reminder
-                // go to time reminder by default if there is no reminder
-                barViewControllers.selectedIndex = 0
-            }
+            barViewControllers.selectedIndex = detailViewModel.setSelectedBarViewController(index: index)
 		}
 	}
 	

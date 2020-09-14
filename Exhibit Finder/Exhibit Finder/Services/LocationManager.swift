@@ -40,7 +40,8 @@ struct LocationManager {
         mapView.addOverlay(circle)
     }
     
-    static func addItemToMap(title: String, coordinate: CLLocationCoordinate2D, radius: Double, regionRadius: CLLocationDistance, mapView: MKMapView, withOverlay: Bool) {
+    static func addItemToMap(title: String, lat: Double, long: Double, radius: Double, regionRadius: CLLocationDistance, mapView: MKMapView, withOverlay: Bool) {
+        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title = title
@@ -73,7 +74,7 @@ struct LocationManager {
             
             guard let result = response.mapItems.first?.placemark else { return }
             // add to map
-            self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", coordinate: result.coordinate, radius: 125, regionRadius: 1000, mapView: mapView, withOverlay: withOverlay)
+            self.addItemToMap(title: "\(museum) \n \(result.title ?? "")", lat: result.coordinate.latitude, long: result.coordinate.longitude, radius: 125, regionRadius: 1000, mapView: mapView, withOverlay: withOverlay)
         }
     }
     
