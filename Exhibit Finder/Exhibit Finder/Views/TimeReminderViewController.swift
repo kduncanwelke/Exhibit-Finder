@@ -28,6 +28,7 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
     
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
+    private let timeReminderViewModel = TimeReminderViewModel()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,12 +75,12 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
 
 		let close = exhibitsViewModel.getCloseDate(index: index)
         if close != "Indefinite" {
-			let maxDate = getDate(from: close)
+            let maxDate = timeReminderViewModel.getDate(from: close)
 			datePicker.maximumDate = maxDate
 		}
 		
 		time.text = "Today to \(close)"
-        reminderSelected.text = getStringDate(from: datePicker.date)
+        reminderSelected.text = timeReminderViewModel.getStringDate(from: datePicker.date)
 		
         if exhibitsViewModel.getReminderForExhibit(index: index) != nil {
             guard let dateToUse = reminderViewModel.getDate() else { return }
@@ -89,30 +90,16 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
                 datePicker.minimumDate = dateToUse
             }
             
-            reminderSelected.text = getStringDate(from: dateToUse)
+            reminderSelected.text = timeReminderViewModel.getStringDate(from: dateToUse)
             datePicker.date = dateToUse
             confirmButton.setTitle("Save Changes", for: .normal)
         }
 	}
 	
 	@objc func datePickerChanged(picker: UIDatePicker) {
-		reminderSelected.text = getStringDate(from: datePicker.date)
+        reminderSelected.text = timeReminderViewModel.getStringDate(from: datePicker.date)
 	}
 	
-	// turn date into string to display
-	func getDate(from stringDate: String) -> Date? {
-		guard let createdDate = dateFormatter.date(from: stringDate) else {
-			print("date conversion failed")
-			return nil
-		}
-		return createdDate
-	}
-	
-    // get string from date
-	func getStringDate(from date: Date) -> String {
-		let createdDate = timeDateFormatter.string(from: date)
-		return createdDate
-	}
 	
     /*
     // MARK: - Navigation
