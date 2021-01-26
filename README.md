@@ -42,4 +42,4 @@ If you experience trouble using the app, have any questions, or simply want to c
 ## Acknowledgement
 This app idea was inspired by my brother (a DC resident) who frequently has missed exhibits he wished to see - with these reminders, both by time and location, he (and other visitors) can more easily ensure they see exhibits they wish to see.
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S03G1HT]
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S03G1HT)
