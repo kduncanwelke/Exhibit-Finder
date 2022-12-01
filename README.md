@@ -17,7 +17,7 @@ Set time based reminders to receive exhibit notifications at your preferred time
 Whether you are a new visitor to Washington D.C., or are familiar with the area, be certain you'll never miss out on your favorite Smithsonian exhibits before they close, or before you pass them by!
 
 ## Dependencies
-[Nuke](https://github.com/kean/Nuke) is used in this project to handle image downloads and display, and [XMLParsing](https://github.com/ShawnMoore/XMLParsing) has been used to handle parsing the XML file which contains the exhibit data. [Cocoapods](hhttps://cocoapods.org) has been used as the dependency manager for this project - please refer to Cocoapods documentation for details.
+[Nuke](https://github.com/kean/Nuke) is used in this project to handle image downloads and display, and [XMLParsing](https://github.com/ShawnMoore/XMLParsing) has been used to handle parsing the XML file which contains the exhibit data. [Cocoapods](https://cocoapods.org) has been used as the dependency manager for this project - please refer to Cocoapods documentation for details.
 
 The content of the Podfile for this project is as follows:
 ```
