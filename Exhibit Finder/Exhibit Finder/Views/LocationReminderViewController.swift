@@ -56,20 +56,16 @@ class LocationReminderViewController: UIViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		// perform check for location services access, as this is the main area that depends on location
-		if CLLocationManager.locationServicesEnabled() {
-			switch CLLocationManager.authorizationStatus() {
-			case .notDetermined, .restricted, .denied:
-				showSettingsAlert(title: "Location service not enabled", message: "Proximity reminders require use of location services to provide region-based notifications. These notifications will not be displayed until settings are adjusted.")
-			case .authorizedAlways:
-				print("access")
-			case .authorizedWhenInUse:
-				showSettingsAlert(title: "Location service limited", message: "Location services are only authorized for when this app is in use. Proximity reminders will not be displayed if the app is closed, unless settings are adjusted.")
-			@unknown default:
-				return
-			}
-		} else {
-			showAlert(title: "Notice", message: "Location services are not available - all features of this app may not be available.")
-		}
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined, .restricted, .denied:
+            showSettingsAlert(title: "Location service not enabled", message: "Proximity reminders require use of location services to provide region-based notifications. These notifications will not be displayed until settings are adjusted.")
+        case .authorizedAlways:
+            print("access")
+        case .authorizedWhenInUse:
+            showSettingsAlert(title: "Location service limited", message: "Location services are only authorized for when this app is in use. Proximity reminders will not be displayed if the app is closed, unless settings are adjusted.")
+        @unknown default:
+            return
+        }
 	}
 	
 	// MARK: Custom functions

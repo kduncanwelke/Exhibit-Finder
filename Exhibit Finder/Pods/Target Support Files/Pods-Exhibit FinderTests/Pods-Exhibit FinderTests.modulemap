@@ -1,0 +1,6 @@
+framework module Pods_Exhibit_FinderTests {
+  umbrella header "Pods-Exhibit FinderTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

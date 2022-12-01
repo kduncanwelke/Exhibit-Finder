@@ -12,14 +12,13 @@ enum Endpoint {
 	case exhibit
 	
 	private var baseURL: URL {
-		return URL(string: "http://logs2.smithsonian.museum/si-exhibits/exhibits.xml")!
+		return URL(string: "https://d.asp6.si.edu/si-exhibits/exhibits.xml")!
 	}
 	
 	// generate url
 	func url() -> URL {
-		switch self {
-		case .exhibit:
-			return baseURL
-		}
+        return baseURL
 	}
 }
+
+

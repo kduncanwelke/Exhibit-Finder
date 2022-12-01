@@ -1,0 +1,28 @@
+PODS:
+  - Nuke (10.7.1)
+  - XMLParsing (0.0.3)
+
+DEPENDENCIES:
+  - Nuke (~> 10.7)
+  - XMLParsing (from `https://github.com/ShawnMoore/XMLParsing.git`)
+
+SPEC REPOS:
+  trunk:
+    - Nuke
+
+EXTERNAL SOURCES:
+  XMLParsing:
+    :git: https://github.com/ShawnMoore/XMLParsing.git
+
+CHECKOUT OPTIONS:
+  XMLParsing:
+    :commit: 594272e4df40798c53ae1735ee65f3f387291670
+    :git: https://github.com/ShawnMoore/XMLParsing.git
+
+SPEC CHECKSUMS:
+  Nuke: 279f17a599fd1c83cf51de5e0e1f2db143a287b0
+  XMLParsing: 085edb6fa22c71d6b53a79299f990a91e7414d19
+
+PODFILE CHECKSUM: 9982933c5ec870944520a6260f7a7fa5f18c6426
+
+COCOAPODS: 1.11.3

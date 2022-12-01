@@ -79,11 +79,11 @@ class DetailViewController: UIViewController {
 		DispatchQueue.main.async {
 			if let url = self.exhibitsViewModel.getImageUrl(index: index) {
 				// load image with Nuke
-				Nuke.loadImage(with: url, options: NukeOptions.options, into: self.exhibitImage) { [unowned self] response, err in
-					if err != nil {
-						self.exhibitImage.image = NukeOptions.options.failureImage
+				Nuke.loadImage(with: url, options: NukeOptions.options, into: self.exhibitImage) { [unowned self] response, completed, total in
+					if response != nil {
+                        self.exhibitImage.image = response?.image
 					} else {
-						self.exhibitImage.image = response?.image
+                        self.exhibitImage.image = NukeOptions.options.failureImage
 					}
 				}
 			}

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BB214C825EEF5EAB61AC340 /* Pods_Exhibit_FinderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */; };
 		2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D031C2D226932C100F47E75 /* NotificationManager.swift */; };
 		2D130615226A7C2700482D1E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D130614226A7C2700482D1E /* LocationManager.swift */; };
-		2D1BD85A2283946A00B66B84 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1BD8592283946A00B66B84 /* Nuke.framework */; };
 		2D3FC3F724F044C500C65022 /* ReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3F624F044C500C65022 /* ReminderViewModel.swift */; };
 		2D3FC3F924F045CA00C65022 /* ExhibitsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3F824F045CA00C65022 /* ExhibitsViewModel.swift */; };
 		2D3FC3FB24F04A9E00C65022 /* AlertDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3FA24F04A9E00C65022 /* AlertDelegate.swift */; };
@@ -23,7 +23,6 @@
 		2D68D679225D35200018C59E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D678225D35200018C59E /* WebKit.framework */; };
 		2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D68D67A225D42060018C59E /* MapKit.framework */; };
 		2D72302E2290918B0064BE8D /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D72302D2290918B0064BE8D /* InfoViewController.swift */; };
-		2D955CDF2283854400D00C16 /* XMLParsing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D955CDE2283854400D00C16 /* XMLParsing.framework */; };
 		2D955CE122838CC600D00C16 /* NukeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D955CE022838CC600D00C16 /* NukeOptions.swift */; };
 		2D956B4F226529B10079BA2A /* InfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D956B4E226529B10079BA2A /* InfoManager.swift */; };
 		2DB45142225E7A1E008E2E2C /* TimeReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB45141225E7A1E008E2E2C /* TimeReminderViewController.swift */; };
@@ -45,6 +44,7 @@
 		2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D5B2259563700B924F0 /* SearchType.swift */; };
 		2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D5E2259566400B924F0 /* DataManager.swift */; };
 		2DE50D612259574800B924F0 /* Exhibit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D602259574800B924F0 /* Exhibit.swift */; };
+		3345F3E17F3AE3453E13515D /* Pods_Exhibit_Finder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5950751FAD2FC5EFD6F38E66 /* Pods_Exhibit_Finder.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,9 +58,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit FinderTests.release.xcconfig"; path = "Target Support Files/Pods-Exhibit FinderTests/Pods-Exhibit FinderTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D031C2D226932C100F47E75 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2D130614226A7C2700482D1E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		2D1BD8592283946A00B66B84 /* Nuke.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nuke.framework; path = Carthage/Build/iOS/Nuke.framework; sourceTree = "<group>"; };
 		2D3FC3F624F044C500C65022 /* ReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewModel.swift; sourceTree = "<group>"; };
 		2D3FC3F824F045CA00C65022 /* ExhibitsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitsViewModel.swift; sourceTree = "<group>"; };
 		2D3FC3FA24F04A9E00C65022 /* AlertDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDelegate.swift; sourceTree = "<group>"; };
@@ -75,8 +75,6 @@
 		2D68D67A225D42060018C59E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2D6E544D22936C0D00C9B3FA /* Exhibit Finder.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Exhibit Finder.entitlements"; sourceTree = "<group>"; };
 		2D72302D2290918B0064BE8D /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
-		2D955CDC228383CE00D00C16 /* XMLParsing.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = XMLParsing.framework.dSYM; path = Carthage/Build/iOS/XMLParsing.framework.dSYM; sourceTree = "<group>"; };
-		2D955CDE2283854400D00C16 /* XMLParsing.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XMLParsing.framework; path = Carthage/Build/iOS/XMLParsing.framework; sourceTree = "<group>"; };
 		2D955CE022838CC600D00C16 /* NukeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NukeOptions.swift; sourceTree = "<group>"; };
 		2D956B4E226529B10079BA2A /* InfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoManager.swift; sourceTree = "<group>"; };
 		2DB45141225E7A1E008E2E2C /* TimeReminderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeReminderViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +100,11 @@
 		2DE50D5B2259563700B924F0 /* SearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchType.swift; sourceTree = "<group>"; };
 		2DE50D5E2259566400B924F0 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		2DE50D602259574800B924F0 /* Exhibit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exhibit.swift; sourceTree = "<group>"; };
+		30FD97C03AEDBF90855DC472 /* Pods-Exhibit Finder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit Finder.debug.xcconfig"; path = "Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder.debug.xcconfig"; sourceTree = "<group>"; };
+		333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exhibit_FinderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4829B1771063660663A497CE /* Pods-Exhibit FinderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit FinderTests.debug.xcconfig"; path = "Target Support Files/Pods-Exhibit FinderTests/Pods-Exhibit FinderTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5950751FAD2FC5EFD6F38E66 /* Pods_Exhibit_Finder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exhibit_Finder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC8F139C3D99E7B88FCCB4ED /* Pods-Exhibit Finder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit Finder.release.xcconfig"; path = "Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,9 +113,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */,
-				2D955CDF2283854400D00C16 /* XMLParsing.framework in Frameworks */,
-				2D1BD85A2283946A00B66B84 /* Nuke.framework in Frameworks */,
 				2D68D679225D35200018C59E /* WebKit.framework in Frameworks */,
+				3345F3E17F3AE3453E13515D /* Pods_Exhibit_Finder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BB214C825EEF5EAB61AC340 /* Pods_Exhibit_FinderTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,11 +165,10 @@
 		2D68D677225D35200018C59E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2D1BD8592283946A00B66B84 /* Nuke.framework */,
-				2D955CDE2283854400D00C16 /* XMLParsing.framework */,
-				2D955CDC228383CE00D00C16 /* XMLParsing.framework.dSYM */,
 				2D68D67A225D42060018C59E /* MapKit.framework */,
 				2D68D678225D35200018C59E /* WebKit.framework */,
+				5950751FAD2FC5EFD6F38E66 /* Pods_Exhibit_Finder.framework */,
+				333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -178,6 +180,7 @@
 				2DE50D4322592FA300B924F0 /* Exhibit FinderTests */,
 				2DE50D2B22592FA200B924F0 /* Products */,
 				2D68D677225D35200018C59E /* Frameworks */,
+				D68CE25D2E2DB7CD17312294 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -256,6 +259,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		D68CE25D2E2DB7CD17312294 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				30FD97C03AEDBF90855DC472 /* Pods-Exhibit Finder.debug.xcconfig */,
+				AC8F139C3D99E7B88FCCB4ED /* Pods-Exhibit Finder.release.xcconfig */,
+				4829B1771063660663A497CE /* Pods-Exhibit FinderTests.debug.xcconfig */,
+				1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -263,10 +277,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2DE50D4922592FA300B924F0 /* Build configuration list for PBXNativeTarget "Exhibit Finder" */;
 			buildPhases = (
+				E8D55F60DF64D4D4A8F279CA /* [CP] Check Pods Manifest.lock */,
 				2DE50D2622592FA200B924F0 /* Sources */,
 				2DE50D2722592FA200B924F0 /* Frameworks */,
 				2DE50D2822592FA200B924F0 /* Resources */,
-				2D65CE0D2280D6A600732F82 /* ShellScript */,
+				F932B8449776F7AEF5F4DD40 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -281,6 +296,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2DE50D4C22592FA300B924F0 /* Build configuration list for PBXNativeTarget "Exhibit FinderTests" */;
 			buildPhases = (
+				95DFA2BCA3CBE32DA0891B3D /* [CP] Check Pods Manifest.lock */,
 				2DE50D3C22592FA300B924F0 /* Sources */,
 				2DE50D3D22592FA300B924F0 /* Frameworks */,
 				2DE50D3E22592FA300B924F0 /* Resources */,
@@ -365,7 +381,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2D65CE0D2280D6A600732F82 /* ShellScript */ = {
+		95DFA2BCA3CBE32DA0891B3D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -373,18 +389,58 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/XMLParsing.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Nuke.framework",
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XMLParsing.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Nuke.framework",
+				"$(DERIVED_FILE_DIR)/Pods-Exhibit FinderTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E8D55F60DF64D4D4A8F279CA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Exhibit Finder-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F932B8449776F7AEF5F4DD40 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -573,6 +629,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -582,23 +639,26 @@
 		};
 		2DE50D4A22592FA300B924F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30FD97C03AEDBF90855DC472 /* Pods-Exhibit Finder.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Exhibit Finder/Exhibit Finder.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A8R365GJ52;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Exhibit Finder/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Exhbit Finder DC";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kduncan-welke.Exhibit-Finder";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -606,23 +666,26 @@
 		};
 		2DE50D4B22592FA300B924F0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AC8F139C3D99E7B88FCCB4ED /* Pods-Exhibit Finder.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Exhibit Finder/Exhibit Finder.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A8R365GJ52;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "Exhibit Finder/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Exhbit Finder DC";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kduncan-welke.Exhibit-Finder";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -630,12 +693,14 @@
 		};
 		2DE50D4D22592FA300B924F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4829B1771063660663A497CE /* Pods-Exhibit FinderTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A8R365GJ52;
 				INFOPLIST_FILE = "Exhibit FinderTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -643,6 +708,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.Exhibit-FinderTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Exhibit Finder.app/Exhibit Finder";
@@ -651,12 +719,14 @@
 		};
 		2DE50D4E22592FA300B924F0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A8R365GJ52;
 				INFOPLIST_FILE = "Exhibit FinderTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -664,6 +734,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.Exhibit-FinderTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Exhibit Finder.app/Exhibit Finder";

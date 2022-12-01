@@ -25,7 +25,7 @@ struct DataManager<T: SearchType> {
 	}
 	
 	static func fetch(completion: @escaping (Result<[T]>) -> Void) {
-		fetch(url: T.endpoint.url()) { result in
+		fetch(url: URL(string: "https://d.asp6.si.edu/si-exhibits/exhibits.xml")!) { result in
 			switch result {
 			case .success(let result):
 				var data: [T] = []
@@ -37,3 +37,5 @@ struct DataManager<T: SearchType> {
 		}
 	}
 }
+
+// old url: http://logs2.smithsonian.museum/si-exhibits/exhibits.xml

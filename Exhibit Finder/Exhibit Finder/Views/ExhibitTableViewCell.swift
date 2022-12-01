@@ -54,16 +54,13 @@ class ExhibitTableViewCell: UITableViewCell {
         
         DispatchQueue.main.async {
             if let url = self.exhibitsViewModel.getImageUrl(index: index) {
-                let request = ImageRequest(
-                    url: url,
-                    targetSize: CGSize(width: 140, height: 140),
-                    contentMode: .aspectFill)
+                let request = ImageRequest(url: url, processors: [ImageProcessors.Resize(size: CGSize(width: 140, height: 140), contentMode: ImageProcessors.Resize.ContentMode.aspectFill)])
                 
-                Nuke.loadImage(with: request, options: NukeOptions.options, into: self.cellImage) { response, err in
-                    if err != nil {
-                        self.cellImage.image = NukeOptions.options.failureImage
-                    } else {
+                Nuke.loadImage(with: request, options: NukeOptions.options, into: self.cellImage) { response, completed, total in
+                    if response != nil {
                         self.cellImage?.image = response?.image
+                    } else {
+                        self.cellImage.image = NukeOptions.options.failureImage
                     }
                 }
             }
