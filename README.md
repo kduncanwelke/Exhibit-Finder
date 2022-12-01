@@ -17,15 +17,15 @@ Set time based reminders to receive exhibit notifications at your preferred time
 Whether you are a new visitor to Washington D.C., or are familiar with the area, be certain you'll never miss out on your favorite Smithsonian exhibits before they close, or before you pass them by!
 
 ## Dependencies
-[Nuke](https://github.com/kean/Nuke) is used in this project to handle image downloads and display, and [XMLParsing](https://github.com/ShawnMoore/XMLParsing) has been used to handle parsing the XML file which contains the exhibit data. [Carthage](https://github.com/Carthage/Carthage) has been used as the dependency manager for this project - please refer to Carthage documentation for details.
+[Nuke](https://github.com/kean/Nuke) is used in this project to handle image downloads and display, and [XMLParsing](https://github.com/ShawnMoore/XMLParsing) has been used to handle parsing the XML file which contains the exhibit data. [Cocoapods](https://cocoapods.org) has been used as the dependency manager for this project - please refer to Cocoapods documentation for details.
 
-The content of the Cartfile for this project is as follows:
+The content of the Podfile for this project is as follows:
 ```
-github "ShawnMoore/XMLParsing"
-github "kean/Nuke" ~> 7.0
+  pod 'Nuke', '~> 10.7'
+  pod 'XMLParsing', :git => 'https://github.com/ShawnMoore/XMLParsing.git' 
 ```
 
-The "Adding frameworks to an application" section in the Carthage documentation provides more explicit instructions for setup than the brief guide offered by Nuke. Simply follow the steps in the "If you're building for iOS, tvOS, or watchOS" section on the Carthage. It explains every step and should make setup easy.
+Pod init adds the pods to the project, then they're all set to go.
 
 ## Features
 Time-based reminders allow a user to create a reminder for an exhibit, set for a specific date and time. These reminders are delivered as local notifications, which display on the device at the time specified by the user. These notifications are self-expiring and once displayed they are removed (for ease of use). A time-based reminder for an exhibit can be edited or removed at any time.
