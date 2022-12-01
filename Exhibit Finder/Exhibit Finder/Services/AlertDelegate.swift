@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol AlertDisplayDelegate: class {
+protocol AlertDisplayDelegate: AnyObject {
     func displayAlert(with title: String, message: String)
 }

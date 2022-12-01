@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-protocol ExhibitLoadDelegate: class {
+protocol ExhibitLoadDelegate: AnyObject {
     func loadExhibits(success: Bool)
 }
 
@@ -18,6 +18,6 @@ enum DataType {
     case exhibitsWithReminders
 }
 
-protocol ReminderDelegate: class {
+protocol ReminderDelegate: AnyObject {
     func getReminder(id: Int64)
 }
