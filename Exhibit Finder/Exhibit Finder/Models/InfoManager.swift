@@ -25,6 +25,8 @@ struct ReminderManager {
 
 struct ExhibitManager {
     
+    static var currentIndex: IndexPath?
+    
     static var exhibitsList: [Exhibit] = []
     static var searchResults: [Exhibit] = []
 }

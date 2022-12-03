@@ -29,8 +29,7 @@ class LocationReminderViewController: UIViewController {
 	let dateFormatter = DateFormatter()
 	let locationManager = CLLocationManager()
 	let regionRadius: CLLocationDistance = 1000
-    var selection: IndexPath?
-    
+   
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
     private let locationReminderViewModel = LocationReminderViewModel()
@@ -71,7 +70,7 @@ class LocationReminderViewController: UIViewController {
 	// MARK: Custom functions
 	
 	func configureView() {
-		guard let index = selection else { return }
+        guard let index = exhibitsViewModel.getCurrentIndex() else { return }
         
         exhibitName.text = exhibitsViewModel.getTitle(index: index)
 		mapView.removeAnnotations(mapView.annotations)
@@ -156,7 +155,7 @@ class LocationReminderViewController: UIViewController {
 		} else if mapView.annotations.isEmpty {
 			showAlert(title: "No museum displayed", message: "A location was not loaded. Please check your network connection and try again.")
 		} else {
-            guard let index = selection else { return }
+            guard let index = exhibitsViewModel.getCurrentIndex() else { return }
             
             // save location
             reminderViewModel.saveLocation(museumLocation: LocationManager.museumPinLocation, min: leftStepper.value, max: rightStepper.value, circle: mapView.overlays.first as? MKCircle, index: index)

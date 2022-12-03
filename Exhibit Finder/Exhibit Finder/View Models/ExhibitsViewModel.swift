@@ -51,8 +51,6 @@ public class ExhibitsViewModel {
                    
                     for exhibit in response {
                         let closeDate = self.getDate(from: exhibit.closingDate)
-                        print("exhibit \(exhibit)")
-                        
                         // disclude museums outside of Washington DC
                         if exhibit.museum != "Cooper Hewitt, Smithsonian Design Museum" && exhibit.museum != "Air and Space Museum Udvar-Hazy Center" && exhibit.museum != "American Indian Museum Heye Center" {
                             
@@ -145,8 +143,12 @@ public class ExhibitsViewModel {
         }
     }
     
-    public func clearList() {
-        ExhibitManager.exhibitsList.removeAll()
+    public func setCurrentIndex(index: IndexPath) {
+        ExhibitManager.currentIndex = index
+    }
+    
+    public func getCurrentIndex() -> IndexPath? {
+        return ExhibitManager.currentIndex
     }
     
     public func isListEmpty() -> Bool {

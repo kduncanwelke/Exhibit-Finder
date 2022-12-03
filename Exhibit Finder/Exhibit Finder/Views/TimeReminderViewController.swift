@@ -24,7 +24,6 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
 	
 	let dateFormatter = DateFormatter()
 	let timeDateFormatter = DateFormatter()
-    var selection: IndexPath?
     
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
@@ -66,7 +65,7 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
 	// MARK: Custom functions
 	
 	func configureView() {
-		guard let index = selection else { return }
+        guard let index = exhibitsViewModel.getCurrentIndex() else { return }
 		exhibitName.text = exhibitsViewModel.getTitle(index: index)
 		museumName.text = exhibitsViewModel.getMuseum(index: index)
 		
@@ -120,7 +119,7 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
 			showAlert(title: "Cannot save reminder", message: "Please select a date that is in the future - the current date and time cannot be used.")
 			return
 		} else {
-            guard let index = selection else { return }
+            guard let index = exhibitsViewModel.getCurrentIndex() else { return }
             
             reminderViewModel.saveTime(date: datePicker.date, index: index)
 			

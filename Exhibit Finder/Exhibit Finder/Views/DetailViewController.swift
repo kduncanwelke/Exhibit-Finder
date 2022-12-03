@@ -31,12 +31,12 @@ class DetailViewController: UIViewController {
 	
 	// MARK: Variables
 	
-    var selection: IndexPath?
 	var museumPinLocation: MKPointAnnotation?
     
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
     private let detailViewModel = DetailViewModel()
+    var selection: IndexPath?
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -57,7 +57,7 @@ class DetailViewController: UIViewController {
 	// MARK: Custom functions
 	
 	func configureView() {
-        guard let index = selection else {
+        guard let index = exhibitsViewModel.getCurrentIndex() else {
             // if there is no selection, set button titles appropriately
             viewOnlineButton.setTitle("No Selection", for: .normal)
             viewOnlineButton.isEnabled = false
@@ -108,14 +108,7 @@ class DetailViewController: UIViewController {
 		if segue.identifier == "addReminder" {
 			var barViewControllers = segue.destination as! UITabBarController
             
-            guard let index = selection else { return }
-            
-            // pass indexpath along to both views
-            var destinationViewControllerOne = barViewControllers.viewControllers![0] as? TimeReminderViewController
-            destinationViewControllerOne?.selection = index
-            
-            var destinationViewControllerTwo = barViewControllers.viewControllers![1] as? LocationReminderViewController
-            destinationViewControllerTwo?.selection = index
+            guard let index = exhibitsViewModel.getCurrentIndex() else { return }
             
             barViewControllers.selectedIndex = detailViewModel.setSelectedBarViewController(index: index)
 		}
@@ -124,7 +117,7 @@ class DetailViewController: UIViewController {
 	// MARK: IBActions
 	
 	@IBAction func viewOnlineButtonTapped(_ sender: UIButton) {
-        guard let index = selection else { return }
+        guard let index = exhibitsViewModel.getCurrentIndex() else { return }
         
         guard let url = exhibitsViewModel.getURL(index: index) else { return }
         

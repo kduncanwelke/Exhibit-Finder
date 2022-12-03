@@ -141,7 +141,7 @@ public class ReminderViewModel {
             
             for reminder in ReminderManager.reminders {
                 ReminderManager.reminderDictionary[reminder.id] = reminder
-                print(reminder.id)
+                print(reminder)
             }
             
         } catch let error as NSError {
@@ -155,12 +155,12 @@ public class ReminderViewModel {
         }*/
     }
     
-    private func getTimeForReminder(time: Time?, date: Date) {
+    private func getTimeForReminder(time: Time?, date: Date) -> Time? {
         // set date components
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: date)
         
-        guard let year = components.year, let month = components.month, let day = components.day, let hour = components.hour, let minute = components.minute else { return }
+        guard let year = components.year, let month = components.month, let day = components.day, let hour = components.hour, let minute = components.minute else { return nil }
         
         // assign to time for reminder
         time?.year = Int32(year)
@@ -168,12 +168,14 @@ public class ReminderViewModel {
         time?.day = Int32(day)
         time?.hour = Int32(hour)
         time?.minute = Int32(minute)
+        
+        return time
     }
     
-    private func getLocationForReminder(location: Location?, museumLocation: MKPointAnnotation?, min: Double, max: Double, circle: MKCircle?, index: IndexPath) {
+    private func getLocationForReminder(location: Location?, museumLocation: MKPointAnnotation?, min: Double, max: Double, circle: MKCircle?, index: IndexPath) -> Location? {
         guard let pin = museumLocation, let address = pin.title, let exhibit = self.getExhibitForReminder(index: index) else {
             print("guard falling through")
-            return }
+            return nil }
         
         location?.address = address
         location?.museum = exhibit.museum
@@ -183,12 +185,14 @@ public class ReminderViewModel {
         location?.minTime = min
         location?.maxTime = max
        
-        guard let overlay = circle else { return }
+        guard let overlay = circle else { return nil }
         location?.radius = overlay.radius
+        
+        return location
     }
     
-    private func getExhibitData(reminder: Reminder, index: IndexPath) {
-        guard let exhibit = self.getExhibitForReminder(index: index), let open = exhibit.openingDate, let close = exhibit.closingDate else { return }
+    private func getExhibitData(reminder: Reminder, index: IndexPath) -> Reminder? {
+        guard let exhibit = self.getExhibitForReminder(index: index), let open = exhibit.openingDate else { return nil }
         
         reminder.name = exhibit.exhibit
         reminder.museum = exhibit.museum
@@ -197,7 +201,13 @@ public class ReminderViewModel {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         reminder.startDate = dateFormatter.date(from: open)
-        reminder.invalidDate = dateFormatter.date(from: close)
+        if let close = exhibit.closingDate {
+            reminder.invalidDate = dateFormatter.date(from: close)
+        } else {
+            reminder.invalidDate = nil
+        }
+        
+        return reminder
     }
     
     // MARK: Saves
@@ -209,13 +219,24 @@ public class ReminderViewModel {
         guard let currentReminder = ReminderManager.currentReminder else {
             let newReminder = Reminder(context: managedContext)
             
+            guard let exhibitData = getExhibitData(reminder: newReminder, index: index) else { return }
+            newReminder.id = exhibitData.id
+            newReminder.invalidDate = exhibitData.invalidDate
+            newReminder.museum = exhibitData.museum
+            newReminder.name = exhibitData.name
+            newReminder.startDate = exhibitData.startDate
+            
             var time: Time?
             time = Time(context: managedContext)
             
-            getTimeForReminder(time: time, date: date)
-            newReminder.time = time
+            guard let timeData = getTimeForReminder(time: time, date: date) else { return }
+            time?.day = timeData.day
+            time?.hour = timeData.hour
+            time?.minute = timeData.minute
+            time?.month = timeData.month
+            time?.year = timeData.year
             
-            getExhibitData(reminder: newReminder, index: index)
+            newReminder.time = time
             
             do {
                 try managedContext.save()
@@ -238,13 +259,26 @@ public class ReminderViewModel {
         // otherwise rewrite data to selected reminder
         if let time = currentReminder.time {
             // resave current time if it already exists
-            getTimeForReminder(time: time, date: date)
+            guard let timeData = getTimeForReminder(time: time, date: date) else { return }
+            time.day = timeData.day
+            time.hour = timeData.hour
+            time.minute = timeData.minute
+            time.month = timeData.month
+            time.year = timeData.year
+            
             currentReminder.time = time
         } else {
             // time was not set before but one is being added
             var time: Time?
             time = Time(context: managedContext)
-            getTimeForReminder(time: time, date: date)
+            
+            guard let timeData = getTimeForReminder(time: time, date: date) else { return }
+            time?.day = timeData.day
+            time?.hour = timeData.hour
+            time?.minute = timeData.minute
+            time?.month = timeData.month
+            time?.year = timeData.year
+            
             currentReminder.time = time
         }
         
@@ -272,9 +306,22 @@ public class ReminderViewModel {
             var location: Location?
             location = Location(context: managedContext)
             
-            getLocationForReminder(location: location, museumLocation: museumLocation, min: min, max: max, circle: circle, index: index)
+            guard let locationData = getLocationForReminder(location: location, museumLocation: museumLocation, min: min, max: max, circle: circle, index: index) else { return }
+            location?.name = locationData.name
+            location?.museum = locationData.museum
+            location?.address = locationData.address
+            location?.latitude = locationData.latitude
+            location?.longitude = locationData.longitude
+            location?.maxTime = locationData.maxTime
+            location?.minTime = locationData.minTime
             newReminder.location = location
-            getExhibitData(reminder: newReminder, index: index)
+            
+            guard let exhibitData = getExhibitData(reminder: newReminder, index: index) else { return }
+            newReminder.id = exhibitData.id
+            newReminder.invalidDate = exhibitData.invalidDate
+            newReminder.museum = exhibitData.museum
+            newReminder.name = exhibitData.name
+            newReminder.startDate = exhibitData.startDate
             
             do {
                 try managedContext.save()
@@ -295,13 +342,31 @@ public class ReminderViewModel {
         // otherwise rewrite data to selected reminder
         if let location = currentReminder.location {
             // resave current location if it already exists
-            getLocationForReminder(location: location, museumLocation: museumLocation, min: min, max: max, circle: circle, index: index)
+            guard let locationData = getLocationForReminder(location: location, museumLocation: museumLocation, min: min, max: max, circle: circle, index: index) else { return }
+            
+            location.name = locationData.name
+            location.museum = locationData.museum
+            location.address = locationData.address
+            location.latitude = locationData.latitude
+            location.longitude = locationData.longitude
+            location.maxTime = locationData.maxTime
+            location.minTime = locationData.minTime
+            
             currentReminder.location = location
         } else {
             // location was not set before but one is being added
             var location: Location?
             location = Location(context: managedContext)
-            getLocationForReminder(location: location, museumLocation: museumLocation, min: min, max: max, circle: circle, index: index)
+            guard let locationData = getLocationForReminder(location: location, museumLocation: museumLocation, min: min, max: max, circle: circle, index: index) else { return }
+            
+            location?.name = locationData.name
+            location?.museum = locationData.museum
+            location?.address = locationData.address
+            location?.latitude = locationData.latitude
+            location?.longitude = locationData.longitude
+            location?.maxTime = locationData.maxTime
+            location?.minTime = locationData.minTime
+           
             currentReminder.location = location
         }
         

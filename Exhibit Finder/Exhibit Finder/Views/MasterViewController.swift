@@ -108,9 +108,12 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 	}
     
     @objc func refresh() {
-        exhibitsViewModel.clearList()
-        tableView.reloadData()
-        exhibitsViewModel.loadExhibitions()
+        if exhibitsViewModel.isListEmpty() {
+            tableView.reloadData()
+            exhibitsViewModel.loadExhibitions()
+        } else {
+            refreshController.endRefreshing()
+        }
     }
 	
 	@objc func reload() {
@@ -132,6 +135,7 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 		    if let indexPath = tableView.indexPathForSelectedRow {
 				let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController
 				destinationViewController?.selection = indexPath
+                exhibitsViewModel.setCurrentIndex(index: indexPath)
 		    }
 		}
 	}
