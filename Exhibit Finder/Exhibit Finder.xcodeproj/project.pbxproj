@@ -40,7 +40,6 @@
 		2DE50D53225940B400B924F0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D52225940B400B924F0 /* Result.swift */; };
 		2DE50D55225940CA00B924F0 /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D54225940CA00B924F0 /* XMLParser.swift */; };
 		2DE50D57225940EE00B924F0 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D56225940EE00B924F0 /* Errors.swift */; };
-		2DE50D592259412300B924F0 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D582259412300B924F0 /* Endpoint.swift */; };
 		2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D5B2259563700B924F0 /* SearchType.swift */; };
 		2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D5E2259566400B924F0 /* DataManager.swift */; };
 		2DE50D612259574800B924F0 /* Exhibit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D602259574800B924F0 /* Exhibit.swift */; };
@@ -96,7 +95,6 @@
 		2DE50D52225940B400B924F0 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		2DE50D54225940CA00B924F0 /* XMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLParser.swift; sourceTree = "<group>"; };
 		2DE50D56225940EE00B924F0 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
-		2DE50D582259412300B924F0 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		2DE50D5B2259563700B924F0 /* SearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchType.swift; sourceTree = "<group>"; };
 		2DE50D5E2259566400B924F0 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		2DE50D602259574800B924F0 /* Exhibit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exhibit.swift; sourceTree = "<group>"; };
@@ -230,7 +228,6 @@
 				2DE50D5E2259566400B924F0 /* DataManager.swift */,
 				2DE50D52225940B400B924F0 /* Result.swift */,
 				2DE50D54225940CA00B924F0 /* XMLParser.swift */,
-				2DE50D582259412300B924F0 /* Endpoint.swift */,
 				2DE50D56225940EE00B924F0 /* Errors.swift */,
 			);
 			path = Networking;
@@ -457,7 +454,6 @@
 				2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */,
 				2D4D251A25100AF6002ECF70 /* TimeReminderViewModel.swift in Sources */,
 				2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */,
-				2DE50D592259412300B924F0 /* Endpoint.swift in Sources */,
 				2D3FC3FB24F04A9E00C65022 /* AlertDelegate.swift in Sources */,
 				2D3FC3F924F045CA00C65022 /* ExhibitsViewModel.swift in Sources */,
 				2DB9D3E1225BE5970025535D /* ExhibitTableViewCell.swift in Sources */,

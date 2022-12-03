@@ -10,7 +10,6 @@ import Foundation
 
 struct Exhibits: SearchType {
 	var exhibits: [Exhibit]
-	static var endpoint = Endpoint.exhibit
 	
 	enum CodingKeys: String, CodingKey {
 		case exhibits = "exhibit"

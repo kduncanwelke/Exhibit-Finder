@@ -51,12 +51,13 @@ public class ExhibitsViewModel {
                    
                     for exhibit in response {
                         let closeDate = self.getDate(from: exhibit.closingDate)
+                        print("exhibit \(exhibit)")
                         
                         // disclude museums outside of Washington DC
                         if exhibit.museum != "Cooper Hewitt, Smithsonian Design Museum" && exhibit.museum != "Air and Space Museum Udvar-Hazy Center" && exhibit.museum != "American Indian Museum Heye Center" {
                             
                             // only add exhibit if closedate is in the future
-                            if closeDate >= Date() {
+                            if closeDate >= Date() || exhibit.closingDate == nil {
                                 ExhibitManager.exhibitsList.append(exhibit)
                                 
                                 // add exhibit to exhibit dictionary
@@ -97,7 +98,7 @@ public class ExhibitsViewModel {
         }
     }
     
-    func setData(type: DataType, searchText: String?) -> [Exhibit] {
+    func setData(type: DataType, searchText: String?) {
         print(type)
         currentType = type
         if searchText != "" {
@@ -117,7 +118,7 @@ public class ExhibitsViewModel {
                 })
             }
             
-            return ExhibitManager.searchResults
+            currentSource = ExhibitManager.searchResults
         } else {
             isSearching = false
             print("not search")
@@ -125,10 +126,8 @@ public class ExhibitsViewModel {
             switch type {
             case .exhibitsOnly:
                 currentSource = ExhibitManager.exhibitsList
-                return ExhibitManager.exhibitsList
             case .exhibitsWithReminders:
                 currentSource = ReminderManager.exhibitsWithReminders
-                return ReminderManager.exhibitsWithReminders
             }
         }
     }
@@ -144,6 +143,10 @@ public class ExhibitsViewModel {
                 return ReminderManager.exhibitsWithReminders
             }
         }
+    }
+    
+    public func clearList() {
+        ExhibitManager.exhibitsList.removeAll()
     }
     
     public func isListEmpty() -> Bool {

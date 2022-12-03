@@ -18,35 +18,43 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 	// MARK: IBOutlets
 	
 	@IBOutlet var noDataView: UIView!
-	
+    @IBOutlet var loadingView: UIView!
+    
 	// MARK: Variables
 	
 	var hasBeenLoaded = false
 	var segmentedController: UISegmentedControl!
 	var searchController = UISearchController(searchResultsController: nil)
-	var activityIndicator = UIActivityIndicatorView()
     
     weak var reminderDelegate: ReminderDelegate?
     
     private let reminderViewModel = ReminderViewModel()
     private let exhibitsViewModel = ExhibitsViewModel()
+    private let refreshController = UIRefreshControl()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		let items = ["Smithsonian Exhibits", "My Reminders"]
 		segmentedController = UISegmentedControl(items: items)
-		segmentedController.tintColor = UIColor(red:1.00, green:0.58, blue:0.00, alpha:1.0)
+		segmentedController.tintColor = UIColor(red: 1.00, green: 0.58, blue: 0.00, alpha: 1.0)
 		segmentedController.selectedSegmentIndex = 0
 		navigationItem.titleView = segmentedController
 		segmentedController.addTarget(self, action: #selector(segmentSelected), for: .valueChanged)
 		
+        view.addSubview(loadingView)
+        loadingView.center = CGPointMake(view.frame.width/2, view.frame.height/3)
+        
 		NotificationCenter.default.addObserver(self, selector: #selector(reload), name: NSNotification.Name(rawValue: "reload"), object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(reminderEdited), name: NSNotification.Name(rawValue: "reminderEdited"), object: nil)
     
         exhibitsViewModel.exhibitDelegate = self
         exhibitsViewModel.alertDelegate = self
         reminderViewModel.alertDelegate = self
+        
+        tableView.addSubview(refreshController)
+        refreshController.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshController.tintColor = UIColor(red: 1.00, green: 0.58, blue: 0.00, alpha: 1.0)
         
         // search setup
 		searchController.delegate = self
@@ -56,9 +64,6 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 		searchController.searchBar.placeholder = "Type to search . . ."
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
-		
-		activityIndicator.color = .gray
-		tableView.backgroundView = activityIndicator
 		
 		if let split = splitViewController {
 			split.preferredDisplayMode = .allVisible
@@ -73,7 +78,8 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 			return
 		} else {
             reminderViewModel.deleteExpiredReminders()
-            activityIndicator.startAnimating()
+            view.addSubview(loadingView)
+            loadingView.center = CGPointMake(view.frame.width/2, view.frame.height/3)
             exhibitsViewModel.loadExhibitions()
 		}
 		
@@ -100,6 +106,12 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 			self.tableView.setContentOffset( CGPoint(x: 0, y: 0) , animated: false)
 		}
 	}
+    
+    @objc func refresh() {
+        exhibitsViewModel.clearList()
+        tableView.reloadData()
+        exhibitsViewModel.loadExhibitions()
+    }
 	
 	@objc func reload() {
         reminderViewModel.loadReminders()
@@ -138,7 +150,6 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
         
         if data.isEmpty {
             if segmentedController.selectedSegmentIndex == 0 {
-                tableView.backgroundView = activityIndicator
                 tableView.separatorStyle = .none
             } else {
                 if isFilteringBySearch() {
@@ -239,11 +250,10 @@ extension MasterViewController {
         if success {
             hasBeenLoaded = true
             tableView.reloadData()
-            
-            activityIndicator.stopAnimating()
-        } else {
-            activityIndicator.stopAnimating()
         }
+        
+        refreshController.endRefreshing()
+        loadingView.removeFromSuperview()
     }
 }
 
@@ -268,13 +278,12 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
             type = .exhibitsWithReminders
         }
         
-        var data = exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
+        exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
 		
 		tableView.reloadData()
-
         
 		// scroll to top upon showing results
-		if data.count != 0 {
+        if !exhibitsViewModel.isSearchEmpty() {
 			let indexPath = IndexPath(row: 0, section: 0)
 			tableView.scrollToRow(at: indexPath, at: .top, animated: true)
 		}

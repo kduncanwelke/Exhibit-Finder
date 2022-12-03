@@ -765,7 +765,7 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="CKV-ww-RwH">
                                             <rect key="frame" x="20" y="89" width="374" height="15"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="SsF-8l-Bzu">
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="SsF-8l-Bzu">
                                                     <rect key="frame" x="0.0" y="0.0" width="132.5" height="15"/>
                                                     <subviews>
                                                         <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Closes:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pmG-pZ-VFb">
@@ -852,11 +852,36 @@
                     <navigationItem key="navigationItem" title="Exhibits" id="Zdf-7t-Un8"/>
                     <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="loadingView" destination="JXs-vm-qU0" id="0pA-7s-fzs"/>
                         <outlet property="noDataView" destination="IT6-XV-dBm" id="mGh-qO-ZVf"/>
                         <segue destination="Dzy-FO-h4B" kind="show" identifier="goToInfo" id="P1Z-nc-Cb5"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Rux-fX-hf1" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="JXs-vm-qU0">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="loading exhibits . . ." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chs-wJ-fHa">
+                            <rect key="frame" x="45" y="31.5" width="150" height="21"/>
+                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <color key="textColor" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="quw-Dg-f2S">
+                            <rect key="frame" x="101.5" y="58.5" width="37" height="37"/>
+                            <color key="color" red="1" green="0.57647058819999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </activityIndicatorView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="44c-dI-BlJ"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="quw-Dg-f2S" firstAttribute="centerY" secondItem="JXs-vm-qU0" secondAttribute="centerY" multiplier="1.2" id="0Px-uj-Mz2"/>
+                        <constraint firstItem="quw-Dg-f2S" firstAttribute="centerX" secondItem="JXs-vm-qU0" secondAttribute="centerX" id="7GM-gc-WBt"/>
+                        <constraint firstItem="Chs-wJ-fHa" firstAttribute="centerX" secondItem="JXs-vm-qU0" secondAttribute="centerX" id="KKT-vb-POs"/>
+                        <constraint firstItem="Chs-wJ-fHa" firstAttribute="centerY" secondItem="JXs-vm-qU0" secondAttribute="centerY" multiplier="0.66" id="vgv-rZ-A1p"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" id="IT6-XV-dBm">
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
