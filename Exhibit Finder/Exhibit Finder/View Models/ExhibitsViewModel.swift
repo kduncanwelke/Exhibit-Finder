@@ -15,9 +15,6 @@ public class ExhibitsViewModel {
     weak var exhibitDelegate: ExhibitLoadDelegate?
 
     var dateFormatter = DateFormatter()
-    var currentType: DataType = .exhibitsOnly
-    var currentSource: [Exhibit] = ExhibitManager.exhibitsList
-    var isSearching = false
     
     // get string from date
     func getStringDate(from date: Date) -> String {
@@ -98,48 +95,56 @@ public class ExhibitsViewModel {
     
     func setData(type: DataType, searchText: String?) {
         print(type)
-        currentType = type
+        ExhibitManager.currentType = type
         if searchText != "" {
             if let search = searchText {
                 print("search")
-                isSearching = true
+                ExhibitManager.isSearching = true
                
                 switch type {
                 case .exhibitsOnly:
-                    currentSource = ExhibitManager.exhibitsList
+                    ExhibitManager.currentSource = ExhibitManager.exhibitsList
                 case .exhibitsWithReminders:
-                    currentSource = ReminderManager.exhibitsWithReminders
+                    ExhibitManager.currentSource = ReminderManager.exhibitsWithReminders
                 }
                 
-                ExhibitManager.searchResults = currentSource.filter({(exhibit: Exhibit) -> Bool in
+                ExhibitManager.searchResults = ExhibitManager.currentSource.filter({(exhibit: Exhibit) -> Bool in
                     return (exhibit.exhibit?.lowercased().contains(search.lowercased()))! || (exhibit.info?.lowercased().contains(search.lowercased()))! || (exhibit.closingDate?.contains(search.lowercased()) ?? false)
                 })
             }
             
-            currentSource = ExhibitManager.searchResults
+            ExhibitManager.currentSource = ExhibitManager.searchResults
         } else {
-            isSearching = false
+            ExhibitManager.isSearching = false
             print("not search")
             
             switch type {
             case .exhibitsOnly:
-                currentSource = ExhibitManager.exhibitsList
+                ExhibitManager.currentSource = ExhibitManager.exhibitsList
             case .exhibitsWithReminders:
-                currentSource = ReminderManager.exhibitsWithReminders
+                ExhibitManager.currentSource = ReminderManager.exhibitsWithReminders
             }
         }
     }
     
     func retrieveSource() -> [Exhibit] {
-        if isSearching {
+        if ExhibitManager.isSearching {
             return ExhibitManager.searchResults
         } else {
-            switch currentType {
+            switch ExhibitManager.currentType {
             case .exhibitsOnly:
                 return ExhibitManager.exhibitsList
             case .exhibitsWithReminders:
                 return ReminderManager.exhibitsWithReminders
             }
+        }
+    }
+    
+    func setSource(index: Int) {
+        if index == 0 {
+            ExhibitManager.currentType = .exhibitsOnly
+        } else {
+            ExhibitManager.currentType = .exhibitsWithReminders
         }
     }
     
@@ -164,17 +169,17 @@ public class ExhibitsViewModel {
     }
     
     public func getReminderForExhibit(index: IndexPath) -> Reminder? {
-        ReminderManager.currentReminder = ReminderManager.reminderDictionary[currentSource[index.row].id]
+        ReminderManager.currentReminder = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.row].id]
         return ReminderManager.currentReminder
     }
     
     public func hasTitle(section: Int) -> String? {
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             return nil
         case .exhibitsWithReminders:
-            if !currentSource.isEmpty {
-                return currentSource[section].exhibit
+            if !ExhibitManager.currentSource.isEmpty {
+                return ExhibitManager.currentSource[section].exhibit
             } else {
                 return nil
             }
@@ -183,14 +188,14 @@ public class ExhibitsViewModel {
     
     public func getImageUrl(index: IndexPath) -> URL? {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let url = ReminderManager.urls[currentSource[selection].id] {
+        if let url = ReminderManager.urls[ExhibitManager.currentSource[selection].id] {
             return url
         } else {
             return nil
@@ -198,16 +203,16 @@ public class ExhibitsViewModel {
     }
     
     public func getTitle(index: IndexPath) -> String {
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
-            if let title = currentSource[index.row].exhibit {
+            if let title = ExhibitManager.currentSource[index.row].exhibit {
                 let decoded = title.decodingHTMLEntities()
                 return String.removeHTMLWithoutSpacing(from: decoded)
             } else {
                 return "No title"
             }
         case .exhibitsWithReminders:
-            guard let result = ReminderManager.reminderDictionary[currentSource[index.section].id] else { return "" }
+            guard let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.section].id] else { return "" }
             var currentDate = Date()
             
             if (result.time != nil && result.location != nil && index.row == 0) || (result.time != nil && result.location == nil) {
@@ -243,14 +248,14 @@ public class ExhibitsViewModel {
     
     public func getMuseum(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let museum = currentSource[selection].museum {
+        if let museum = ExhibitManager.currentSource[selection].museum {
             return museum
         } else {
             return "No museum listed"
@@ -259,14 +264,14 @@ public class ExhibitsViewModel {
     
     public func getInfo(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let data = currentSource[selection].infoBrief {
+        if let data = ExhibitManager.currentSource[selection].infoBrief {
             let decoded = data.decodingHTMLEntities()
             return String.removeHTMLWithoutSpacing(from: decoded)
         } else {
@@ -276,14 +281,14 @@ public class ExhibitsViewModel {
     
     public func getVerboseInfo(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let data = currentSource[selection].info {
+        if let data = ExhibitManager.currentSource[selection].info {
             let decoded = data.decodingHTMLEntities()
             return String.removeHTML(from: decoded)
         } else {
@@ -293,14 +298,14 @@ public class ExhibitsViewModel {
     
     public func getOpenDate(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let open = currentSource[selection].openingDate?.dropLast(11) {
+        if let open = ExhibitManager.currentSource[selection].openingDate?.dropLast(11) {
             return "\(open)"
         } else {
             return "No info"
@@ -309,16 +314,16 @@ public class ExhibitsViewModel {
     
     public func getCloseDate(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let close = currentSource[selection].closingDate?.dropLast(11) {
+        if let close = ExhibitManager.currentSource[selection].closingDate?.dropLast(11) {
             return "\(close)"
-        } else if (currentSource[selection].closeText?.contains("Indefinitely")) != nil {
+        } else if (ExhibitManager.currentSource[selection].closeText?.contains("Indefinitely")) != nil {
             return "Indefinite"
         } else {
             return "No info"
@@ -327,14 +332,14 @@ public class ExhibitsViewModel {
     
     public func getLocation(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let location = currentSource[selection].location {
+        if let location = ExhibitManager.currentSource[selection].location {
             return "Location: \(location)"
         } else {
             return "No specific location"
@@ -343,7 +348,7 @@ public class ExhibitsViewModel {
     
     public func hasReminder(index: IndexPath) -> String {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
@@ -351,8 +356,8 @@ public class ExhibitsViewModel {
         }
         
         // there is a reminder
-        if let result = ReminderManager.reminderDictionary[currentSource[selection].id] {
-            switch currentType {
+        if let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[selection].id] {
+            switch ExhibitManager.currentType {
             case .exhibitsOnly:
                 return "Reminder"
             case .exhibitsWithReminders:
@@ -365,7 +370,7 @@ public class ExhibitsViewModel {
                 }
             }
         } else { // there is no reminder
-            switch currentType {
+            switch ExhibitManager.currentType {
             case .exhibitsOnly:
                 return "No reminder"
             case .exhibitsWithReminders:
@@ -376,7 +381,7 @@ public class ExhibitsViewModel {
     
     public func reminderImage(index: IndexPath) -> UIImage? {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
@@ -384,8 +389,8 @@ public class ExhibitsViewModel {
         }
         
         // there is a reminder
-        if let result = ReminderManager.reminderDictionary[currentSource[selection].id] {
-            switch currentType {
+        if let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[selection].id] {
+            switch ExhibitManager.currentType {
             case .exhibitsOnly:
                 if result.time != nil && result.location != nil {
                     return UIImage(named: "both25")
@@ -412,14 +417,14 @@ public class ExhibitsViewModel {
     
     public func getURL(index: IndexPath) -> URL? {
         var selection: Int
-        switch currentType {
+        switch ExhibitManager.currentType {
         case .exhibitsOnly:
             selection = index.row
         case .exhibitsWithReminders:
             selection = index.section
         }
         
-        if let stringUrl = currentSource[selection].exhibitURL, let generatedUrl = URL(string: stringUrl) {
+        if let stringUrl = ExhibitManager.currentSource[selection].exhibitURL, let generatedUrl = URL(string: stringUrl) {
             return generatedUrl
         } else {
             return nil

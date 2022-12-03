@@ -89,15 +89,7 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 	// MARK: Custom functions
 	
 	@objc func segmentSelected() {
-        var type: DataType
-        
-        if segmentedController.selectedSegmentIndex == 0 {
-            type = .exhibitsOnly
-        } else {
-            type = .exhibitsWithReminders
-        }
-        
-        exhibitsViewModel.setData(type: type, searchText: searchController.searchBar.text)
+        exhibitsViewModel.setSource(index: segmentedController.selectedSegmentIndex)
 		
         tableView.reloadData()
         
@@ -136,6 +128,7 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 				let destinationViewController = (segue.destination as? UINavigationController)?.topViewController as? DetailViewController
 				destinationViewController?.selection = indexPath
                 exhibitsViewModel.setCurrentIndex(index: indexPath)
+                print("segue index \(indexPath)")
 		    }
 		}
 	}
