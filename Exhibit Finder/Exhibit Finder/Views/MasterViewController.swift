@@ -204,15 +204,19 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            var data = exhibitsViewModel.retrieveSource()
-            
-            exhibitsViewModel.getReminderForExhibit(index: indexPath)
+            reminderViewModel.setCurrentReminder(indexPath: indexPath)
+            print(indexPath.section)
+            print(indexPath.row)
             
             if tableView.numberOfRows(inSection: indexPath.section) == 1 {
+                print("only one row")
                 // there is only one reminder shown, delete it
                 reminderViewModel.fullDelete()
                 
-                data.remove(at: indexPath.row)
+                if isFilteringBySearch() {
+                    exhibitsViewModel.deleteFromSearch(index: indexPath.section)
+                }
+                
                 // delete entire section to prevent '0 row in section' warning
                 tableView.deleteSections([indexPath.section], with: .fade)
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reload"), object: nil)

@@ -13,6 +13,8 @@ import CoreLocation
 
 public class ReminderViewModel {
     
+    private let exhibitViewModel = ExhibitsViewModel()
+    
     weak var alertDelegate: AlertDisplayDelegate?
     let defaultMinTime = 8.0
     let defaultMaxTime = 17.0
@@ -22,12 +24,16 @@ public class ReminderViewModel {
         return ReminderManager.reminders.count
     }
     
-    func getReminder(id: Int64) {
-        ReminderManager.currentReminder = ReminderManager.reminderDictionary[id]
-    }
-    
     func getExhibitForReminder(index: IndexPath) -> Exhibit? {
         return ExhibitManager.exhibitsList[index.row]
+    }
+    
+    func setCurrentReminder(indexPath: IndexPath) {
+        var exhibitList = exhibitViewModel.retrieveSource()
+        
+        if let reminder = ReminderManager.reminderDictionary[exhibitList[indexPath.section].id] {
+            ReminderManager.currentReminder = reminder
+        }
     }
     
     public func getAddress() -> String? {

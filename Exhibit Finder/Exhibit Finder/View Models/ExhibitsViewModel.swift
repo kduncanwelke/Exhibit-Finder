@@ -168,6 +168,10 @@ public class ExhibitsViewModel {
         return ExhibitManager.exhibitsList.count 
     }
     
+    public func deleteFromSearch(index: Int) {
+        ExhibitManager.searchResults.remove(at: index)
+    }
+    
     public func getReminderForExhibit(index: IndexPath) -> Reminder? {
         ReminderManager.currentReminder = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.row].id]
         return ReminderManager.currentReminder
