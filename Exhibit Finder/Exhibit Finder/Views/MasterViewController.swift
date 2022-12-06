@@ -39,8 +39,8 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 		segmentedController = UISegmentedControl(items: items)
 		segmentedController.tintColor = UIColor(red: 1.00, green: 0.58, blue: 0.00, alpha: 1.0)
 		segmentedController.selectedSegmentIndex = 0
-		navigationItem.titleView = segmentedController
 		segmentedController.addTarget(self, action: #selector(segmentSelected), for: .valueChanged)
+        navigationItem.titleView = segmentedController
 		
         view.addSubview(loadingView)
         loadingView.center = CGPointMake(view.frame.width/2, view.frame.height/3)
@@ -64,10 +64,12 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 		searchController.searchBar.placeholder = "Type to search . . ."
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
-		
-		if let split = splitViewController {
-			split.preferredDisplayMode = .allVisible
-		}
+        
+        if #available(iOS 16.0, *) {
+            navigationItem.preferredSearchBarPlacement = .stacked
+        } else {
+            // Fallback on earlier versions
+        }
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
