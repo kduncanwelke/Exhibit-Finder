@@ -102,6 +102,8 @@ class DetailViewController: UIViewController {
 	
 	@objc func updateButton() {
 		reminderButton.setTitle("Edit Reminder", for: .normal)
+        guard let index = exhibitsViewModel.getCurrentIndex() else { return }
+        titleLabel.text = exhibitsViewModel.getTitle(index: index)
 	}
 	
 	// MARK: Navigation

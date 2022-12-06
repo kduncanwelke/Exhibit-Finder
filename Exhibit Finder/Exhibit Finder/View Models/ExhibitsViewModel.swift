@@ -94,7 +94,6 @@ public class ExhibitsViewModel {
     }
     
     func setData(type: DataType, searchText: String?) {
-        print(type)
         ExhibitManager.currentType = type
         if searchText != "" {
             if let search = searchText {
@@ -272,7 +271,7 @@ public class ExhibitsViewModel {
     }
     
     public func getTitleForTimeReminder(index: IndexPath) -> String {
-        guard let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.section].id] else { return "" }
+        guard let result = ReminderManager.currentReminder else { return "" }
         var currentDate = Date()
         
         if (result.time != nil && result.location != nil && index.row == 0) || (result.time != nil && result.location == nil) {
@@ -302,7 +301,7 @@ public class ExhibitsViewModel {
     }
     
     public func getTitleForLocationReminder(index: IndexPath) -> String {
-        guard let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.section].id] else { return "" }
+        guard let result = ReminderManager.currentReminder else { return "" }
         
         if let radius = result.location?.radius {
             return "Within \(Int(radius)) foot radius of museum"
