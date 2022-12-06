@@ -33,7 +33,7 @@ public class DetailViewModel {
     
     func setSelectedBarViewController(index: IndexPath) -> Int {
         // there is a reminder
-        if let reminder = exhibitsViewModel.getReminderForExhibit(index: index) {
+        if let reminder = exhibitsViewModel.getReminderForExhibit(indexPath: index) {
             
             var type: WithReminder
             guard let typeOfReminder = reminderViewModel.getReminderType() else { return 0 }

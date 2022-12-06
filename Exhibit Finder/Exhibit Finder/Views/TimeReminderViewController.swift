@@ -66,7 +66,7 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
 	
 	func configureView() {
         guard let index = exhibitsViewModel.getCurrentIndex() else { return }
-		exhibitName.text = exhibitsViewModel.getTitle(index: index)
+		exhibitName.text = exhibitsViewModel.getTitleForTimeReminder(index: index)
 		museumName.text = exhibitsViewModel.getMuseum(index: index)
 		
 		let minDate = Date()
@@ -81,7 +81,7 @@ class TimeReminderViewController: UIViewController, AlertDisplayDelegate {
 		time.text = "Today to \(close)"
         reminderSelected.text = timeReminderViewModel.getStringDate(from: datePicker.date)
 		
-        if exhibitsViewModel.getReminderForExhibit(index: index) != nil {
+        if exhibitsViewModel.getReminderForExhibit(indexPath: index) != nil {
             guard let dateToUse = reminderViewModel.getDate() else { return }
             
             // if loading an old reminder, set its past date as the minimum picker date

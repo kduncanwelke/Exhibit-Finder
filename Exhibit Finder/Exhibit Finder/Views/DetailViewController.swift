@@ -65,7 +65,9 @@ class DetailViewController: UIViewController {
             return
         }
         
-        if let reminder = exhibitsViewModel.getReminderForExhibit(index: index) {
+        if let reminder = exhibitsViewModel.getReminderForExhibit(indexPath: index) {
+            print("reminder for exhibit")
+            print(reminder)
             reminderButton.isEnabled = true
             viewOnlineButton.isEnabled = true
             reminderButton.setTitle("Edit Reminder", for: .normal)

@@ -72,12 +72,12 @@ class LocationReminderViewController: UIViewController {
 	func configureView() {
         guard let index = exhibitsViewModel.getCurrentIndex() else { return }
         
-        exhibitName.text = exhibitsViewModel.getTitle(index: index)
+        exhibitName.text = exhibitsViewModel.getTitleForLocationReminder(index: index)
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.removeOverlays(mapView.overlays)
 		
         // there is an existing location reminder
-        if exhibitsViewModel.getReminderForExhibit(index: index) != nil && reminderViewModel.hasLocation() {
+        if exhibitsViewModel.getReminderForExhibit(indexPath: index) != nil && reminderViewModel.hasLocation() {
             print("has reminder")
             // show time range selections and region
             let address = reminderViewModel.getAddress() ?? ""
@@ -100,7 +100,7 @@ class LocationReminderViewController: UIViewController {
             
             // create pin from a reminder
             LocationManager.addItemToMap(title: address, lat: lat, long: long, radius: radius, regionRadius: 1000, mapView: mapView, withOverlay: true)
-        } else if exhibitsViewModel.getReminderForExhibit(index: index) != nil && reminderViewModel.hasLocation() == false {
+        } else if exhibitsViewModel.getReminderForExhibit(indexPath: index) != nil && reminderViewModel.hasLocation() == false {
             print("reminder with no location")
             // there is a reminder but no location, so show museum
             locationReminderViewModel.checkForLocation(mapView: mapView, selection: index, withOverlay: true)

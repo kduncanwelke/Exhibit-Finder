@@ -33,6 +33,8 @@ public class ReminderViewModel {
         
         if let reminder = ReminderManager.reminderDictionary[exhibitList[indexPath.section].id] {
             ReminderManager.currentReminder = reminder
+        } else {
+            ReminderManager.currentReminder = nil
         }
     }
     

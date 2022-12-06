@@ -98,7 +98,6 @@ public class ExhibitsViewModel {
         ExhibitManager.currentType = type
         if searchText != "" {
             if let search = searchText {
-                print("search")
                 ExhibitManager.isSearching = true
                
                 switch type {
@@ -116,7 +115,6 @@ public class ExhibitsViewModel {
             ExhibitManager.currentSource = ExhibitManager.searchResults
         } else {
             ExhibitManager.isSearching = false
-            print("not search")
             
             switch type {
             case .exhibitsOnly:
@@ -172,8 +170,31 @@ public class ExhibitsViewModel {
         ExhibitManager.searchResults.remove(at: index)
     }
     
-    public func getReminderForExhibit(index: IndexPath) -> Reminder? {
-        ReminderManager.currentReminder = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.row].id]
+    public func getReminderForExhibit(indexPath: IndexPath) -> Reminder? {
+        var exhibit: Exhibit
+
+        if ExhibitManager.isSearching {
+            switch ExhibitManager.currentType {
+            case .exhibitsOnly:
+                exhibit = ExhibitManager.searchResults[indexPath.row]
+            case .exhibitsWithReminders:
+                exhibit = ExhibitManager.searchResults[indexPath.section]
+            }
+        } else {
+            switch ExhibitManager.currentType {
+            case .exhibitsOnly:
+                exhibit = ExhibitManager.exhibitsList[indexPath.row]
+            case .exhibitsWithReminders:
+                exhibit = ReminderManager.exhibitsWithReminders[indexPath.section]
+            }
+        }
+        
+        if let result = ReminderManager.reminderDictionary[exhibit.id] {
+            ReminderManager.currentReminder = result
+        } else {
+            ReminderManager.currentReminder = nil
+        }
+        
         return ReminderManager.currentReminder
     }
     
@@ -248,6 +269,46 @@ public class ExhibitsViewModel {
                     }
                 }
             }
+    }
+    
+    public func getTitleForTimeReminder(index: IndexPath) -> String {
+        guard let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.section].id] else { return "" }
+        var currentDate = Date()
+        
+        if (result.time != nil && result.location != nil && index.row == 0) || (result.time != nil && result.location == nil) {
+            guard let date = result.time else { return "" }
+            let calendar = Calendar.current
+            let components = DateComponents(year: Int(date.year), month: Int(date.month), day: Int(date.day), hour: Int(date.hour), minute: Int(date.minute))
+            
+            guard let dateToUse = calendar.date(from: components) else { return "" }
+            if let invalid = result.invalidDate {
+                if dateToUse < currentDate || invalid < currentDate {
+                    return "This reminder has expired"
+                } else {
+                    let stringDate = getStringDate(from: dateToUse)
+                    return "For \(stringDate)"
+                }
+            } else {
+                if dateToUse < currentDate {
+                    return "This reminder has expired"
+                } else {
+                    let stringDate = getStringDate(from: dateToUse)
+                    return "For \(stringDate)"
+                }
+            }
+        }
+        
+        return ""
+    }
+    
+    public func getTitleForLocationReminder(index: IndexPath) -> String {
+        guard let result = ReminderManager.reminderDictionary[ExhibitManager.currentSource[index.section].id] else { return "" }
+        
+        if let radius = result.location?.radius {
+            return "Within \(Int(radius)) foot radius of museum"
+        } else {
+            return ""
+        }
     }
     
     public func getMuseum(index: IndexPath) -> String {
