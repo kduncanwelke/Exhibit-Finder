@@ -147,23 +147,35 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
     override func numberOfSections(in tableView: UITableView) -> Int {
         var data = exhibitsViewModel.retrieveSource()
         
-        if data.isEmpty {
-            if segmentedController.selectedSegmentIndex == 0 {
+        if segmentedController.selectedSegmentIndex == 0 && data.isEmpty {
+            tableView.backgroundView = loadingView
+            tableView.separatorStyle = .none
+            
+            return 1
+        } else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
+            if data.isEmpty {
                 tableView.separatorStyle = .none
             } else {
-                if isFilteringBySearch() {
-                    tableView.separatorStyle = .none
-                } else {
-                    tableView.backgroundView = noDataView
-                    tableView.separatorStyle = .none
-                }
+                tableView.separatorStyle = .singleLine
             }
             
-            return 0
+            return data.count
+        } else if segmentedController.selectedSegmentIndex == 1 {
+            // no reminders
+            if reminderViewModel.reminderCount() == 0 || data.isEmpty {
+                tableView.backgroundView = noDataView
+                tableView.separatorStyle = .none
+            } else {
+                tableView.separatorStyle = .singleLine
+                tableView.backgroundView = nil
+            }
+            
+            return data.count
         } else {
             tableView.separatorStyle = .singleLine
             tableView.backgroundView = nil
-            return data.count
+            
+            return 1
         }
     }
     
@@ -176,15 +188,8 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var data = exhibitsViewModel.retrieveSource()
-        
         // exhibit section, return count
-        if segmentedController.selectedSegmentIndex == 0 {
-            return data.count
-        } else {
-            // rows vary for reminder section
-            return reminderViewModel.getRowCount(section: section)
-        }
+        return exhibitsViewModel.getRows(isFiltering: isFilteringBySearch(), segment: segmentedController.selectedSegmentIndex, section: section)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

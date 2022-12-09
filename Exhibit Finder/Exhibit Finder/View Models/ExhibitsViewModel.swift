@@ -137,6 +137,34 @@ public class ExhibitsViewModel {
         }
     }
     
+    func getRows(isFiltering: Bool, segment: Int, section: Int) -> Int {
+        var data = retrieveSource()
+        
+        if isFiltering && segment == 1 {
+            let result = ReminderManager.reminderDictionary[data[section].id]
+                if result?.time != nil && result?.location != nil {
+                    return 2
+                } else {
+                    return 1
+                }
+        } else if isFiltering {
+            return data.count
+        } else if segment == 0 {
+            return data.count
+        } else {
+            if ReminderManager.reminders.isEmpty {
+                return 1
+            } else {
+                let result = ReminderManager.reminderDictionary[data[section].id]
+                if result?.time != nil && result?.location != nil {
+                    return 2
+                } else {
+                    return 1
+                }
+            }
+        }
+    }
+    
     func setSource(index: Int) {
         if index == 0 {
             ExhibitManager.currentType = .exhibitsOnly

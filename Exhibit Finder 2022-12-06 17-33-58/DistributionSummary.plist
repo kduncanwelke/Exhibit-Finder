@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Exhibit Finder.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>B7F0A8167C5D095BBCA08FCCD70117EE2BA600C0</string>
+				<key>dateExpires</key>
+				<string>12/17/22</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>B7F0A8167C5D095BBCA08FCCD70117EE2BA600C0</string>
+						<key>dateExpires</key>
+						<string>12/17/22</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>Nuke.framework</string>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>A8R365GJ52</string>
+						<key>name</key>
+						<string>Katherine Duncan-Welke</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.1</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>B7F0A8167C5D095BBCA08FCCD70117EE2BA600C0</string>
+						<key>dateExpires</key>
+						<string>12/17/22</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>XMLParsing.framework</string>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>A8R365GJ52</string>
+						<key>name</key>
+						<string>Katherine Duncan-Welke</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>1.1</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>A8R365GJ52.com.kduncan-welke.Exhibit-Finder</string>
+				<key>aps-environment</key>
+				<string>production</string>
+				<key>beta-reports-active</key>
+				<true/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>A8R365GJ52</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>Exhibit Finder.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>afdd2277-b90c-476f-94b6-80592879ec4a</string>
+				<key>dateExpires</key>
+				<string>5/18/23</string>
+				<key>name</key>
+				<string>iOS Team Store Provisioning Profile: com.kduncan-welke.Exhibit-Finder</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>A8R365GJ52</string>
+				<key>name</key>
+				<string>Katherine Duncan-Welke</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.1</string>
+		</dict>
+	</array>
+</dict>
+</plist>

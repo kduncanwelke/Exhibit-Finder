@@ -50,7 +50,7 @@ class ExhibitTableViewCell: UITableViewCell {
             type = .exhibitsWithReminders
         }
         
-        var data = exhibitsViewModel.setData(type: type, searchText: searchText)
+        exhibitsViewModel.setData(type: type, searchText: searchText)
         
         DispatchQueue.main.async {
             if let url = self.exhibitsViewModel.getImageUrl(index: index) {

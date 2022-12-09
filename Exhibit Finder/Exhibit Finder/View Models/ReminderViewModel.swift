@@ -20,7 +20,7 @@ public class ReminderViewModel {
     let defaultMaxTime = 17.0
     let defaultRadius = 125.0
     
-    public func reminderCount() -> Int {
+    func reminderCount() -> Int {
         return ReminderManager.reminders.count
     }
     
@@ -38,21 +38,8 @@ public class ReminderViewModel {
         }
     }
     
-    public func getAddress() -> String? {
+    func getAddress() -> String? {
         return ReminderManager.currentReminder?.location?.address
-    }
-    
-    public func getRowCount(section: Int) -> Int {
-        let exhibitsViewModel = ExhibitsViewModel()
-        var data = exhibitsViewModel.retrieveSource()
-        
-        let result = ReminderManager.reminderDictionary[data[section].id]
-        
-        if result?.time != nil && result?.location != nil {
-            return 2
-        } else {
-            return 1
-        }
     }
     
     func hasLocation() -> Bool {
