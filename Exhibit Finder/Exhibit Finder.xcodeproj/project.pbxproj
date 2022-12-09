@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		066E9E392943F09300DD7879 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066E9E382943F09300DD7879 /* NetworkMonitor.swift */; };
 		0BB214C825EEF5EAB61AC340 /* Pods_Exhibit_FinderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */; };
 		2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D031C2D226932C100F47E75 /* NotificationManager.swift */; };
 		2D130615226A7C2700482D1E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D130614226A7C2700482D1E /* LocationManager.swift */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		066E9E382943F09300DD7879 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit FinderTests.release.xcconfig"; path = "Target Support Files/Pods-Exhibit FinderTests/Pods-Exhibit FinderTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D031C2D226932C100F47E75 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2D130614226A7C2700482D1E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				2DE50D52225940B400B924F0 /* Result.swift */,
 				2DE50D54225940CA00B924F0 /* XMLParser.swift */,
 				2DE50D56225940EE00B924F0 /* Errors.swift */,
+				066E9E382943F09300DD7879 /* NetworkMonitor.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -453,6 +456,7 @@
 				2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */,
 				2D677BF02260FD3100A1CC2E /* Reminder.xcdatamodeld in Sources */,
 				2D4D251A25100AF6002ECF70 /* TimeReminderViewModel.swift in Sources */,
+				066E9E392943F09300DD7879 /* NetworkMonitor.swift in Sources */,
 				2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */,
 				2D3FC3FB24F04A9E00C65022 /* AlertDelegate.swift in Sources */,
 				2D3FC3F924F045CA00C65022 /* ExhibitsViewModel.swift in Sources */,

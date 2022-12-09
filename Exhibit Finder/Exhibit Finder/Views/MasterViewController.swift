@@ -65,6 +65,8 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 		navigationItem.searchController = searchController
 		navigationItem.hidesSearchBarWhenScrolling = false
         
+        exhibitsViewModel.setUpNetworkMonitor()
+        
         if #available(iOS 16.0, *) {
             navigationItem.preferredSearchBarPlacement = .stacked
         } else {
@@ -97,15 +99,16 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
         
 		// return to top of table if new section has been loaded
 		if tableView.visibleCells.isEmpty != true {
-			self.tableView.setContentOffset( CGPoint(x: 0, y: 0) , animated: false)
+            self.tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
 		}
 	}
     
     @objc func refresh() {
-        if exhibitsViewModel.isListEmpty() {
+        if exhibitsViewModel.isListEmpty() && exhibitsViewModel.hasConnection() {
             tableView.reloadData()
             exhibitsViewModel.loadExhibitions()
         } else {
+            print("end refreshing")
             refreshController.endRefreshing()
         }
     }
@@ -121,6 +124,7 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
 			tableView.reloadData()
 		}
     }
+    
 
 	// MARK: - Segues
 
@@ -147,12 +151,7 @@ class MasterViewController: UITableViewController, ExhibitLoadDelegate, AlertDis
     override func numberOfSections(in tableView: UITableView) -> Int {
         var data = exhibitsViewModel.retrieveSource()
         
-        if segmentedController.selectedSegmentIndex == 0 && data.isEmpty {
-            tableView.backgroundView = loadingView
-            tableView.separatorStyle = .none
-            
-            return 1
-        } else if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
+        if isFilteringBySearch() && segmentedController.selectedSegmentIndex == 1 {
             if data.isEmpty {
                 tableView.separatorStyle = .none
             } else {
@@ -255,9 +254,12 @@ extension MasterViewController {
         if success {
             hasBeenLoaded = true
             tableView.reloadData()
+            refresh()
+        } else {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView = nil
         }
-        
-        refreshController.endRefreshing()
+       
         loadingView.removeFromSuperview()
     }
 }
@@ -289,8 +291,7 @@ extension MasterViewController: UISearchControllerDelegate, UISearchResultsUpdat
         
 		// scroll to top upon showing results
         if !exhibitsViewModel.isSearchEmpty() {
-			let indexPath = IndexPath(row: 0, section: 0)
-			tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            self.tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
 		}
 	}
 	

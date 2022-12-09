@@ -523,4 +523,22 @@ public class ExhibitsViewModel {
         }
     }
     
+    func hasConnection() -> Bool {
+        return NetworkMonitor.connection
+    }
+    
+    func setUpNetworkMonitor() {
+        NetworkMonitor.monitor.pathUpdateHandler = { path in
+            if path.status == .satisfied {
+                print("connection successful")
+                NetworkMonitor.connection = true
+            } else if path.status == .unsatisfied {
+                print("no connection")
+                NetworkMonitor.connection = false
+            }
+        }
+
+        let queue = DispatchQueue(label: "Monitor")
+        NetworkMonitor.monitor.start(queue: queue)
+    }
 }
