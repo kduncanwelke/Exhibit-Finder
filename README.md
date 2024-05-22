@@ -5,7 +5,7 @@ This app uses information from the [Smithsonian Institution](https://www.si.edu/
 
 Users can set time based reminders to receive a notification about an exhibit for a given time and date, and also set location based reminders, which will be triggered when their device is in proximity to the relevant museum. Reminders can be readily edited and deleted from the reminders list. Maps, location services, and local notifications are used to fulfill these features.
 
-![Screenshot of the app Exhibit Finder DC](https://i.ibb.co/d6PSVg3/Screen-Shot-2020-08-10-at-2-45-04-PM.png)
+![Screenshot of the app Exhibit Finder DC](https://kduncanwelkecom.ipage.com/Exhibit%20Finder%20Preview.png)
 
 ## Description
 Discover and set reminders for your favorite exhibits currently on view at Smithsonian museums in Washington, D.C.!
