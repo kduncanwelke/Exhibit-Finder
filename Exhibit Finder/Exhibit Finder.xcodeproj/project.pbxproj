@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		063BE6DC2C49CC3B00252B96 /* Nuke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 063BE6DB2C49CC3B00252B96 /* Nuke.framework */; };
 		066E9E392943F09300DD7879 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066E9E382943F09300DD7879 /* NetworkMonitor.swift */; };
-		0BB214C825EEF5EAB61AC340 /* Pods_Exhibit_FinderTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */; };
+		06C18C602C49D0DB007AA278 /* XMLParsing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06C18C5F2C49D0DB007AA278 /* XMLParsing.framework */; };
 		2D031C2E226932C100F47E75 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D031C2D226932C100F47E75 /* NotificationManager.swift */; };
 		2D130615226A7C2700482D1E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D130614226A7C2700482D1E /* LocationManager.swift */; };
 		2D3FC3F724F044C500C65022 /* ReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3FC3F624F044C500C65022 /* ReminderViewModel.swift */; };
@@ -36,7 +37,6 @@
 		2DE50D3222592FA200B924F0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D3122592FA200B924F0 /* DetailViewController.swift */; };
 		2DE50D3522592FA200B924F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DE50D3322592FA200B924F0 /* Main.storyboard */; };
 		2DE50D3A22592FA300B924F0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2DE50D3822592FA300B924F0 /* LaunchScreen.storyboard */; };
-		2DE50D4522592FA300B924F0 /* Exhibit_FinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D4422592FA300B924F0 /* Exhibit_FinderTests.swift */; };
 		2DE50D512259409200B924F0 /* Networker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D502259409200B924F0 /* Networker.swift */; };
 		2DE50D53225940B400B924F0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D52225940B400B924F0 /* Result.swift */; };
 		2DE50D55225940CA00B924F0 /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D54225940CA00B924F0 /* XMLParser.swift */; };
@@ -44,22 +44,15 @@
 		2DE50D5C2259563700B924F0 /* SearchType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D5B2259563700B924F0 /* SearchType.swift */; };
 		2DE50D5F2259566400B924F0 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D5E2259566400B924F0 /* DataManager.swift */; };
 		2DE50D612259574800B924F0 /* Exhibit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DE50D602259574800B924F0 /* Exhibit.swift */; };
-		3345F3E17F3AE3453E13515D /* Pods_Exhibit_Finder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5950751FAD2FC5EFD6F38E66 /* Pods_Exhibit_Finder.framework */; };
+		6CF380DAADEA6899866EA276 /* Pods_Exhibit_Finder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 198CA8F4AE005BC0EB88CCB5 /* Pods_Exhibit_Finder.framework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		2DE50D4122592FA300B924F0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2DE50D2222592FA100B924F0 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2DE50D2922592FA200B924F0;
-			remoteInfo = "Exhibit Finder";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
+		063BE6DB2C49CC3B00252B96 /* Nuke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Nuke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		063BE6DF2C49CC3F00252B96 /* XMLParsing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = XMLParsing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		066E9E382943F09300DD7879 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
-		1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit FinderTests.release.xcconfig"; path = "Target Support Files/Pods-Exhibit FinderTests/Pods-Exhibit FinderTests.release.xcconfig"; sourceTree = "<group>"; };
+		06C18C5F2C49D0DB007AA278 /* XMLParsing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = XMLParsing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		198CA8F4AE005BC0EB88CCB5 /* Pods_Exhibit_Finder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exhibit_Finder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D031C2D226932C100F47E75 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		2D130614226A7C2700482D1E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		2D3FC3F624F044C500C65022 /* ReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewModel.swift; sourceTree = "<group>"; };
@@ -90,9 +83,6 @@
 		2DE50D3422592FA200B924F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2DE50D3922592FA300B924F0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2DE50D3B22592FA300B924F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2DE50D4022592FA300B924F0 /* Exhibit FinderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Exhibit FinderTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2DE50D4422592FA300B924F0 /* Exhibit_FinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exhibit_FinderTests.swift; sourceTree = "<group>"; };
-		2DE50D4622592FA300B924F0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2DE50D502259409200B924F0 /* Networker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networker.swift; sourceTree = "<group>"; };
 		2DE50D52225940B400B924F0 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		2DE50D54225940CA00B924F0 /* XMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLParser.swift; sourceTree = "<group>"; };
@@ -100,11 +90,8 @@
 		2DE50D5B2259563700B924F0 /* SearchType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchType.swift; sourceTree = "<group>"; };
 		2DE50D5E2259566400B924F0 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		2DE50D602259574800B924F0 /* Exhibit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exhibit.swift; sourceTree = "<group>"; };
-		30FD97C03AEDBF90855DC472 /* Pods-Exhibit Finder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit Finder.debug.xcconfig"; path = "Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder.debug.xcconfig"; sourceTree = "<group>"; };
-		333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exhibit_FinderTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4829B1771063660663A497CE /* Pods-Exhibit FinderTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit FinderTests.debug.xcconfig"; path = "Target Support Files/Pods-Exhibit FinderTests/Pods-Exhibit FinderTests.debug.xcconfig"; sourceTree = "<group>"; };
-		5950751FAD2FC5EFD6F38E66 /* Pods_Exhibit_Finder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Exhibit_Finder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC8F139C3D99E7B88FCCB4ED /* Pods-Exhibit Finder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit Finder.release.xcconfig"; path = "Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder.release.xcconfig"; sourceTree = "<group>"; };
+		7936FFA4D0AEEC975BBB6257 /* Pods-Exhibit Finder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit Finder.release.xcconfig"; path = "Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder.release.xcconfig"; sourceTree = "<group>"; };
+		EF63E864818A318BE85A08F5 /* Pods-Exhibit Finder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Exhibit Finder.debug.xcconfig"; path = "Target Support Files/Pods-Exhibit Finder/Pods-Exhibit Finder.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,17 +99,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06C18C602C49D0DB007AA278 /* XMLParsing.framework in Frameworks */,
+				063BE6DC2C49CC3B00252B96 /* Nuke.framework in Frameworks */,
 				2D68D67B225D42060018C59E /* MapKit.framework in Frameworks */,
 				2D68D679225D35200018C59E /* WebKit.framework in Frameworks */,
-				3345F3E17F3AE3453E13515D /* Pods_Exhibit_Finder.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2DE50D3D22592FA300B924F0 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0BB214C825EEF5EAB61AC340 /* Pods_Exhibit_FinderTests.framework in Frameworks */,
+				6CF380DAADEA6899866EA276 /* Pods_Exhibit_Finder.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,10 +146,12 @@
 		2D68D677225D35200018C59E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				06C18C5F2C49D0DB007AA278 /* XMLParsing.framework */,
+				063BE6DF2C49CC3F00252B96 /* XMLParsing.framework */,
+				063BE6DB2C49CC3B00252B96 /* Nuke.framework */,
 				2D68D67A225D42060018C59E /* MapKit.framework */,
 				2D68D678225D35200018C59E /* WebKit.framework */,
-				5950751FAD2FC5EFD6F38E66 /* Pods_Exhibit_Finder.framework */,
-				333B49202484D9BE52AAB966 /* Pods_Exhibit_FinderTests.framework */,
+				198CA8F4AE005BC0EB88CCB5 /* Pods_Exhibit_Finder.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -177,7 +160,6 @@
 			isa = PBXGroup;
 			children = (
 				2DE50D2C22592FA200B924F0 /* Exhibit Finder */,
-				2DE50D4322592FA300B924F0 /* Exhibit FinderTests */,
 				2DE50D2B22592FA200B924F0 /* Products */,
 				2D68D677225D35200018C59E /* Frameworks */,
 				D68CE25D2E2DB7CD17312294 /* Pods */,
@@ -188,7 +170,6 @@
 			isa = PBXGroup;
 			children = (
 				2DE50D2A22592FA200B924F0 /* Exhibit Finder.app */,
-				2DE50D4022592FA300B924F0 /* Exhibit FinderTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,15 +193,6 @@
 				2DE50D3B22592FA300B924F0 /* Info.plist */,
 			);
 			path = "Exhibit Finder";
-			sourceTree = "<group>";
-		};
-		2DE50D4322592FA300B924F0 /* Exhibit FinderTests */ = {
-			isa = PBXGroup;
-			children = (
-				2DE50D4422592FA300B924F0 /* Exhibit_FinderTests.swift */,
-				2DE50D4622592FA300B924F0 /* Info.plist */,
-			);
-			path = "Exhibit FinderTests";
 			sourceTree = "<group>";
 		};
 		2DE50D4F2259407F00B924F0 /* Networking */ = {
@@ -262,10 +234,8 @@
 		D68CE25D2E2DB7CD17312294 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				30FD97C03AEDBF90855DC472 /* Pods-Exhibit Finder.debug.xcconfig */,
-				AC8F139C3D99E7B88FCCB4ED /* Pods-Exhibit Finder.release.xcconfig */,
-				4829B1771063660663A497CE /* Pods-Exhibit FinderTests.debug.xcconfig */,
-				1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */,
+				EF63E864818A318BE85A08F5 /* Pods-Exhibit Finder.debug.xcconfig */,
+				7936FFA4D0AEEC975BBB6257 /* Pods-Exhibit Finder.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -277,11 +247,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2DE50D4922592FA300B924F0 /* Build configuration list for PBXNativeTarget "Exhibit Finder" */;
 			buildPhases = (
-				E8D55F60DF64D4D4A8F279CA /* [CP] Check Pods Manifest.lock */,
+				16E1B8B9B13DC2999776F706 /* [CP] Check Pods Manifest.lock */,
 				2DE50D2622592FA200B924F0 /* Sources */,
 				2DE50D2722592FA200B924F0 /* Frameworks */,
 				2DE50D2822592FA200B924F0 /* Resources */,
-				F932B8449776F7AEF5F4DD40 /* [CP] Embed Pods Frameworks */,
+				1F96875DBD000D984F9E4BD4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -291,25 +261,6 @@
 			productName = "Exhibit Finder";
 			productReference = 2DE50D2A22592FA200B924F0 /* Exhibit Finder.app */;
 			productType = "com.apple.product-type.application";
-		};
-		2DE50D3F22592FA300B924F0 /* Exhibit FinderTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2DE50D4C22592FA300B924F0 /* Build configuration list for PBXNativeTarget "Exhibit FinderTests" */;
-			buildPhases = (
-				95DFA2BCA3CBE32DA0891B3D /* [CP] Check Pods Manifest.lock */,
-				2DE50D3C22592FA300B924F0 /* Sources */,
-				2DE50D3D22592FA300B924F0 /* Frameworks */,
-				2DE50D3E22592FA300B924F0 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2DE50D4222592FA300B924F0 /* PBXTargetDependency */,
-			);
-			name = "Exhibit FinderTests";
-			productName = "Exhibit FinderTests";
-			productReference = 2DE50D4022592FA300B924F0 /* Exhibit FinderTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -335,10 +286,6 @@
 							};
 						};
 					};
-					2DE50D3F22592FA300B924F0 = {
-						CreatedOnToolsVersion = 10.2;
-						TestTargetID = 2DE50D2922592FA200B924F0;
-					};
 				};
 			};
 			buildConfigurationList = 2DE50D2522592FA100B924F0 /* Build configuration list for PBXProject "Exhibit Finder" */;
@@ -355,7 +302,6 @@
 			projectRoot = "";
 			targets = (
 				2DE50D2922592FA200B924F0 /* Exhibit Finder */,
-				2DE50D3F22592FA300B924F0 /* Exhibit FinderTests */,
 			);
 		};
 /* End PBXProject section */
@@ -371,39 +317,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2DE50D3E22592FA300B924F0 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		95DFA2BCA3CBE32DA0891B3D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Exhibit FinderTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E8D55F60DF64D4D4A8F279CA /* [CP] Check Pods Manifest.lock */ = {
+		16E1B8B9B13DC2999776F706 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -425,7 +342,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F932B8449776F7AEF5F4DD40 /* [CP] Embed Pods Frameworks */ = {
+		1F96875DBD000D984F9E4BD4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -482,23 +399,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2DE50D3C22592FA300B924F0 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2DE50D4522592FA300B924F0 /* Exhibit_FinderTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		2DE50D4222592FA300B924F0 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2DE50D2922592FA200B924F0 /* Exhibit Finder */;
-			targetProxy = 2DE50D4122592FA300B924F0 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2DE50D3322592FA200B924F0 /* Main.storyboard */ = {
@@ -639,7 +540,7 @@
 		};
 		2DE50D4A22592FA300B924F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30FD97C03AEDBF90855DC472 /* Pods-Exhibit Finder.debug.xcconfig */;
+			baseConfigurationReference = EF63E864818A318BE85A08F5 /* Pods-Exhibit Finder.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Exhibit Finder/Exhibit Finder.entitlements";
@@ -654,7 +555,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kduncan-welke.Exhibit-Finder";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -668,7 +569,7 @@
 		};
 		2DE50D4B22592FA300B924F0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC8F139C3D99E7B88FCCB4ED /* Pods-Exhibit Finder.release.xcconfig */;
+			baseConfigurationReference = 7936FFA4D0AEEC975BBB6257 /* Pods-Exhibit Finder.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Exhibit Finder/Exhibit Finder.entitlements";
@@ -683,7 +584,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kduncan-welke.Exhibit-Finder";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -692,58 +593,6 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		2DE50D4D22592FA300B924F0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4829B1771063660663A497CE /* Pods-Exhibit FinderTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A8R365GJ52;
-				INFOPLIST_FILE = "Exhibit FinderTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.Exhibit-FinderTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Exhibit Finder.app/Exhibit Finder";
-			};
-			name = Debug;
-		};
-		2DE50D4E22592FA300B924F0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1F639AB8C8A7F4719F3BB4D3 /* Pods-Exhibit FinderTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = A8R365GJ52;
-				INFOPLIST_FILE = "Exhibit FinderTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.example.Exhibit-FinderTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Exhibit Finder.app/Exhibit Finder";
 			};
 			name = Release;
 		};
@@ -764,15 +613,6 @@
 			buildConfigurations = (
 				2DE50D4A22592FA300B924F0 /* Debug */,
 				2DE50D4B22592FA300B924F0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2DE50D4C22592FA300B924F0 /* Build configuration list for PBXNativeTarget "Exhibit FinderTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2DE50D4D22592FA300B924F0 /* Debug */,
-				2DE50D4E22592FA300B924F0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

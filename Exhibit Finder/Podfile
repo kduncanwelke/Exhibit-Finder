@@ -10,9 +10,4 @@ target 'Exhibit Finder' do
   pod 'Nuke', '~> 10.7'
   pod 'XMLParsing', :git => 'https://github.com/ShawnMoore/XMLParsing.git' 
 
-  target 'Exhibit FinderTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end
