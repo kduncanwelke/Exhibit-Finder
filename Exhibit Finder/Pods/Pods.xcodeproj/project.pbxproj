@@ -135,7 +135,7 @@
 		2A178F94E1AE9F17EECD94146ED051CD /* Pods-Exhibit FinderTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Exhibit FinderTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		2A28689CA157F9B2570777F23710F568 /* ImageTask.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageTask.swift; path = Sources/Core/ImageTask.swift; sourceTree = "<group>"; };
 		2D19E6E0788E4D45EB32AB17091329F5 /* Pods-Exhibit FinderTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-Exhibit FinderTests.modulemap"; sourceTree = "<group>"; };
-		2DAD7D76FC007F48AE48F2FD15BF01BB /* Nuke.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Nuke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2DAD7D76FC007F48AE48F2FD15BF01BB /* Nuke */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Nuke; path = Nuke.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F53A1C7DE802603D107A8C21E552687 /* ImageDecompression.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageDecompression.swift; path = Sources/Core/Processing/ImageDecompression.swift; sourceTree = "<group>"; };
 		3042B971AA68C36623D8F4BB505CE9AB /* XMLKeyedDecodingContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = XMLKeyedDecodingContainer.swift; path = Sources/XMLParsing/Decoder/XMLKeyedDecodingContainer.swift; sourceTree = "<group>"; };
 		3490658867C4AC0C8D0C48D1E3ECEFE8 /* Pods-Exhibit Finder */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-Exhibit Finder"; path = Pods_Exhibit_Finder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,7 +153,7 @@
 		4FF1DB668E84D1254C07A93932B3BF48 /* TaskFetchWithPublisher.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TaskFetchWithPublisher.swift; path = Sources/Core/Tasks/TaskFetchWithPublisher.swift; sourceTree = "<group>"; };
 		5204B1DD75479AB05F77DA5A29CD1EAB /* ImageProcessors+Circle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ImageProcessors+Circle.swift"; path = "Sources/Core/Processing/ImageProcessors+Circle.swift"; sourceTree = "<group>"; };
 		5498411A903C0453263670415ECDF71F /* ImageProcessors+Resize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ImageProcessors+Resize.swift"; path = "Sources/Core/Processing/ImageProcessors+Resize.swift"; sourceTree = "<group>"; };
-		55DBBB1164A984A039B9F86A1E3B9FBD /* XMLParsing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XMLParsing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		55DBBB1164A984A039B9F86A1E3B9FBD /* XMLParsing */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = XMLParsing; path = XMLParsing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55EBB8FFCA6CADD599C974B37B6FA663 /* XMLUnkeyedDecodingContainer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = XMLUnkeyedDecodingContainer.swift; path = Sources/XMLParsing/Decoder/XMLUnkeyedDecodingContainer.swift; sourceTree = "<group>"; };
 		5DF9247CF25C78BC0490D3041D8D4A97 /* ImageEncoders+ImageIO.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ImageEncoders+ImageIO.swift"; path = "Sources/Core/Encoding/ImageEncoders+ImageIO.swift"; sourceTree = "<group>"; };
 		5F1276B751E8D5DE447B1DEE6DA78E9F /* ImagePipelineDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImagePipelineDelegate.swift; path = Sources/Core/ImagePipelineDelegate.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 		9067D26E102C131342AD380D7D576BD2 /* XMLParsing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = XMLParsing.release.xcconfig; sourceTree = "<group>"; };
 		94045F2C47222D1CAB47CD620C6DAC68 /* AssetType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AssetType.swift; path = Sources/Core/Decoding/AssetType.swift; sourceTree = "<group>"; };
 		9A9C6D9D7FBC66873F2B6A25BB985369 /* ImageProcessors+GaussianBlur.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "ImageProcessors+GaussianBlur.swift"; path = "Sources/Core/Processing/ImageProcessors+GaussianBlur.swift"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A24EFA8C83958C6001EDF34ECC37F46D /* DataCaching.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DataCaching.swift; path = Sources/Core/Caching/DataCaching.swift; sourceTree = "<group>"; };
 		A33D1364D294C89459FD9D960AFAB23A /* Nuke-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Nuke-prefix.pch"; sourceTree = "<group>"; };
 		ABC6FB30F24153070E024FB9568753EF /* Pods-Exhibit Finder-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Exhibit Finder-frameworks.sh"; sourceTree = "<group>"; };
@@ -350,16 +350,17 @@
 				DCF052D1393B916B8A31F59A2FC1D650 /* TaskLoadImage.swift */,
 				9C7256A893C7F6C21800F74AE176AB5C /* Support Files */,
 			);
+			name = Nuke;
 			path = Nuke;
 			sourceTree = "<group>";
 		};
 		512FACDFD25315F729639D5F8018F61C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2DAD7D76FC007F48AE48F2FD15BF01BB /* Nuke.framework */,
+				2DAD7D76FC007F48AE48F2FD15BF01BB /* Nuke */,
 				3490658867C4AC0C8D0C48D1E3ECEFE8 /* Pods-Exhibit Finder */,
 				F3D690C68D5A5FA30D305FE7F739596D /* Pods-Exhibit FinderTests */,
-				55DBBB1164A984A039B9F86A1E3B9FBD /* XMLParsing.framework */,
+				55DBBB1164A984A039B9F86A1E3B9FBD /* XMLParsing */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -428,6 +429,7 @@
 				55EBB8FFCA6CADD599C974B37B6FA663 /* XMLUnkeyedDecodingContainer.swift */,
 				8E7A3AB103AD04277907B07F8A5A9050 /* Support Files */,
 			);
+			name = XMLParsing;
 			path = XMLParsing;
 			sourceTree = "<group>";
 		};
@@ -519,7 +521,7 @@
 			);
 			name = Nuke;
 			productName = Nuke;
-			productReference = 2DAD7D76FC007F48AE48F2FD15BF01BB /* Nuke.framework */;
+			productReference = 2DAD7D76FC007F48AE48F2FD15BF01BB /* Nuke */;
 			productType = "com.apple.product-type.framework";
 		};
 		6BB8E226D88E9CD5A0B6CF29E084B8C0 /* Pods-Exhibit Finder */ = {
@@ -576,7 +578,7 @@
 			);
 			name = XMLParsing;
 			productName = XMLParsing;
-			productReference = 55DBBB1164A984A039B9F86A1E3B9FBD /* XMLParsing.framework */;
+			productReference = 55DBBB1164A984A039B9F86A1E3B9FBD /* XMLParsing */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -586,7 +588,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1410;
+				LastUpgradeCheck = 1300;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 11.0";
@@ -839,7 +841,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -906,7 +907,6 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -950,7 +950,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Nuke/Nuke-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Nuke/Nuke-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1099,7 +1099,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/Nuke/Nuke-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/Nuke/Nuke-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1134,7 +1134,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/XMLParsing/XMLParsing-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/XMLParsing/XMLParsing-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1169,7 +1169,7 @@
 				GCC_PREFIX_HEADER = "Target Support Files/XMLParsing/XMLParsing-prefix.pch";
 				INFOPLIST_FILE = "Target Support Files/XMLParsing/XMLParsing-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

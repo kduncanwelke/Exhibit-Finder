@@ -43,10 +43,10 @@ class ExhibitTableViewCell: UITableViewCell {
         
         // get type based on segment selection, change cell title color if reminders segment
         if segment == 0 {
-            title.textColor = UIColor(red:0.00, green:0.00, blue:0.00, alpha:1.0)
+            title.textColor = UIColor.label
             type = .exhibitsOnly
         } else {
-            title.textColor = UIColor(red:0.44, green:0.44, blue:0.47, alpha:1.0)
+            title.textColor = UIColor.secondaryLabel
             type = .exhibitsWithReminders
         }
         
